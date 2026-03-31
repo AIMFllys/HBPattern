@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,200..800&amp;family=Noto+Serif+SC:wght@200..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d2ae1e",
+                        "accent-red": "#a63d33",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211e11",
+                        "ink": "#1b180e",
+                        "muted-gold": "#958750"
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "Noto Serif SC", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Noto Serif SC', 'Newsreader', serif;
+        }
+        .writing-vertical {
+            writing-mode: vertical-rl;
+        }
+        .seal-tag {
+            border: 1px solid #a63d33;
+            color: #a63d33;
+            padding: 0.25rem;
+            position: relative;
+        }
+        .museum-frame {
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.1), 0 20px 25px -5px rgba(0,0,0,0.1);
+            border: 12px solid #e5e7eb;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-ink dark:text-slate-100 transition-colors duration-300">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Unified Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-primary/20 px-8 py-4 sticky top-0 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">landscape</span>
+<h2 class="text-xl font-bold tracking-widest">纹样大观</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-ink dark:text-slate-100 text-sm font-medium hover:text-primary transition-colors" href="#">首页</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary" href="#">纹样库</a>
+<a class="text-ink dark:text-slate-100 text-sm font-medium hover:text-primary transition-colors" href="#">学术研究</a>
+<a class="text-ink dark:text-slate-100 text-sm font-medium hover:text-primary transition-colors" href="#">关于我们</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-muted-gold">search</span>
+<input class="pl-10 pr-4 py-2 bg-primary/5 border border-primary/20 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary w-48 transition-all group-hover:w-64" placeholder="搜索纹样..."/>
+</div>
+<div class="flex gap-3">
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">share</span>
+</button>
+<button class="p-2 hover:bg-primary/10 rounded-full transition-colors">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-12">
+<!-- Hero Section: Art Book Split Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+<!-- Left: High-res Pattern Image -->
+<div class="relative group">
+<div class="museum-frame bg-white overflow-hidden rounded-lg">
+<img alt="凤穿牡丹纹样" class="w-full aspect-[4/5] object-cover hover:scale-105 transition-transform duration-700" data-alt="Intricate golden phoenix and peony traditional Chinese pattern" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARDnENQPQTyMq2zyiwWP7MujHU6fOo8SeG8FK0XgyIODmavHlEr5JnUKtPGS2YuV2gWgUZSzTEz8atCUNpczTTnpmb2fo6AtLu0raV-FRXPpw0ZUn_xksag7BjHjIYBe83DR2L6bZeVUIOFTluINY4AfvQN0Q8G76i5v74x8Js5jo5me3G8Hq5J0s7_mmmFvzU162mCJ4qO4d-t0JvUQnscH6ajFk73pxhqXsrdhbbGcGyKR82jxOPQABZjod9zlv_QQV9-as8rQ"/>
+</div>
+<div class="absolute -bottom-4 -right-4 bg-accent-red text-white p-4 writing-vertical font-bold text-lg tracking-widest shadow-lg">
+                        凤穿牡丹 · 永恒之华
+                    </div>
+</div>
+<!-- Right: Storytelling Text -->
+<div class="flex flex-col gap-8 py-4">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-2">
+<h1 class="text-5xl font-black text-ink dark:text-white leading-tight">凤穿牡丹纹样</h1>
+<p class="text-muted-gold text-xl italic font-display">Phoenix &amp; Peony: An Eternal Visual Epic</p>
+</div>
+<div class="flex gap-2">
+<div class="seal-tag writing-vertical text-xs font-bold px-1 border-accent-red/40">珍藏珍品</div>
+<div class="seal-tag writing-vertical text-xs font-bold px-1 border-accent-red/40">宫廷御用</div>
+</div>
+</div>
+<div class="flex gap-6 mt-4">
+<div class="flex items-center gap-2 bg-primary/10 px-4 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-sm">history_edu</span>
+<span class="text-sm font-medium">楚风遗韵</span>
+</div>
+<div class="flex items-center gap-2 bg-primary/10 px-4 py-1 rounded-full border border-primary/20">
+<span class="material-symbols-outlined text-sm">museum</span>
+<span class="text-sm font-medium">汉代金饰</span>
+</div>
+</div>
+<div class="prose prose-lg dark:prose-invert max-w-none text-ink/80 dark:text-slate-300 leading-relaxed space-y-6">
+<p class="first-letter:text-5xl first-letter:font-bold first-letter:text-accent-red first-letter:mr-3 first-letter:float-left">
+                            此纹样以凤凰翱翔于盛开的牡丹花丛为主题，象征着权力的尊贵与生命的繁荣。凤凰的线条流转如云，牡丹的花瓣层叠若锦，展现了中国古代工匠对自然与神话的极致想象。
+                        </p>
+<p>
+                            在东方美学体系中，凤为鸟中之王，牡丹为花中之魁。两者的结合，不仅是视觉上的繁花似锦，更是对社会安定、富贵吉祥的深切期许。其艺术表现手法随着朝代更迭，由楚式的灵动诡谲演变为盛唐的雍容华贵。
+                        </p>
+</div>
+<div class="grid grid-cols-3 gap-6 pt-8 border-t border-primary/20">
+<div>
+<span class="text-xs text-muted-gold uppercase tracking-widest block mb-1">主色调</span>
+<div class="flex gap-2">
+<div class="w-6 h-6 rounded-full bg-primary shadow-sm"></div>
+<div class="w-6 h-6 rounded-full bg-accent-red shadow-sm"></div>
+<div class="w-6 h-6 rounded-full bg-[#e8e4d9] border border-primary/20 shadow-sm"></div>
+</div>
+</div>
+<div>
+<span class="text-xs text-muted-gold uppercase tracking-widest block mb-1">工艺类别</span>
+<span class="font-bold">金丝刺绣 / 织锦</span>
+</div>
+<div>
+<span class="text-xs text-muted-gold uppercase tracking-widest block mb-1">流行年代</span>
+<span class="font-bold">唐 - 清</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Evolution Timeline Section -->
+<section class="mt-24">
+<div class="flex items-center gap-4 mb-12">
+<h3 class="text-2xl font-bold tracking-widest">演变历程</h3>
+<div class="h-[1px] grow bg-primary/20"></div>
+</div>
+<div class="relative">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-primary/20 -translate-y-1/2 hidden md:block"></div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="relative group">
+<div class="bg-background-light dark:bg-background-dark p-6 rounded-lg border border-primary/10 hover:border-primary/50 transition-all z-10 relative">
+<div class="text-accent-red font-display text-4xl font-bold opacity-30 mb-2">楚</div>
+<h4 class="font-bold mb-2">浪漫诡谲</h4>
+<p class="text-sm text-ink/60 dark:text-slate-400">纹样初见雏形，线条细长，极具张力，多见于漆器纹饰。</p>
+</div>
+<div class="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-primary z-20"></div>
+</div>
+<div class="relative group">
+<div class="bg-background-light dark:bg-background-dark p-6 rounded-lg border border-primary/10 hover:border-primary/50 transition-all z-10 relative">
+<div class="text-accent-red font-display text-4xl font-bold opacity-30 mb-2">汉</div>
+<h4 class="font-bold mb-2">雄浑大气</h4>
+<p class="text-sm text-ink/60 dark:text-slate-400">凤凰形体渐趋丰满，常与云气纹结合，呈现神性之美。</p>
+</div>
+<div class="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-primary z-20"></div>
+</div>
+<div class="relative group">
+<div class="bg-primary/5 p-6 rounded-lg border-2 border-primary/50 shadow-xl z-10 relative">
+<div class="text-accent-red font-display text-4xl font-bold mb-2">唐</div>
+<h4 class="font-bold mb-2">雍容华贵</h4>
+<p class="text-sm text-ink dark:text-slate-200">巅峰时期，牡丹与凤凰完美融合，色彩艳丽，尽显大国气度。</p>
+</div>
+<div class="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-accent-red z-20 border-4 border-white"></div>
+</div>
+<div class="relative group">
+<div class="bg-background-light dark:bg-background-dark p-6 rounded-lg border border-primary/10 hover:border-primary/50 transition-all z-10 relative">
+<div class="text-accent-red font-display text-4xl font-bold opacity-30 mb-2">清</div>
+<h4 class="font-bold mb-2">繁缛精巧</h4>
+<p class="text-sm text-ink/60 dark:text-slate-400">细节雕琢至极，工艺精湛，成为宫廷等级的象征。</p>
+</div>
+<div class="hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-primary z-20"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Related Patterns Section -->
+<section class="mt-24 mb-12">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-2xl font-bold tracking-widest">相关纹样</h3>
+<a class="text-sm text-primary font-bold flex items-center gap-1 hover:underline" href="#">
+                        查看更多 <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+<div class="flex flex-col gap-3 group">
+<div class="aspect-square bg-white rounded-lg overflow-hidden border border-primary/10">
+<img alt="龙纹" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Intricate golden dragon pattern on silk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCEs1ntVRuAzE91dw_u3W1Dkf_nJi861cCUPIIfZNlUYZ2cg0vFrbjqFwYTQNZEBvsqxcQtgeHsjVWRmw9pAqFZk-TYvY85knqFtM28__mUhaBO1eq-vdQbzxGeZ8vC4_48BfBlbWnaTBnkqkbu8rvEVPvalcvLQqxUjLeOVoH22kAfDpb8JzJfC7-DCsDwrG6zypNbQkW8kAW0RgXuB5g7pjxBR2Iz8G0DYXGxQXMTtLNJgJ9Dya0PPziwbMGKPBCT4Q6T11Fhw"/>
+</div>
+<div class="flex justify-between items-center">
+<h5 class="font-bold">云龙纹</h5>
+<span class="text-xs text-muted-gold">元 · 景德镇</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="aspect-square bg-white rounded-lg overflow-hidden border border-primary/10">
+<img alt="缠枝莲纹" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Traditional lotus vine pattern on ceramic background" src=""/>
+</div>
+<div class="flex justify-between items-center">
+<h5 class="font-bold">缠枝莲纹</h5>
+<span class="text-xs text-muted-gold">明 · 青花</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="aspect-square bg-white rounded-lg overflow-hidden border border-primary/10">
+<img alt="团花纹" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Circular flower medallion pattern embroidery" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqo1dqsfsYhYJG-besTrYP1OeOiRunddlXdl7n_-5I-5QR_tYxWLkV_9bQr4kT0t8qvZ024Lo98XZ0tGXSwlr9p3ctSBcQSryaHUUBOkCS6W-m8BPxb8wr29RWqbr5kEavpz_tTHSc0IW7zgsePfAr2qSHkyDNJAPoAiPwTqWjJqg8WthfwlvHuw6iaViTfWsu0ej9W66d_BbEYikOPAcGeMKId_hsC60s_62jwzC2vVkSboOa9hcPQf9Ze6o3jbnBeHmTITeGFw"/>
+</div>
+<div class="flex justify-between items-center">
+<h5 class="font-bold">大唐团花</h5>
+<span class="text-xs text-muted-gold">唐 · 织锦</span>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="aspect-square bg-white rounded-lg overflow-hidden border border-primary/10">
+<img alt="如意纹" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Abstract traditional Ruyi cloud pattern" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-QfGYDNIK1HmjvBAfi46QY3SzZRelUu2c5RH0ICl6ALZij1CCyHiLMNTpYljZIDIp-6mtfBrxlbKz-lzMo9LlusY8AgD3w2pvj_636kvNkeUpq-iI3WAb_eoWc3yHDDvL0ZMBjpQSsp4I7aPdY5g27NG5nj_bbyqPpJOrVwyxxrvckBTZ81cf8M7legHTZfz0gOfKWJ5OrtR4Rl0aqeXOGdSgioemcarD_VVhgfmpJqcijkMit1P5rUE_oRyrkhsWfjbeMKfs6w"/>
+</div>
+<div class="flex justify-between items-center">
+<h5 class="font-bold">祥云如意</h5>
+<span class="text-xs text-muted-gold">清 · 漆绘</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer class="bg-ink text-slate-400 py-12 px-8">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3 text-white">
+<span class="material-symbols-outlined text-primary">landscape</span>
+<span class="text-xl font-bold tracking-widest">纹样大观 · 数字化博物馆</span>
+</div>
+<p class="text-sm opacity-60">致力于中国传统纹样的数字化整理与美学传播</p>
+</div>
+<div class="flex gap-12 text-sm">
+<div class="flex flex-col gap-3">
+<span class="text-white font-bold">探索</span>
+<a class="hover:text-primary transition-colors" href="#">纹样全集</a>
+<a class="hover:text-primary transition-colors" href="#">工艺溯源</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-white font-bold">研究</span>
+<a class="hover:text-primary transition-colors" href="#">学术论文</a>
+<a class="hover:text-primary transition-colors" href="#">出版物</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-white font-bold">联络</span>
+<a class="hover:text-primary transition-colors" href="#">关于我们</a>
+<a class="hover:text-primary transition-colors" href="#">版权申明</a>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/10 text-xs text-center opacity-40">
+                © 2024 纹样大观数字库. 保留所有权利.
+            </div>
+</footer>
+</div>
+</body></html>

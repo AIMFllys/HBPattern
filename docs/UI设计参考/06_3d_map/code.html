@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,200..800&amp;family=Noto+Sans+SC:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d2ae1e",
+                        "accent-red": "#b34d43",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211e11",
+                        "card-beige": "#f3f0e8",
+                        "border-beige": "#e6e2d1"
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "Noto Sans SC", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        .map-glow {
+            filter: drop-shadow(0 0 8px rgba(210, 174, 30, 0.6));
+        }
+        .marker-red {
+            filter: drop-shadow(0 0 6px rgba(179, 77, 67, 0.8));
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-border-beige px-6 md:px-10 py-4 bg-background-light/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-slate-900">
+<span class="material-symbols-outlined text-primary text-3xl">storm</span>
+<h2 class="text-xl font-bold tracking-tight">湖北非遗3D文化地图</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-900 text-sm font-medium hover:text-primary transition-colors border-b-2 border-primary" href="#">首页</a>
+<a class="text-slate-900/70 text-sm font-medium hover:text-primary transition-colors" href="#">数字地图</a>
+<a class="text-slate-900/70 text-sm font-medium hover:text-primary transition-colors" href="#">非遗百科</a>
+<a class="text-slate-900/70 text-sm font-medium hover:text-primary transition-colors" href="#">传承人</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<div class="relative hidden sm:block w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-card-beige border-none rounded text-sm focus:ring-1 focus:ring-primary" placeholder="搜索非遗项目或地名"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined p-2 text-slate-600 hover:bg-card-beige rounded-full transition-colors">notifications</button>
+<div class="size-9 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center overflow-hidden">
+<img alt="用户头像" class="w-full h-full object-cover" data-alt="User profile avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo9oJ1RHovHERjAnzA39Fix2HJSkXzD8U7ZYaNqmiTcG2pYiEmsBqrV45mPd5frZ9nDUtaO00AbvPZD5QBnaXKRr9SenUZeUdZp18jBobDf2HRhd_R5wzrlHNjBH-oqhjSWZYVE9hNeNZ03yCtnmeQEP0FJeoPpJoB-yfTWTln00myL9YZyYq2nl5zgtRn2A3psJNHz0SQ-YMzwJ9GwQXvKOGFGx3m_GbJSf7kgtl4Xgsl0ZgMf2aEm7eE0CRxAV6zli6AKd-LnQ"/>
+</div>
+</div>
+</div>
+</header>
+<main class="flex flex-col lg:flex-row h-[calc(100vh-73px)] overflow-hidden">
+<!-- Left Sidebar: Controls & Stats -->
+<aside class="w-full lg:w-80 border-r border-border-beige flex flex-col bg-background-light overflow-y-auto">
+<div class="p-6 flex flex-col gap-6">
+<div>
+<h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">实时数据看板</h3>
+<div class="grid grid-cols-1 gap-4">
+<div class="p-4 bg-card-beige rounded-lg border border-border-beige/50">
+<div class="flex justify-between items-start mb-1">
+<span class="text-sm text-slate-500">传统纹样总数</span>
+<span class="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded font-bold">+5.2%</span>
+</div>
+<div class="text-2xl font-bold text-slate-900">1,284 <span class="text-xs font-normal text-slate-400 ml-1">件</span></div>
+</div>
+<div class="p-4 bg-card-beige rounded-lg border border-border-beige/50">
+<div class="flex justify-between items-start mb-1">
+<span class="text-sm text-slate-500">活跃工艺大师</span>
+<span class="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded font-bold">+2.1%</span>
+</div>
+<div class="text-2xl font-bold text-slate-900">456 <span class="text-xs font-normal text-slate-400 ml-1">位</span></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">层级筛选</h3>
+<button class="flex items-center gap-3 px-4 py-3 rounded bg-primary text-slate-900 font-medium">
+<span class="material-symbols-outlined text-xl">grid_view</span>
+<span class="text-sm">全省概览</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 rounded hover:bg-card-beige text-slate-600 transition-colors">
+<span class="material-symbols-outlined text-xl">map</span>
+<span class="text-sm font-medium">地区分布</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 rounded hover:bg-card-beige text-slate-600 transition-colors">
+<span class="material-symbols-outlined text-xl">category</span>
+<span class="text-sm font-medium">类别检索</span>
+</button>
+<button class="flex items-center gap-3 px-4 py-3 rounded hover:bg-card-beige text-slate-600 transition-colors">
+<span class="material-symbols-outlined text-xl">bookmark</span>
+<span class="text-sm font-medium">我的收藏</span>
+</button>
+</div>
+<div class="mt-auto pt-6">
+<button class="w-full flex items-center justify-center gap-2 py-3 bg-accent-red text-white rounded font-bold text-sm shadow-lg shadow-accent-red/20">
+<span class="material-symbols-outlined text-lg">download</span>
+                        下载年度研究报告
+                    </button>
+</div>
+</div>
+</aside>
+<!-- Main View: Map Section -->
+<section class="flex-1 relative bg-[#fdfcf9]">
+<!-- Interactive Map Container -->
+<div class="absolute inset-0 z-0 bg-cover bg-center opacity-40 mix-blend-multiply" data-alt="Antique styled topographic map of Hubei Province" data-location="Hubei" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDkNdEBvcUE26tuEi_A-J4E255nERBPXlv4wL8623SspIp-VPiXoNy3LF1m5_tBDzqQEfnYNQfzsuY-DjNN36hXcIZXx_rHDql4X6qXa_Z5jdBo0s6rFyK_nwLr1KHDgQ_mwndIUvl3rhtedKacq6nqlsi5Fs-5U43q-qFD-WMaQi76BX04kmj7AX4Wu5B_0lMLmPwIctQxg3vGb0aUfBtfGcvtZIzSZ2CNv1nc376TT6Z_YDJKZDTj0mn7_k5bzYZhGvXE0nto1w')"></div>
+<!-- Map Markers & UI Overlays -->
+<div class="relative z-10 w-full h-full p-8 flex flex-col justify-between pointer-events-none">
+<div class="flex justify-between items-start pointer-events-auto">
+<div class="bg-white/80 backdrop-blur p-4 rounded-xl border border-border-beige shadow-sm max-w-xs">
+<h4 class="text-primary font-bold text-xs tracking-widest uppercase mb-1">当前视图</h4>
+<p class="text-slate-900 font-bold text-lg">湖北省行政区域</p>
+<p class="text-slate-500 text-xs mt-1">点击城市锚点查看详细非遗数据洞察</p>
+</div>
+<div class="flex flex-col gap-2">
+<div class="bg-white rounded shadow-md overflow-hidden flex flex-col border border-border-beige">
+<button class="p-2 hover:bg-card-beige text-slate-600"><span class="material-symbols-outlined">add</span></button>
+<div class="h-px bg-border-beige mx-2"></div>
+<button class="p-2 hover:bg-card-beige text-slate-600"><span class="material-symbols-outlined">remove</span></button>
+</div>
+<button class="bg-white p-2 rounded shadow-md border border-border-beige text-slate-600 pointer-events-auto">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<button class="bg-white p-2 rounded shadow-md border border-border-beige text-slate-600 pointer-events-auto">
+<span class="material-symbols-outlined">layers</span>
+</button>
+</div>
+</div>
+<!-- Abstract Map Nodes Representation -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<!-- Marker for Wuhan -->
+<div class="absolute top-[45%] left-[65%] pointer-events-auto group">
+<div class="relative cursor-pointer">
+<div class="absolute -inset-4 bg-primary/20 rounded-full animate-pulse"></div>
+<div class="relative size-4 bg-accent-red rounded-full border-2 border-white marker-red"></div>
+<div class="absolute top-6 left-1/2 -translate-x-1/2 whitespace-nowrap bg-white/90 px-2 py-1 rounded text-[10px] font-bold text-slate-800 shadow-sm border border-border-beige">武汉市</div>
+</div>
+</div>
+<!-- Other City Nodes -->
+<div class="absolute top-[35%] left-[30%] pointer-events-auto opacity-60">
+<div class="size-3 bg-primary rounded-full border-2 border-white map-glow"></div>
+<div class="absolute top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-medium text-slate-400">十堰市</div>
+</div>
+<div class="absolute top-[55%] left-[25%] pointer-events-auto opacity-60">
+<div class="size-3 bg-primary rounded-full border-2 border-white map-glow"></div>
+<div class="absolute top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-medium text-slate-400">恩施州</div>
+</div>
+<div class="absolute top-[60%] left-[45%] pointer-events-auto opacity-60">
+<div class="size-3 bg-primary rounded-full border-2 border-white map-glow"></div>
+<div class="absolute top-5 left-1/2 -translate-x-1/2 whitespace-nowrap text-[9px] font-medium text-slate-400">荆州市</div>
+</div>
+</div>
+<!-- Region Insight Pop-up (Wuhan Example) -->
+<div class="mt-auto pointer-events-auto self-start animate-fade-in">
+<div class="bg-white border-l-4 border-accent-red p-6 rounded-r-xl shadow-2xl max-w-md border-y border-r border-border-beige">
+<div class="flex justify-between items-start mb-4">
+<div>
+<span class="text-accent-red font-bold text-xs uppercase tracking-tighter">地区洞察</span>
+<h2 class="text-2xl font-bold text-slate-900">武汉 (Wuhan)</h2>
+</div>
+<span class="material-symbols-outlined text-slate-300">info</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="space-y-1">
+<p class="text-xs text-slate-400">国家级非遗项目</p>
+<p class="text-xl font-bold text-slate-800">18 <span class="text-xs font-normal">项</span></p>
+</div>
+<div class="space-y-1">
+<p class="text-xs text-slate-400">省级代表传承人</p>
+<p class="text-xl font-bold text-slate-800">42 <span class="text-xs font-normal">位</span></p>
+</div>
+</div>
+<div class="space-y-3">
+<h4 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+<span class="size-1.5 bg-accent-red rounded-full"></span> 重点推荐项目
+                            </h4>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-2 rounded bg-card-beige hover:bg-primary/10 transition-colors cursor-pointer group">
+<span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">汉绣 (Han Embroidery)</span>
+<span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-card-beige hover:bg-primary/10 transition-colors cursor-pointer group">
+<span class="text-sm text-slate-600 group-hover:text-slate-900 transition-colors">武汉铜锣制作技艺</span>
+<span class="material-symbols-outlined text-sm text-slate-400">chevron_right</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-6 py-2 border border-border-beige text-slate-600 text-xs font-bold rounded hover:bg-slate-50 transition-colors">
+                            查看该地区完整数字档案
+                        </button>
+</div>
+</div>
+</div>
+<!-- Legend Overlay -->
+<div class="absolute bottom-8 right-8 z-20 flex flex-col gap-2 bg-white/90 backdrop-blur p-4 rounded border border-border-beige shadow-sm pointer-events-auto">
+<div class="flex items-center gap-3">
+<div class="size-2.5 bg-accent-red rounded-full"></div>
+<span class="text-[10px] text-slate-600 font-medium">重点文化保护区</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-2.5 bg-primary rounded-full"></div>
+<span class="text-[10px] text-slate-600 font-medium">一般非遗集聚地</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="size-2.5 bg-slate-200 rounded-full border border-slate-300"></div>
+<span class="text-[10px] text-slate-600 font-medium">待考察区域</span>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

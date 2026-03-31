@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d2ae1e",
+                        "accent-red": "#b34d4d",
+                        "background-light": "#f8f8f6",
+                        "background-dark": "#211e11",
+                        "neutral-beige": "#f3f0e8",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<title>2026年度管理后台</title>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-neutral-beige px-6 md:px-10 py-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-accent-red">
+<span class="material-symbols-outlined text-3xl">account_balance</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-tight">2026年度管理后台</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-accent-red transition-colors" href="#">仪表盘</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-accent-red transition-colors" href="#">内容管理</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-accent-red transition-colors" href="#">用户分析</a>
+<a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-accent-red transition-colors" href="#">系统设置</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6 items-center">
+<label class="hidden sm:flex flex-col min-w-40 h-10 max-w-64">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full overflow-hidden border border-neutral-beige shadow-sm">
+<div class="text-slate-400 flex bg-white dark:bg-slate-800 items-center justify-center pl-4">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-0 h-full placeholder:text-slate-400 px-4 pl-2 text-sm" placeholder="搜索关键词..."/>
+</div>
+</label>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:text-accent-red">notifications</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-accent-red/20" data-alt="用户个人头像照片" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzwAxINAN17YGhhnXQNdK-kpQRhIc7bsjWRw_WFUZZ9LIEj2NunqSaAb9XDCIIpJaY5UlS4e610bD-I_TCvzr1KXrgtXLSze8dimt-sKgm9xQADaHK_9BOjJkHUhxiBRJ_je6oKXwjFGJlCjEaIqoiHmcOSU4ptftU4UlPESKY5lKKVOpNNOzqhsjM8kj0TY4RpxkSfuhO9z4655lIcDbnnXqIbXwerV4dhlTIV8YcIQY5q89ZlQNMI9bE8lveAwR3Qg_Fi-vFqA");'>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1200px] mx-auto w-full p-6 md:p-10 space-y-8">
+<!-- Header Section -->
+<div class="flex flex-col gap-2">
+<h1 class="text-slate-900 dark:text-slate-100 text-4xl font-black tracking-tight">2026年度数据概览</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg">实时监控学术平台核心指标与增长趋势</p>
+</div>
+<!-- Key Metrics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-800 border border-neutral-beige shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">总模式数量</p>
+<span class="material-symbols-outlined text-accent-red/60">schema</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold tabular-nums">12,840</p>
+<div class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-sm font-semibold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+12.5%</span>
+<span class="text-slate-400 font-normal ml-1">较上月</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-800 border border-neutral-beige shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">累计用户数</p>
+<span class="material-symbols-outlined text-accent-red/60">group</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold tabular-nums">85,600</p>
+<div class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-sm font-semibold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+8.2%</span>
+<span class="text-slate-400 font-normal ml-1">较上月</span>
+</div>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-slate-800 border border-neutral-beige shadow-sm hover:shadow-md transition-shadow">
+<div class="flex justify-between items-start">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-wider">AI 调用次数</p>
+<span class="material-symbols-outlined text-accent-red/60">smart_toy</span>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-3xl font-bold tabular-nums">1.2M</p>
+<div class="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-sm font-semibold">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+24.0%</span>
+<span class="text-slate-400 font-normal ml-1">较上月</span>
+</div>
+</div>
+</div>
+<!-- Main Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Area Chart -->
+<div class="lg:col-span-2 rounded-xl p-6 bg-white dark:bg-slate-800 border border-neutral-beige shadow-sm">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold">2026年内容增长趋势</h3>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-accent-red/10 text-accent-red text-xs font-bold rounded">年度数据</span>
+</div>
+</div>
+<div class="flex items-baseline gap-4 mb-4">
+<p class="text-slate-900 dark:text-slate-100 text-4xl font-bold tabular-nums">12,840</p>
+<div class="flex items-center gap-1 text-emerald-600 font-semibold">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span class="text-sm">+15.8%</span>
+</div>
+</div>
+<div class="w-full h-64 relative mt-4">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 200">
+<defs>
+<lineargradient id="gradient-red" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#b34d4d" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#b34d4d" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,150 Q100,140 200,100 T400,80 T600,120 T800,40 T1000,20 V200 H0 Z" fill="url(#gradient-red)"></path>
+<path d="M0,150 Q100,140 200,100 T400,80 T600,120 T800,40 T1000,20" fill="none" stroke="#b34d4d" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="flex justify-between mt-4 text-slate-400 text-xs font-medium">
+<span>1月</span><span>3月</span><span>5月</span><span>7月</span><span>9月</span><span>11月</span>
+</div>
+</div>
+</div>
+<!-- Heatmap / Regional Distribution -->
+<div class="rounded-xl p-6 bg-white dark:bg-slate-800 border border-neutral-beige shadow-sm">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold mb-6">区域模式分布</h3>
+<div class="space-y-4">
+<div class="relative pt-1">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold text-slate-600 dark:text-slate-300">华东地区</span>
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">42%</span>
+</div>
+<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-neutral-beige dark:bg-slate-700">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-accent-red" style="width:42%"></div>
+</div>
+</div>
+<div class="relative pt-1">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold text-slate-600 dark:text-slate-300">华北地区</span>
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">28%</span>
+</div>
+<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-neutral-beige dark:bg-slate-700">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-accent-red/80" style="width:28%"></div>
+</div>
+</div>
+<div class="relative pt-1">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold text-slate-600 dark:text-slate-300">华南地区</span>
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">18%</span>
+</div>
+<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-neutral-beige dark:bg-slate-700">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-accent-red/60" style="width:18%"></div>
+</div>
+</div>
+<div class="relative pt-1">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-semibold text-slate-600 dark:text-slate-300">西部地区</span>
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">12%</span>
+</div>
+<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-neutral-beige dark:bg-slate-700">
+<div class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-accent-red/40" style="width:12%"></div>
+</div>
+</div>
+</div>
+<div class="mt-8 rounded bg-background-light dark:bg-background-dark p-4 border border-dashed border-neutral-beige">
+<div class="flex items-center gap-2 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-sm">info</span>
+<span>数据根据2026年IP地理位置聚合而成。</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Activity Table -->
+<div class="rounded-xl overflow-hidden bg-white dark:bg-slate-800 border border-neutral-beige shadow-sm">
+<div class="p-6 border-b border-neutral-beige flex justify-between items-center">
+<h3 class="text-slate-900 dark:text-slate-100 text-xl font-bold">近期模式更新</h3>
+<button class="text-accent-red text-sm font-bold hover:underline">查看全部</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-background-light dark:bg-background-dark text-slate-500 text-xs uppercase tracking-wider">
+<tr>
+<th class="px-6 py-4 font-semibold">模式名称</th>
+<th class="px-6 py-4 font-semibold">类别</th>
+<th class="px-6 py-4 font-semibold">状态</th>
+<th class="px-6 py-4 font-semibold text-right">更新日期</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-neutral-beige dark:divide-slate-700">
+<tr class="hover:bg-background-light/50 dark:hover:bg-background-dark/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">学术本体论 v2.4</td>
+<td class="px-6 py-4 text-sm text-slate-500">语义架构</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">活跃</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">2026-10-24</td>
+</tr>
+<tr class="hover:bg-background-light/50 dark:hover:bg-background-dark/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">深度神经网络映射</td>
+<td class="px-6 py-4 text-sm text-slate-500">计算模型</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">处理中</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">2026-10-22</td>
+</tr>
+<tr class="hover:bg-background-light/50 dark:hover:bg-background-dark/50 transition-colors">
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-slate-100">多模态知识图谱</td>
+<td class="px-6 py-4 text-sm text-slate-500">知识表示</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">活跃</span>
+</td>
+<td class="px-6 py-4 text-sm text-slate-500 text-right">2026-10-20</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<footer class="mt-auto border-t border-neutral-beige p-8 text-center bg-background-light dark:bg-background-dark">
+<p class="text-slate-400 text-sm">© 2026 学术管理平台 - 专业 · 严谨 · 智能</p>
+</footer>
+</div>
+</body></html>

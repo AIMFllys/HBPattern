@@ -1,0 +1,461 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+  extensions = [postgis, vector]
+}
+
+enum Role {
+  admin
+  moderator
+  user
+  @@map("hp_role")
+}
+
+enum ContributorLevel {
+  newcomer
+  contributor
+  expert
+  inheritor
+  @@map("hp_contributor_level")
+}
+
+enum PatternStatus {
+  pending
+  approved
+  rejected
+  featured
+  @@map("hp_pattern_status")
+}
+
+enum LicenseType {
+  public_domain
+  cc_by
+  cc_by_nc_sa
+  copyright
+  @@map("hp_license_type")
+}
+
+enum MediaType {
+  image
+  video
+  three_d_model @map("3d_model")
+  deep_zoom
+  @@map("hp_media_type")
+}
+
+enum RelationType {
+  evolved_from
+  influenced_by
+  variant_of
+  same_origin
+  @@map("hp_relation_type")
+}
+
+enum TechniqueCategory {
+  embroidery
+  dyeing
+  weaving
+  printing
+  @@map("hp_technique_category")
+}
+
+enum IchLevel {
+  national
+  provincial
+  municipal
+  @@map("hp_ich_level")
+}
+
+enum IchProtectionStatus {
+  endangered
+  general
+  good
+  @@map("hp_ich_protection_status")
+}
+
+enum CommentStatus {
+  pending
+  approved
+  rejected
+  @@map("hp_comment_status")
+}
+
+enum NotificationType {
+  comment_reply
+  moderation_result
+  system
+  badge_earned
+  @@map("hp_notification_type")
+}
+
+enum ReportTargetType {
+  pattern
+  comment
+  user
+  @@map("hp_report_target_type")
+}
+
+enum ReportReason {
+  misinformation
+  copyright
+  low_quality
+  offensive
+  other
+  @@map("hp_report_reason")
+}
+
+enum ReportStatus {
+  pending
+  resolved
+  dismissed
+  @@map("hp_report_status")
+}
+
+enum AiTaskType {
+  generate
+  texture_map
+  moderate
+  embed_image
+  @@map("hp_ai_task_type")
+}
+
+enum AiTaskStatus {
+  queued
+  processing
+  completed
+  failed
+  @@map("hp_ai_task_status")
+}
+
+enum ApiKeyTier {
+  free
+  basic
+  premium
+  @@map("hp_api_key_tier")
+}
+
+enum ApiKeyPurpose {
+  academic
+  personal
+  commercial
+  @@map("hp_api_key_purpose")
+}
+
+model User {
+  id                    String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid // Matches auth.users.id
+  email                 String            @unique
+  nickname              String
+  avatar_url            String?
+  role                  Role              @default(user)
+  contribution_points   Int               @default(0)
+  contributor_level     ContributorLevel  @default(newcomer)
+  preferences           Json?
+  agreed_privacy_policy Boolean           @default(false)
+  created_at            DateTime          @default(now()) @db.Timestamptz
+  last_login            DateTime?         @db.Timestamptz
+
+  patterns                Pattern[]
+  comments                Comment[]
+  user_likes              UserLike[]
+  collections             Collection[]
+  notifications           Notification[]
+  view_history            UserViewHistory[]
+  reports                 Report[]          @relation("Reporter")
+  resolved_reports        Report[]          @relation("Resolver")
+  badges                  UserBadge[]
+  pattern_relations_added PatternRelation[]
+  ai_tasks                AiTask[]
+  api_keys                ApiKey[]
+
+  @@map("hp_users")
+}
+
+model Pattern {
+  id                    String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                  String
+  description           String?       @db.Text
+  historical_background String?       @db.Text
+  era                   String?
+  region_id             String?       @db.Uuid
+  uploader_id           String        @db.Uuid
+  technique_id          String?       @db.Uuid
+  ich_record_id         String?       @db.Uuid
+  is_ai_generated       Boolean       @default(false)
+  ai_model_version      String?
+  status                PatternStatus @default(pending)
+  license_type          LicenseType   @default(copyright)
+  source_declaration    String?
+  copyright_holder      String?
+  color_palette         Json?
+  metadata              Json?
+  view_count            Int           @default(0)
+  like_count            Int           @default(0)
+  comment_count         Int           @default(0)
+  created_at            DateTime      @default(now()) @db.Timestamptz
+  updated_at            DateTime      @updatedAt @db.Timestamptz
+
+  location              Unsupported("geometry(Point, 4326)")?
+  embedding             Unsupported("vector(512)")?
+
+  uploader              User              @relation(fields: [uploader_id], references: [id])
+  region                Region?           @relation(fields: [region_id], references: [id])
+  technique             Technique?        @relation(fields: [technique_id], references: [id])
+  ich_record            IchRecord?        @relation(fields: [ich_record_id], references: [id])
+  media                 PatternMedia[]
+  comments              Comment[]
+  user_likes            UserLike[]
+  pattern_tags          PatternTag[]
+  relations_source      PatternRelation[] @relation("SourcePattern")
+  relations_target      PatternRelation[] @relation("TargetPattern")
+  collection_items      CollectionItem[]
+  view_history          UserViewHistory[]
+
+  @@map("hp_patterns")
+}
+
+model PatternMedia {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pattern_id      String    @db.Uuid
+  media_type      MediaType @default(image)
+  url             String
+  thumbnail_url   String?
+  watermarked_url String?
+  sort_order      Int       @default(0)
+  metadata        Json?
+
+  pattern         Pattern   @relation(fields: [pattern_id], references: [id])
+
+  @@map("hp_pattern_media")
+}
+
+model PatternRelation {
+  id                String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  source_pattern_id String       @db.Uuid
+  target_pattern_id String       @db.Uuid
+  relation_type     RelationType
+  description       String?      @db.Text
+  confidence        Float        @default(1.0)
+  created_by        String       @db.Uuid
+
+  source_pattern    Pattern      @relation("SourcePattern", fields: [source_pattern_id], references: [id])
+  target_pattern    Pattern      @relation("TargetPattern", fields: [target_pattern_id], references: [id])
+  creator           User         @relation(fields: [created_by], references: [id])
+
+  @@map("hp_pattern_relations")
+}
+
+model Technique {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String
+  category         TechniqueCategory
+  description      String?           @db.Text
+  origin_region_id String?           @db.Uuid
+  difficulty_level Int               @default(1)
+
+  origin_region    Region?           @relation(fields: [origin_region_id], references: [id])
+  patterns         Pattern[]
+
+  @@map("hp_techniques")
+}
+
+model IchRecord {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name              String
+  official_code     String?
+  level             IchLevel
+  protection_status IchProtectionStatus
+  inheritor_info    String?             @db.Text
+  description       String?             @db.Text
+
+  patterns          Pattern[]
+
+  @@map("hp_ich_records")
+}
+
+model Region {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  province       String
+  city           String?
+  cultural_intro String? @db.Text
+
+  boundary       Unsupported("geometry(MultiPolygon, 4326)")?
+
+  patterns       Pattern[]
+  techniques     Technique[]
+
+  @@map("hp_regions")
+}
+
+model Comment {
+  id                String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  pattern_id        String        @db.Uuid
+  user_id           String        @db.Uuid
+  parent_id         String?       @db.Uuid
+  content           String        @db.Text
+  status            CommentStatus @default(pending)
+  moderation_reason String?
+  created_at        DateTime      @default(now()) @db.Timestamptz
+
+  pattern           Pattern       @relation(fields: [pattern_id], references: [id])
+  user              User          @relation(fields: [user_id], references: [id])
+  parent            Comment?      @relation("CommentReplies", fields: [parent_id], references: [id])
+  replies           Comment[]     @relation("CommentReplies")
+
+  @@map("hp_comments")
+}
+
+model Tag {
+  id       String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name     String       @unique
+  category String? // 朝代/技法/颜色/风格
+
+  patterns PatternTag[]
+
+  @@map("hp_tags")
+}
+
+model PatternTag {
+  pattern_id String @db.Uuid
+  tag_id     String @db.Uuid
+
+  pattern    Pattern @relation(fields: [pattern_id], references: [id])
+  tag        Tag     @relation(fields: [tag_id], references: [id])
+
+  @@id([pattern_id, tag_id])
+  @@map("hp_pattern_tags")
+}
+
+model UserLike {
+  user_id    String   @db.Uuid
+  pattern_id String   @db.Uuid
+  created_at DateTime @default(now()) @db.Timestamptz
+
+  user       User     @relation(fields: [user_id], references: [id])
+  pattern    Pattern  @relation(fields: [pattern_id], references: [id])
+
+  @@id([user_id, pattern_id])
+  @@map("hp_user_likes")
+}
+
+model Collection {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String   @db.Uuid
+  name        String
+  description String?  @db.Text
+  is_public   Boolean  @default(false)
+  created_at  DateTime @default(now()) @db.Timestamptz
+
+  user        User             @relation(fields: [user_id], references: [id])
+  items       CollectionItem[]
+
+  @@map("hp_collections")
+}
+
+model CollectionItem {
+  collection_id String   @db.Uuid
+  pattern_id    String   @db.Uuid
+  note          String?  @db.Text
+  added_at      DateTime @default(now()) @db.Timestamptz
+
+  collection    Collection @relation(fields: [collection_id], references: [id])
+  pattern       Pattern    @relation(fields: [pattern_id], references: [id])
+
+  @@id([collection_id, pattern_id])
+  @@map("hp_collection_items")
+}
+
+model UserViewHistory {
+  user_id               String   @db.Uuid
+  pattern_id            String   @db.Uuid
+  viewed_at             DateTime @default(now()) @db.Timestamptz
+  view_duration_seconds Int      @default(0)
+
+  user                  User     @relation(fields: [user_id], references: [id])
+  pattern               Pattern  @relation(fields: [pattern_id], references: [id])
+
+  @@id([user_id, pattern_id, viewed_at])
+  @@map("hp_user_view_history")
+}
+
+model Notification {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String           @db.Uuid
+  type        NotificationType
+  title       String
+  content     String           @db.Text
+  related_url String?
+  is_read     Boolean          @default(false)
+  created_at  DateTime         @default(now()) @db.Timestamptz
+
+  user        User             @relation(fields: [user_id], references: [id])
+
+  @@map("hp_notifications")
+}
+
+model Report {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reporter_id String           @db.Uuid
+  target_type ReportTargetType
+  target_id   String           @db.Uuid
+  reason      ReportReason
+  description String?          @db.Text
+  status      ReportStatus     @default(pending)
+  resolved_by String?          @db.Uuid
+  created_at  DateTime         @default(now()) @db.Timestamptz
+
+  reporter    User             @relation("Reporter", fields: [reporter_id], references: [id])
+  resolver    User?            @relation("Resolver", fields: [resolved_by], references: [id])
+
+  @@map("hp_reports")
+}
+
+model UserBadge {
+  user_id   String   @db.Uuid
+  badge_key String
+  earned_at DateTime @default(now()) @db.Timestamptz
+
+  user      User     @relation(fields: [user_id], references: [id])
+
+  @@id([user_id, badge_key])
+  @@map("hp_user_badges")
+}
+
+model AiTask {
+  id                 String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id            String       @db.Uuid
+  task_type          AiTaskType
+  prompt             String       @db.Text
+  parameters         Json?
+  status             AiTaskStatus @default(queued)
+  result_url         String?
+  processing_time_ms Int?
+  created_at         DateTime     @default(now()) @db.Timestamptz
+  completed_at       DateTime?    @db.Timestamptz
+
+  user               User         @relation(fields: [user_id], references: [id])
+
+  @@map("hp_ai_tasks")
+}
+
+model ApiKey {
+  id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id             String        @db.Uuid
+  key_hash            String        @unique
+  tier                ApiKeyTier    @default(free)
+  purpose             ApiKeyPurpose @default(personal)
+  rate_limit_per_hour Int           @default(100)
+  is_active           Boolean       @default(true)
+  created_at          DateTime      @default(now()) @db.Timestamptz
+  last_used_at        DateTime?     @db.Timestamptz
+
+  user                User          @relation(fields: [user_id], references: [id])
+
+  @@map("hp_api_keys")
+}

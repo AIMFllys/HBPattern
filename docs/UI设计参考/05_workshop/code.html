@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#d2ae1e",
+                        "soft-red": "#b34d4d",
+                        "beige-light": "#f8f8f6",
+                        "beige-dark": "#e6e2d1",
+                        "background-light": "#fbfbf8",
+                        "background-dark": "#211e11",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d2ae1e;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Unified Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-beige-dark/50 bg-white/80 backdrop-blur-md px-8 py-3 z-50">
+<div class="flex items-center gap-4">
+<div class="size-8 bg-primary flex items-center justify-center rounded-lg text-white">
+<span class="material-symbols-outlined">grid_view</span>
+</div>
+<div>
+<h1 class="text-xl font-bold leading-tight tracking-tight text-slate-900">纹样+ 跨界创作工坊</h1>
+<p class="text-[10px] uppercase tracking-widest text-primary/80 font-bold">Crossover Creation Workshop</p>
+</div>
+</div>
+<nav class="flex items-center gap-10">
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">首页</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">工作台</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">灵感库</a>
+<a class="text-slate-600 hover:text-primary text-sm font-medium transition-colors" href="#">社区</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-beige-dark/30 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-700">settings</span>
+</button>
+<button class="p-2 hover:bg-beige-dark/30 rounded-full transition-colors">
+<span class="material-symbols-outlined text-slate-700">share</span>
+</button>
+<div class="h-8 w-[1px] bg-beige-dark mx-2"></div>
+<div class="flex items-center gap-3 bg-beige-dark/20 px-3 py-1.5 rounded-full border border-beige-dark/40">
+<span class="text-xs font-bold text-slate-700">设计者: 暖暖</span>
+<div class="size-8 rounded-full bg-cover bg-center border border-white" data-alt="Female anime style character avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCdYD-sS812F9nWXsn3m99c6v0iI0bF0HiFJEtKWZU5bOKu5NggUl25gJmnMaJCm-L1z2lDnegkc6xZK78IEUBpNo-ofVhX5HHut0ZyEsZZqKH_CHQDLcwqoNFRA6t_0MPuOJJIvvPhatt8Y4MInG13EQmz_lYs1-aiFltfE80q-y6KNOY_C2Y3A1QSCJX4cfzgKTsqLsf9I0oh2lbpleNsIP78WQxoRtE3NlJov4jFSleBa6JYowCEp5PUDdnDBcowmEyXRkvS1Q')"></div>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden relative">
+<!-- Left & Center: Canvas Area -->
+<div class="flex-1 relative flex flex-col items-center justify-center p-12 bg-[#f4f1ea]">
+<!-- Breadcrumb -->
+<div class="absolute top-6 left-8 flex items-center gap-2 text-sm">
+<span class="text-primary/60">跨界工坊</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-400">高端定制</span>
+<span class="material-symbols-outlined text-xs">chevron_right</span>
+<span class="text-slate-900 font-bold">主题: {{DATA:THEME:THEME_22}}</span>
+</div>
+<!-- Main Preview Display -->
+<div class="relative w-full max-w-2xl aspect-[4/3] flex items-center justify-center">
+<div class="absolute inset-0 bg-gradient-radial from-white/60 to-transparent rounded-full blur-3xl opacity-50"></div>
+<div class="relative z-10 w-full h-full bg-contain bg-center bg-no-repeat drop-shadow-2xl transform hover:scale-105 transition-transform duration-700" data-alt="Luxury high-end designer handbag with intricate traditional patterns" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLOqldh-8J33-07ClMmfWkYeeXwiFjZyGzO_MVF2Pq8yjyzk2rpar3a8oIK7cG3hBjMxkYCocc45yVmJ8XaQqi_yVPUjYc8CKLypypO83y2opwEO_EOBOrNNOpyvFT0GMajOIC9SiAYc08olkWpIrx81W0fAY6TD5PM7WomDAgSlJnMm7qwYIcM3r5uPdm4MA7X1MPzlhAY7D8LZtFJlboOmk_3-7bwb-HqHH8TlUdtcruxGMP7Nts-bJHfh2LJskBhWTrYn5clg')">
+</div>
+<!-- Floating Detail Labels -->
+<div class="absolute top-1/4 right-0 glass-panel p-3 rounded-lg border-l-4 border-soft-red shadow-sm max-w-[180px]">
+<p class="text-[10px] text-soft-red font-bold uppercase tracking-wider">当前应用纹样</p>
+<p class="text-sm font-bold text-slate-800">楚风凤鸟纹 - 金漆版</p>
+</div>
+</div>
+<!-- Bottom Tuning Panel (Glassmorphism) -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl glass-panel rounded-xl p-6 shadow-2xl border-t border-white/50">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-soft-red">tune</span>
+<h3 class="font-bold text-slate-800">专业调色面板</h3>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-1.5 bg-soft-red text-white text-xs font-bold rounded-lg shadow-lg hover:bg-soft-red/90 transition-all">应用更改</button>
+<button class="px-4 py-1.5 bg-slate-200 text-slate-600 text-xs font-bold rounded-lg hover:bg-slate-300 transition-all">重置</button>
+</div>
+</div>
+<div class="grid grid-cols-3 gap-8">
+<div class="space-y-3">
+<div class="flex justify-between text-xs font-bold text-slate-600">
+<span>纹样密度</span>
+<span class="text-primary">75%</span>
+</div>
+<input class="w-full h-1.5 bg-beige-dark rounded-lg appearance-none cursor-pointer accent-soft-red" type="range"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs font-bold text-slate-600">
+<span>金属感</span>
+<span class="text-primary">42%</span>
+</div>
+<input class="w-full h-1.5 bg-beige-dark rounded-lg appearance-none cursor-pointer accent-soft-red" type="range"/>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between text-xs font-bold text-slate-600">
+<span>丝绸光泽</span>
+<span class="text-primary">90%</span>
+</div>
+<input class="w-full h-1.5 bg-beige-dark rounded-lg appearance-none cursor-pointer accent-soft-red" type="range"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Pattern Asset Library -->
+<aside class="w-96 bg-white border-l border-beige-dark/50 flex flex-col">
+<div class="p-6 border-b border-beige-dark/30">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_awesome</span>
+                            纹样资产库
+                        </h2>
+<span class="text-[10px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded">NEW</span>
+</div>
+<!-- Search & Filter -->
+<div class="relative mb-4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="w-full pl-9 pr-4 py-2 bg-beige-light border-none rounded-lg text-sm focus:ring-1 focus:ring-primary/50" placeholder="搜索纹样..." type="text"/>
+</div>
+<!-- Categories -->
+<div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar">
+<button class="whitespace-nowrap px-4 py-1.5 bg-primary text-white text-xs font-bold rounded-full shadow-sm">楚式纹样</button>
+<button class="whitespace-nowrap px-4 py-1.5 bg-beige-light text-slate-600 text-xs font-bold rounded-full hover:bg-beige-dark/40 transition-colors">敦煌艺术</button>
+<button class="whitespace-nowrap px-4 py-1.5 bg-beige-light text-slate-600 text-xs font-bold rounded-full hover:bg-beige-dark/40 transition-colors">故宫典藏</button>
+<button class="whitespace-nowrap px-4 py-1.5 bg-beige-light text-slate-600 text-xs font-bold rounded-full hover:bg-beige-dark/40 transition-colors">现代简约</button>
+</div>
+</div>
+<!-- Pattern Grid -->
+<div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
+<div class="grid grid-cols-2 gap-4">
+<!-- Pattern Card 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl overflow-hidden border-2 border-primary bg-beige-light p-1 transition-all group-hover:shadow-lg">
+<div class="w-full h-full rounded-lg bg-cover bg-center" data-alt="Traditional Chu style phoenix pattern in gold and red" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCFO6lq1N8UY2nHBijrjDqiTdQIPAw5PvVUIDLqB67ZnxUw_OA7LMmCkRbIr-wlJV5XVvd82bBy5jhrX8ZDzkQw8dPjPbx4781Fn3OAn1y14udv4I_nrXu1UmVz0TSJBaXK8HWNsATBxLaGc0ra6EjIGTwZACojSl6igScBr_BLP-KmzGXMUPPEj4dmsmsV55ylc2Q88PNoVL4Z4QQG-latYFku48Xh_dMgYeAu6NpVVs8-fYs5COfCdGN4ojRaTFyjDEPyGkvQcg')"></div>
+</div>
+<p class="mt-2 text-xs font-bold text-center text-primary">凤鸟云纹 (选中)</p>
+</div>
+<!-- Pattern Card 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl overflow-hidden border-2 border-transparent hover:border-beige-dark bg-beige-light p-1 transition-all group-hover:shadow-lg">
+<div class="w-full h-full rounded-lg bg-cover bg-center" data-alt="Traditional pattern of deer and floral motifs" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDnP36Gsqe2hHvD7Jz4gLXwu6G5iajjLma-t_UYuRRujXW9eE57U2KPgKmV6Ksz-pQv59AGyIL8IfUEmgj_I4o73XAQqtMr73HmdjmOGljci1AC4-vuakDkF7nKqm_hLMvkiYgLuPKXqbdQJF-3oGEqjMUg1ucor7gQgbwzPdG7-5QZfwhfOZstL1-CZieCO5Q9itYGSKM61flYOVRQqU6_AQY-lLxteg40m35RESYLy3cmeGhUmMafOTFetvjFKNiDzifSjulmmQ')"></div>
+</div>
+<p class="mt-2 text-xs font-bold text-center text-slate-500">九色鹿图腾</p>
+</div>
+<!-- Pattern Card 3 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl overflow-hidden border-2 border-transparent hover:border-beige-dark bg-beige-light p-1 transition-all group-hover:shadow-lg">
+<div class="w-full h-full rounded-lg bg-cover bg-center" data-alt="Intricate blue and white porcelain pattern" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD6VRE-JnW20fMt5f23Ec6WHLBIk56MaKhfx6Kk5-qEYcwrbeH5Mzzzj-WTBg7yMaB9nbwHkoy8FKuaRJt2I4IaQHCdw5kPUk2D8YvWF8jrPlT3g5Wwv4GZlHqv9XwGXk3cYPmkEdg9qREQufP-hNMHMpCeoRyIOrHM6iVLXpXNqvWfMQ9XaYKJkxtW83nuZxWIk6r22vohvTYg9tofn9H0RJeV-Qw-k6EnfFh5kALFtGMN-oYWEATQNd3ZVbf1OvWuhWvGc0fl-A')"></div>
+</div>
+<p class="mt-2 text-xs font-bold text-center text-slate-500">青花折枝纹</p>
+</div>
+<!-- Pattern Card 4 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl overflow-hidden border-2 border-transparent hover:border-beige-dark bg-beige-light p-1 transition-all group-hover:shadow-lg">
+<div class="w-full h-full rounded-lg bg-cover bg-center" data-alt="Geometric silk pattern with subtle gold threads" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDAyL9_JLqyTLm9H55lDybKvPo4SkiN-hfBO53Dt1wUnW6bJ_u4TfDlY-rug0yG7ayVTq_ZTlt0lHLpvX6ZDBqHXFfzHoISBAjNUAVtNUq3BBYvhhuvJ_Tf4HOgbRvCRlV0ficvSYcMRLybTjOoEXYEqbCQUT10WZ0zaeeFvc7dHusJjRB5MHkzB3XYYdNf5PdjX5wLloFXe3-q0TGqc34Iiqr78LOZAhtHeBBhTIQFX6HGvD3LLh1F-MM5FFT_0Z1K1jjw2yWJLg')"></div>
+</div>
+<p class="mt-2 text-xs font-bold text-center text-slate-500">锦绣繁花</p>
+</div>
+<!-- Pattern Card 5 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl overflow-hidden border-2 border-transparent hover:border-beige-dark bg-beige-light p-1 transition-all group-hover:shadow-lg">
+<div class="w-full h-full rounded-lg bg-cover bg-center" data-alt="Abstract modern interpretation of water ripples" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAVCdf9KqEUa99l6H_8_8VPlFsT4nex8IN3GYsbL4B4QkvQbsd4pYGnEMREUpPKPcJXqcZ3ThNGWTFrBUlLfxZrp_ZgrKzY1T1QqEeF0fT3sG43hQLog-xsnekXnF43s_4jqgkymdU-vpv-yjPgHCPsQJawuf2uRkV2O0tER33c4gBivrBIyEVgRYjF7QjqApNNi55b-jHevpyXtzSkII1_RjfjZAyGy9U-I8eUXEn2mF8e9mf5HQlCIk3LdEOHIkfc98cpOEgJfA')"></div>
+</div>
+<p class="mt-2 text-xs font-bold text-center text-slate-500">涟漪写意</p>
+</div>
+<!-- Pattern Card 6 -->
+<div class="group cursor-pointer">
+<div class="aspect-square rounded-xl overflow-hidden border-2 border-transparent hover:border-beige-dark bg-beige-light p-1 transition-all group-hover:shadow-lg">
+<div class="w-full h-full rounded-lg bg-cover bg-center" data-alt="Traditional dragon and pearl embroidery pattern" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCnHNoTZam4otmqIjx3bPBfzi2v5PK8zz5zuFQqOfFJnR6-bnShHeKlhkBgic7_wNu_mFqcOXC2h6W1e6DtwM01mL6esiP5KyldJOZnc4eL8m8sIxH2wvl4kYlqmEtVMhbG3PZMgqzieD5EFL2fAhRVe7Iz8VZ7648BDVZVayN7HEMHohzraJGeeBrIDisFW0ho9CxwtGIip1b4DxqGAFQ4RjbPCGyzrREyvAsKQ08UGQiC_jLsJIT7eOfunyN3oMC-04_ceDBKTA')"></div>
+</div>
+<p class="mt-2 text-xs font-bold text-center text-slate-500">龙腾祥瑞</p>
+</div>
+</div>
+</div>
+<!-- Export Options -->
+<div class="p-6 bg-beige-light/50 border-t border-beige-dark/30">
+<button class="w-full py-3 bg-slate-900 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-slate-800 transition-all shadow-xl">
+<span class="material-symbols-outlined text-sm">download</span>
+                        导出高清设计稿
+                    </button>
+<p class="text-[10px] text-center mt-3 text-slate-400 font-medium">支持 PNG, SVG, 3D OBJ 格式</p>
+</div>
+</aside>
+</main>
+</div>
+</body></html>

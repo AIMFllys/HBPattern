@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#b91c1c", /* Soft Red Accent instead of yellow for contrast */
+                        "background-light": "#fdfaf1", /* Beige Background */
+                        "background-dark": "#211e11",
+                        "neutral-soft": "#f3eee0",
+                    },
+                    fontFamily: {
+                        "display": ["Newsreader", "serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Newsreader', "Noto Sans SC", serif;
+        }
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 1.5rem;
+        }
+        @media (min-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 w-full border-b border-primary/10 bg-background-light/80 backdrop-blur-md px-6 lg:px-20 py-4 flex items-center justify-between">
+<div class="flex items-center gap-12">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<span class="material-symbols-outlined text-3xl">filter_vintage</span>
+</div>
+<h1 class="text-xl font-display font-bold tracking-tight text-slate-900">湖北传统纹样库</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors border-b-2 border-primary" href="#">首页</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary transition-colors" href="#">纹样专题</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary transition-colors" href="#">学术研究</a>
+<a class="text-sm font-medium text-slate-600 hover:text-primary transition-colors" href="#">数字档案</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xl">search</span>
+<input class="pl-10 pr-4 py-1.5 w-64 bg-neutral-soft border-none rounded-lg focus:ring-1 focus:ring-primary text-sm" placeholder="搜索纹样..." type="text"/>
+</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-soft text-slate-700">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</header>
+<main class="flex flex-1 w-full max-w-7xl mx-auto px-6 lg:px-10 py-10 gap-10">
+<!-- Sidebar Filters -->
+<aside class="w-64 shrink-0 hidden lg:flex flex-col gap-8">
+<div class="flex flex-col gap-2">
+<h2 class="text-lg font-bold border-l-4 border-primary pl-3 mb-4">筛选检索</h2>
+<!-- Filter Section: Era -->
+<div class="mb-6">
+<h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">年代分类</h3>
+<div class="flex flex-col gap-1">
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">楚式风格</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">汉代纹饰</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">唐宋韵味</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">明清工艺</span>
+</label>
+</div>
+</div>
+<!-- Filter Section: Region -->
+<div class="mb-6">
+<h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">地域分布</h3>
+<div class="flex flex-col gap-1">
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">武汉 (江城)</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">荆州 (古城)</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">恩施 (土苗)</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">襄阳 (汉水)</span>
+</label>
+</div>
+</div>
+<!-- Filter Section: Technique -->
+<div class="mb-6">
+<h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">工艺类别</h3>
+<div class="flex flex-col gap-1">
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">传统刺绣</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">民间蜡染</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">织锦 (西兰卡普)</span>
+</label>
+<label class="flex items-center gap-2 px-2 py-1.5 rounded hover:bg-neutral-soft cursor-pointer group">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-700 group-hover:text-primary">漆器纹样</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Promotion Card -->
+<div class="bg-primary/5 p-6 rounded-xl border border-primary/10">
+<p class="text-sm text-primary font-medium mb-2">学术研究征集</p>
+<p class="text-xs text-slate-600 leading-relaxed">欢迎提供更多湖北地方传统纹样线索与学术文章，共同丰富档案库。</p>
+<button class="mt-4 text-xs font-bold text-primary underline">立即参与</button>
+</div>
+</aside>
+<!-- Main Content: Masonry Gallery -->
+<section class="flex-1">
+<div class="flex items-baseline justify-between mb-8">
+<div class="flex items-center gap-4">
+<h2 class="text-2xl font-display font-bold">纹样画廊</h2>
+<span class="text-sm text-slate-400">共 1,248 件作品</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1 px-3 py-1.5 bg-neutral-soft rounded-lg text-sm text-slate-600 hover:text-primary">
+<span class="material-symbols-outlined text-lg">sort</span>
+                        最新上传
+                    </button>
+</div>
+</div>
+<div class="masonry-grid">
+<!-- Card 1 -->
+<div class="masonry-item group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl bg-neutral-soft aspect-[3/4]">
+<img alt="Phoenix bird pattern on dark silk" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Intricate Chu style phoenix bird pattern illustration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsNXdBQSzIk8lxkjO_09UAZEGl79AJKULYueXNcqoCPTfBYGPNoLJzHJ_sX4UnAEAbexD1L_TM-cqEgtIkYVe2OkZq0LiMrPFnr66BPMNBnxGt0DYyYaH0W-9iOI5P2YKWzGYc2N75wvmaMkUYQR7jq2-NQ0n9nMuy7jW9OmvvVpVAst36tFCNLlDdNv7w2rcySF9exdhQylitge3g7k_xMdsYt8MnQquNOpDAiPBwpsicZoJJaGIqIydCEZ32LumBEgl_DjiJfg"/>
+<div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-primary uppercase tracking-tight">AI 生成</div>
+</div>
+<div class="mt-4 px-1">
+<h3 class="text-base font-bold text-slate-900 group-hover:text-primary transition-colors">战国凤鸟纹</h3>
+<p class="text-sm text-slate-500 font-display italic">湖北省博物馆 · 楚文化</p>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="masonry-item group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl bg-neutral-soft aspect-[1/1]">
+<img alt="Traditional geometric textile pattern blue and white" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Geometric Xilankapu weaving pattern from Enshi region" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATHS5zVKaG8q0brO6vkAGdx0UPC4i744BOOc05WdG0p_XdJg923VaBlqDOvviD6ClMZ2CacPkNB0F5e5jS2LyydYzwiy4RB5OgJitjXR3D8qniAlbjMuI93QS2cHGWwEqEE2YkSSGY4XR8k7bseotrX1mSF77IUwy55mOiPcPIiuKGxjz0AkrcxZ53_Mp4VzCwzuE45csF9KgTSRG20mijBPjG5uXo02mjNE7izk7uRGfrGIF2RUtqKQQ1DSBiBSyt8sy6V0xbAg"/>
+</div>
+<div class="mt-4 px-1">
+<h3 class="text-base font-bold text-slate-900 group-hover:text-primary transition-colors">西兰卡普几何纹</h3>
+<p class="text-sm text-slate-500 font-display italic">恩施土家族 · 织锦</p>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="masonry-item group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl bg-neutral-soft aspect-[4/5]">
+<img alt="Cloud and dragon traditional pattern" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Ancient Han dynasty cloud and scroll pattern from Jingzhou" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvgTn9sGE9o4JK2kvD9m_h5NS1_c4fu1YBupELNFO9APyxRoBA0Eo2CVUIKzWdsKQymjB5KIWJ6yZKAWbpAAL9NmqMJWAE2yfaOFmIhfiNju8MvcobEO4j9UP-JBo-jOCU7ZxezFqHVqyL5RLiuVqZ0gWhkGJXVmGzz5mRh2rkLjRzmSIgBfYaVUSeS0ZexWRvb-PeJ1u476XKKv2yltw-yFalJvCcO1Zpv8MP81_AdHnfvbmN0ZeuuT7MOeQLMJA3sVnoZnc2-g"/>
+</div>
+<div class="mt-4 px-1">
+<h3 class="text-base font-bold text-slate-900 group-hover:text-primary transition-colors">汉代流云纹</h3>
+<p class="text-sm text-slate-500 font-display italic">荆州古城 · 考古发现</p>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="masonry-item group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl bg-neutral-soft aspect-[3/2]">
+<img alt="Floral embroidery details on fabric" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Delicate Qing dynasty embroidery pattern from Jiangling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMfXn8UuVrYu3k5lURx2EerWJpTokx5EUgNAGH_E0cVi2e3tj76febb2ClRgwSc1-GkQAEsQ1k3sL0ngbtBavrCj1Ic_xGYPVgF-VzNE-2RDa-sGo2uiqyLLvwa6fXiq78zyExJnVyY0ZjeDHMtdloDnpTf0dqIHAF40bYRZe0s0gBKwVvsjNXVNIZdaOl0UaGh4w0rWSeiHLiAGx5SLo4_n3vP40aK4f1xWxB425rKuO5sqlfMpvo_erNsr1KYN2YsYApNz7JMw"/>
+</div>
+<div class="mt-4 px-1">
+<h3 class="text-base font-bold text-slate-900 group-hover:text-primary transition-colors">江陵刺绣牡丹</h3>
+<p class="text-sm text-slate-500 font-display italic">民间收集 · 丝绣</p>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="masonry-item group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl bg-neutral-soft aspect-[4/5]">
+<img alt="Traditional blue and white print fabric" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Traditional blue printed cloth pattern from Tianmen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBB-sdQ9uVajQP6iRz4EdTsxmV49GHtjOhYWJ3g5eRyPxv18bMjvUbgCSsH-DVkWOyjWilBasd2WPeSjScMT2ATMm41b2GRyrgeVDKZc1GAJDlMEq8Jcdrx-KsthFw4WrRqTWjaVuTfgz-Gmvzs-cId8FiVi6YVbYy6M01zJ4GU4_xC-9r5mqD-iQbI43I17u195k-pultJSt-6qc0UwsaIroajereacEOZ3Bzg7VFC-OjyujSyCm_0tWAbqm9pnjLooWpvVxsldA"/>
+<div class="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-primary uppercase tracking-tight">AI 生成</div>
+</div>
+<div class="mt-4 px-1">
+<h3 class="text-base font-bold text-slate-900 group-hover:text-primary transition-colors">天门印花蓝布纹</h3>
+<p class="text-sm text-slate-500 font-display italic">近现代 · 传统印染</p>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="masonry-item group cursor-pointer">
+<div class="relative overflow-hidden rounded-xl bg-neutral-soft aspect-[1/1]">
+<img alt="Gold lacquer pattern on black background" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Chu culture golden mythological beast pattern on lacquerware" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxAOxPhPBb0Vu2leHXEHzP1jAhYxRx-9O0vAHrLYKGgjxBDlRsrVXsKYSH5MD3stvLF2DbBisgaVIdnSkxWD2B9o005qUtMbcneEKTX13Xx4AmrWy42rMEvW07ge1Hb1NjzVRSv9aquGkRFyvFjdTWvfFm7uIdvZtdaMrfj_aoE1lKz5ip8eXzHYxXkwny6KTVhEiBTPSRhkfCMG2KiigL3f2Ewi5vSdifsVUE7wBJfUUf9rf4QwYR0td_laoUbONjahkeQkFTIw"/>
+</div>
+<div class="mt-4 px-1">
+<h3 class="text-base font-bold text-slate-900 group-hover:text-primary transition-colors">楚漆器神兽纹</h3>
+<p class="text-sm text-slate-500 font-display italic">随州出土 · 漆绘</p>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-center gap-2 mt-16 py-10 border-t border-primary/10">
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-soft text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-primary text-white text-sm font-bold">1</button>
+<button class="w-10 h-10 rounded-full hover:bg-neutral-soft text-slate-600 text-sm font-medium">2</button>
+<button class="w-10 h-10 rounded-full hover:bg-neutral-soft text-slate-600 text-sm font-medium">3</button>
+<span class="px-2 text-slate-400">...</span>
+<button class="w-10 h-10 rounded-full hover:bg-neutral-soft text-slate-600 text-sm font-medium">12</button>
+<button class="flex items-center justify-center w-10 h-10 rounded-full bg-neutral-soft text-slate-600 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-neutral-soft py-12 px-6 lg:px-20 mt-10">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
+<div class="max-w-xs">
+<div class="flex items-center gap-3 mb-6">
+<div class="text-primary">
+<span class="material-symbols-outlined text-2xl">filter_vintage</span>
+</div>
+<h2 class="text-lg font-display font-bold text-slate-900">湖北传统纹样库</h2>
+</div>
+<p class="text-sm text-slate-500 leading-relaxed">致力于通过数字技术保存和复兴荆楚大地数千年的文化遗产，为设计师、学者提供精准的传统美学资源。</p>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-10">
+<div class="flex flex-col gap-4">
+<h4 class="text-xs font-bold text-slate-900 uppercase">快速链接</h4>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">纹样分类</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">学术文章</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">关于我们</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-xs font-bold text-slate-900 uppercase">合作伙伴</h4>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">湖北省博物馆</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">武汉美术馆</a>
+<a class="text-sm text-slate-500 hover:text-primary" href="#">非遗研究所</a>
+</div>
+<div class="flex flex-col gap-4">
+<h4 class="text-xs font-bold text-slate-900 uppercase">联系我们</h4>
+<p class="text-sm text-slate-500">contact@hubeipattern.org</p>
+<div class="flex gap-4 mt-2">
+<span class="material-symbols-outlined text-slate-400 hover:text-primary cursor-pointer">language</span>
+<span class="material-symbols-outlined text-slate-400 hover:text-primary cursor-pointer">share</span>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-200 text-center">
+<p class="text-xs text-slate-400">© 2024 湖北传统纹样库. 鄂ICP备2024XXXX号. 保留所有权利.</p>
+</div>
+</footer>
+</div>
+</body></html>
