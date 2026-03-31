@@ -1,8 +1,8 @@
-﻿<div align="center">
+<div align="center">
 
-# 馃У HBPattern 路 婀栧寳绾规鏂囧寲灞曠ず骞冲彴
+# 🧵 HBPattern · 湖北纹案文化展示平台
 
-**婀栧寳浼犵粺绾圭唬鏂囧寲鐨勬暟瀛楀寲灞曠ず銆佹帰绱€丄I 鍒涗綔涓庡叡浜钩鍙?*
+**湖北传统纹饰文化的数字化展示、探索、AI 创作与共享平台**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
@@ -12,210 +12,235 @@
 [![Alibaba Cloud](https://img.shields.io/badge/Alibaba_Cloud-RDS+OSS-ff6a00?logo=alibabacloud)](https://www.aliyun.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/AIMFllys/HBPattern/issues)
 
-[馃寪 鍦ㄧ嚎浣撻獙锛堝嵆灏嗕笂绾匡級](#) 路 [馃摉 缃戠珯鍔熻兘浠嬬粛](./docs/婀栧寳绾规鏂囧寲灞曠ず骞冲彴%20鈥?20缃戠珯鍔熻兘浠嬬粛.md) 路 [馃彈锔?鎶€鏈灦鏋勬枃妗(./docs/婀栧寳绾规-鍏蜂綋鎶€鏈灦鏋勮鍒?md) 路 [馃挰 鎻愪氦鍙嶉](https://github.com/AIMFllys/HBPattern/issues)
+[🌐 在线体验（即将上线）](#) · [📖 网站功能介绍](./docs/湖北纹案文化展示平台%20—%20网站功能介绍.md) · [🏗️ 技术架构文档](./docs/湖北纹案-具体技术架构规划.md) · [💬 提交反馈](https://github.com/AIMFllys/HBPattern/issues)
 
 </div>
 
 ---
 
-## 馃摉 椤圭洰绠€浠?
-**婀栧寳绾规鏂囧寲灞曠ず骞冲彴锛圚BPattern锛?* 鏄竴涓互鏁板瓧鍖栨柟寮忎繚鎶ゅ拰浼犳挱婀栧寳浼犵粺绾圭唬鏂囧寲鐨勫紑婧?Web 椤圭洰銆?
-婀栧寳鏄鏂囧寲鐨勫彂婧愬湴锛屾嫢鏈夋瀬涓轰赴瀵岀殑浼犵粺绾圭唬閬椾骇銆傝繖浜涚汗妗堝巻缁忓崈骞存矇娣€锛岃暣鍚潃鐙壒鐨勫巻鍙叉晠浜嬨€佸伐鑹烘妧娉曚笌鏂囧寲绗﹀彿銆傜劧鑰岄殢鐫€鐜颁唬鍖栬繘绋嬶紝璁稿鐝嶈吹鐨勭汗缁ｅ浘妗堟闈复澶变紶鐨勯闄┿€?
-鏈钩鍙版棬鍦ㄩ€氳繃锛?- 馃梽锔?**鏁板瓧鍖栧瓨妗?* 鈥?寤虹珛楂樼簿搴︾殑婀栧寳绾规鏁版嵁搴?- 馃椇锔?**鍦扮悊婧簮** 鈥?浠?3D 浜や簰鍦板浘杩芥函姣忎釜绾规鐨勫巻鍙叉笂婧?- 馃 **AI 璧嬭兘** 鈥?鍒╃敤 AI 鎶€鏈繘琛屽浘妗堝垱浣滀笌鏂囧垱浜у搧棰勮
-- 馃實 **寮€鏀惧叡浜?* 鈥?瀵瑰鎻愪緵寮€鏀?API锛屼緵瀛︽湳鐮旂┒鍜屽紑鍙戣€呰皟鐢?
-...璁╂瘡涓€涓紶缁熺汗缁ｇ汗妗堥兘鑳借鏇村浜虹湅瑙併€佺悊瑙ｅ拰浼犳壙銆?
+## 📖 项目简介
+
+**湖北纹案文化展示平台（HBPattern）** 是一个以数字化方式保护和传播湖北传统纹饰文化的开源 Web 项目。
+
+湖北是楚文化的发源地，拥有极为丰富的传统纹饰遗产。这些纹案历经千年沉淀，蕴含着独特的历史故事、工艺技法与文化符号。然而随着现代化进程，许多珍贵的纹绣图案正面临失传的风险。
+
+本平台旨在通过：
+- 🖼️ **数字化存档** — 建立高精度的湖北纹案数据库
+- 🗺️ **地理溯源** — 以 3D 交互地图追溯每个纹案的历史上源
+- 🤖 **AI 赋能** — 利用 AI 技术进行图案创作与文创产品预览
+- 🌍 **开放共享** — 对外提供开放 API，供学术研究和开发者调用
+
+...让每一个传统纹饰纹案都能被更多人看见、理解和传承。
+
 ---
 
-## 鉁?鏍稿績鍔熻兘
+## ✨ 核心功能
 
-| 鍔熻兘妯″潡 | 鎻忚堪 |
+| 功能模块 | 描述 |
 |---------|------|
-| **绾规鐢诲粖** | 鐎戝竷娴?缃戞牸娴忚锛屾敮鎸佸缁寸瓫閫夈€佷互鍥炬悳鍥俱€侀鑹叉悳绱?|
-| **3D 鏂囧寲鍦板浘** | 浜や簰寮?3D 鍦板浘锛岀偣鍑昏Е鍙戝厜鏅曞姩鐢伙紝杩芥函绾规鍦扮悊娓婃簮 |
-| **绾规鐭ヨ瘑鍥捐氨** | 鍙鍖栧睍绀虹汗妗堥棿鐨勬紨鍖栥€佽鐢熴€佸悓婧愬叧绯?|
-| **AI 鍥炬鐢熸垚** | 鍩轰簬璞嗗寘 Seedream 妯″瀷锛屾枃瀛楁弿杩扮敓鎴愮汗缁ｅ浘妗?|
-| **3D 鏂囧垱棰勮鍣?* | 灏嗙汗妗堝疄鏃舵槧灏勫埌 3D 浜у搧妯″瀷涓婏紙鏉瓙/T鎭?鏃楀笢绛夛級 |
-| **绀惧尯涓庤瘎璁?* | 鐢ㄦ埛涓婁紶銆佽瘎璁恒€佹敹钘忥紝AI 鑷姩瀹夊叏瀹℃牳 |
-| **涓汉鏀惰棌澶?* | 鍒涘缓鑷畾涔夌敾鏉匡紝绠＄悊鍠滅埍鐨勭汗妗?|
-| **闈為仐鍏宠仈** | 绾规涓庡浗瀹?鐪佺骇闈為仐鍚嶅綍鐨勫搴斿叧鑱?|
-| **寮€鏀?API** | 闈㈠悜寮€鍙戣€呭拰鐮旂┒鏈烘瀯鐨勬暟鎹帴鍙ｆ湇鍔?|
+| **纹案画廊** | 瀑布流/网格浏览，支持多维筛选、以图搜图、颜色搜索 |
+| **3D 文化地图** | 交互式 3D 地图，点击触发光晕动画，追溯纹案地理渊源 |
+| **纹案知识图谱** | 可视化展示纹案间的演化、衍生、同源关系 |
+| **AI 图案生成** | 基于豆包 Seedream 模型，文字描述生成纹绣图案 |
+| **3D 文创预览器** | 将纹案实时映射到 3D 产品模型上（杯子/T恤/旗袍等） |
+| **社区与评论** | 用户上传、评论、收藏，AI 自动安全审核 |
+| **个人收藏夹** | 创建自定义画册，管理喜爱的纹案 |
+| **非遗关联** | 纹案与国家/省级非遗名录的对应关联 |
+| **开放 API** | 面向开发者和研究机构的数据接口服务 |
 
-> 璇﹁ [馃摉 缃戠珯鍔熻兘浠嬬粛鏂囨。](./docs/婀栧寳绾规鏂囧寲灞曠ず骞冲彴%20鈥?20缃戠珯鍔熻兘浠嬬粛.md)
+> 详见 [📖 网站功能介绍文档](./docs/湖北纹案文化展示平台%20—%20网站功能介绍.md)
 
 ---
 
-## 馃洜锔?鎶€鏈爤
+## 🛠️ 技术栈
 
-### 鍓嶇
+### 前端
 
-| 鎶€鏈?| 璇存槑 |
+| 技术 | 说明 |
 |------|------|
-| [Next.js 15](https://nextjs.org/) (App Router) | 鏍稿績妗嗘灦锛孲SR + SEO 浼樺厛 |
-| [TypeScript 5](https://www.typescriptlang.org/) | 鍏ㄧ被鍨嬪畨鍏?|
-| [Tailwind CSS v4](https://tailwindcss.com/) | 鏍峰紡瑙ｅ喅鏂规 |
-| [Framer Motion](https://www.framer.com/motion/) | 鍔ㄦ晥涓庡姩鐢?|
-| [Three.js / React Three Fiber](https://docs.pmnd.rs/react-three-fiber) | 3D 娓叉煋锛堟枃鍒涢瑙堝櫒锛墊
-| [Deck.gl](https://deck.gl/) + 楂樺痉鍦板浘 | 3D 浜や簰鍦板浘 |
-| [D3.js](https://d3js.org/) | 鐭ヨ瘑鍥捐氨鍔涘鍚戝浘 |
-| [Zustand](https://zustand-demo.pmnd.rs/) + TanStack Query | 鐘舵€佺鐞?|
+| [Next.js 15](https://nextjs.org/) (App Router) | 核心框架，SSR + SEO 优先 |
+| [TypeScript 5](https://www.typescriptlang.org/) | 全类型安全 |
+| [Tailwind CSS v4](https://tailwindcss.com/) | 样式解决方案 |
+| [Framer Motion](https://www.framer.com/motion/) | 动效与动画 |
+| [Three.js / React Three Fiber](https://docs.pmnd.rs/react-three-fiber) | 3D 渲染（文创预览器）|
+| [Deck.gl](https://deck.gl/) + 高德地图 | 3D 交互地图 |
+| [D3.js](https://d3js.org/) | 知识图谱力导向图 |
+| [Zustand](https://zustand-demo.pmnd.rs/) + TanStack Query | 状态管理 |
 
-### 鍚庣 & 鏁版嵁搴?
-| 鎶€鏈?| 璇存槑 |
+### 后端 & 数据库
+
+| 技术 | 说明 |
 |------|------|
-| [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | 鍚庣鎺ュ彛灞?(BFF) |
-| [闃块噷浜?RDS PostgreSQL](https://www.aliyun.com/product/rds/postgresql) | 鏍稿績鏁版嵁搴擄紙鍚屽湴鍩熷唴缃?<1ms 寤惰繜锛墊
-| [PostGIS](https://postgis.net/) + [pgvector](https://github.com/pgvector/pgvector) | 鍦扮悊绌洪棿 + 鍚戦噺妫€绱㈡墿灞?|
-| [闃块噷浜?OSS](https://www.aliyun.com/product/oss) | 瀵硅薄瀛樺偍锛堢汗妗堝浘鐗?3D 妯″瀷锛墊
-| [NextAuth.js](https://next-auth.js.org/) | 鐢ㄦ埛璁よ瘉锛堟浛浠?Supabase Auth锛墊
-| [闃块噷浜?Redis](https://www.aliyun.com/product/kvstore) | 缂撳瓨锛堢儹鐐规暟鎹?浼氳瘽绠＄悊锛墊
+| [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | 后端接口层 (BFF) |
+| [阿里云 RDS PostgreSQL](https://www.aliyun.com/product/rds/postgresql) | 核心数据库（同地域内网 <1ms 延迟）|
+| [PostGIS](https://postgis.net/) + [pgvector](https://github.com/pgvector/pgvector) | 地理空间 + 向量检索扩展 |
+| [阿里云 OSS](https://www.aliyun.com/product/oss) | 对象存储（纹案图片、3D 模型）|
+| [NextAuth.js](https://next-auth.js.org/) | 用户认证（替代 Supabase Auth）|
+| [阿里云 Redis](https://www.aliyun.com/product/kvstore) | 缓存（热点数据、会话管理）|
 
-### AI 鏈嶅姟
+### AI 服务
 
-| 鍔熻兘 | 妯″瀷 / 鏂规 |
+| 功能 | 模型 / 方案 |
 |------|------------|
-| 绾圭唬鍥炬鐢熸垚 | 璞嗗寘 Seedream 5.0 (鐏北寮曟搸) |
-| 鍥剧墖/鏂囨湰鍐呭瀹℃牳 | 璞嗗寘澶фā鍨?2.0 澶氭ā鎬?|
-| 浠ュ浘鎼滃浘 | 璞嗗寘瑙嗚鐞嗚В妯″瀷 + pgvector |
-| 鑹插僵鎻愬彇 | Canvas k-means锛堟棤 API 鎴愭湰锛墊
-| 妯″瀷绮捐皟锛堟湭鏉ワ級| 鐏北鏂硅垷 LoRA 浜戠寰皟 |
+| 纹饰图案生成 | 豆包 Seedream 5.0 (火山引擎) |
+| 图片/文本内容审核 | 豆包大模型 2.0 多模态 |
+| 以图搜图 | 豆包视觉理解模型 + pgvector |
+| 颜色提取 | Canvas k-means（无 API 成本）|
+| 模型精调（未来）| 火山方舟 LoRA 云端微调 |
 
-> **0 GPU 鏂规**锛氭墍鏈?AI 鑳藉姏鍧囬€氳繃鐏北寮曟搸 API 鎸夋璋冪敤锛屾棤闇€鑷缓 GPU 鏈嶅姟鍣紝鍒濇湡 AI 鏈堟垚鏈害 300-400 鍏冦€?
+> **0 GPU 方案**：所有 AI 能力均通过火山引擎 API 按量调用，无需自建 GPU 服务器，初期 AI 月成本约 300-400 元。
+
 ---
 
-## 馃搨 椤圭洰缁撴瀯
+## 📂 项目结构
 
 ```
 HBPattern/
-鈹溾攢鈹€ docs/                        # 椤圭洰鏂囨。
-鈹?  鈹溾攢鈹€ 婀栧寳绾规鏂囧寲灞曠ず骞冲彴 鈥?缃戠珯鍔熻兘浠嬬粛.md
-鈹?  鈹斺攢鈹€ 婀栧寳绾规-鍏蜂綋鎶€鏈灦鏋勮鍒?md
-鈹溾攢鈹€ src/
-鈹?  鈹溾攢鈹€ app/                     # Next.js App Router 璺敱
-鈹?  鈹?  鈹溾攢鈹€ (public)/            # 鍏紑椤甸潰
-鈹?  鈹?  鈹?  鈹溾攢鈹€ page.tsx         # 棣栭〉
-鈹?  鈹?  鈹?  鈹溾攢鈹€ gallery/         # 绾规鐢诲粖
-鈹?  鈹?  鈹?  鈹溾攢鈹€ map/             # 3D 鏂囧寲鍦板浘
-鈹?  鈹?  鈹?  鈹溾攢鈹€ timeline/        # 婕斿寲鏃堕棿绾?鈹?  鈹?  鈹?  鈹溾攢鈹€ search/          # 楂樼骇鎼滅储
-鈹?  鈹?  鈹?  鈹溾攢鈹€ create/          # AI 鍒涗綔涓績
-鈹?  鈹?  鈹?  鈹溾攢鈹€ community/       # 绀惧尯浜掑姩
-鈹?  鈹?  鈹?  鈹斺攢鈹€ profile/         # 涓汉涓績
-鈹?  鈹?  鈹溾攢鈹€ (admin)/             # 绠＄悊鍚庡彴
-鈹?  鈹?  鈹斺攢鈹€ api/                 # API Routes
-鈹?  鈹溾攢鈹€ components/              # 鍙鐢ㄧ粍浠?鈹?  鈹溾攢鈹€ lib/                     # 宸ュ叿搴擄紙鏁版嵁搴?OSS 瀹㈡埛绔瓑锛?鈹?  鈹溾攢鈹€ stores/                  # Zustand 鐘舵€佺鐞?鈹?  鈹斺攢鈹€ types/                   # TypeScript 绫诲瀷瀹氫箟
-鈹溾攢鈹€ prisma/
-鈹?  鈹斺攢鈹€ schema.prisma            # 鏁版嵁搴?Schema锛?8 寮犺〃锛?鈹斺攢鈹€ sql/
-    鈹斺攢鈹€ migrations/              # PostgreSQL 杩佺Щ鑴氭湰
+├── docs/                        # 项目文档
+│   ├── 湖北纹案文化展示平台 — 网站功能介绍.md
+│   └── 湖北纹案-具体技术架构规划.md
+├── src/
+│   ├── app/                     # Next.js App Router 路由
+│   │   ├── (public)/            # 公开页面
+│   │   │   ├── page.tsx         # 首页
+│   │   │   ├── gallery/         # 纹案画廊
+│   │   │   ├── map/             # 3D 文化地图
+│   │   │   ├── timeline/        # 演化时间线
+│   │   │   ├── search/          # 高级搜索
+│   │   │   ├── create/          # AI 创作中心
+│   │   │   ├── community/       # 社区互动
+│   │   │   └── profile/         # 个人中心
+│   │   ├── (admin)/             # 管理后台
+│   │   └── api/                 # API Routes
+│   ├── components/              # 可复用组件
+│   ├── lib/                     # 工具库（数据库、OSS 客户端等）
+│   ├── stores/                  # Zustand 状态管理
+│   └── types/                   # TypeScript 类型定义
+├── prisma/
+│   └── schema.prisma            # 数据库 Schema（18 张表）
+└── sql/
+    └── migrations/              # PostgreSQL 迁移脚本
 ```
 
 ---
 
-## 馃殌 蹇€熷紑濮?
-### 鐜瑕佹眰
+## 🚀 快速开始
+
+### 环境要求
 
 - Node.js 20+
-- npm 鎴?pnpm
-- 闃块噷浜戣处鍙凤紙RDS PostgreSQL + OSS + Redis锛?- 鐏北寮曟搸璐﹀彿锛堢敤浜?AI API锛?
-### 1. 鍏嬮殕椤圭洰
+- npm 或 pnpm
+- 阿里云账号（RDS PostgreSQL + OSS + Redis）
+- 火山引擎账号（用于 AI API）
+
+### 1. 克隆项目
 
 ```bash
 git clone https://github.com/AIMFllys/HBPattern.git
 cd HBPattern
 ```
 
-### 2. 瀹夎渚濊禆
+### 2. 安装依赖
 
 ```bash
 npm install
 ```
 
-### 3. 閰嶇疆鐜鍙橀噺
+### 3. 配置环境变量
 
-鏂板缓 `.env.local` 鏂囦欢锛?
+新建 `.env.local` 文件：
+
 ```env
-# 闃块噷浜?RDS PostgreSQL
+# 阿里云 RDS PostgreSQL
 DATABASE_URL=postgresql://user:password@your-rds-host:5432/hbpattern
 
-# 闃块噷浜?OSS
+# 阿里云 OSS
 OSS_REGION=oss-cn-hangzhou
 OSS_BUCKET=hbpattern-assets
 OSS_ACCESS_KEY_ID=your-access-key-id
 OSS_ACCESS_KEY_SECRET=your-access-key-secret
 
-# 闃块噷浜?Redis
+# 阿里云 Redis
 REDIS_URL=redis://:password@your-redis-host:6379
 
 # NextAuth.js
 NEXTAUTH_SECRET=your-random-secret
 NEXTAUTH_URL=http://localhost:3000
 
-# 楂樺痉鍦板浘
+# 高德地图
 NEXT_PUBLIC_AMAP_KEY=your-amap-key
 
-# 鐏北寮曟搸 (璞嗗寘 AI)
+# 火山引擎 (豆包 AI)
 VOLCENGINE_API_KEY=your-volcengine-api-key
 ```
 
-### 4. 鍒濆鍖栨暟鎹簱
+### 4. 初始化数据库
 
 ```bash
-# 鍦?RDS 涓惎鐢ㄦ墿灞曞苟鎵ц杩佺Щ
+# 在 RDS 中启用扩展并执行迁移
 npx prisma db push
 ```
 
-### 5. 鍚姩寮€鍙戞湇鍔″櫒
+### 5. 启动开发服务器
 
 ```bash
 npm run dev
 ```
 
-璁块棶 [http://localhost:3000](http://localhost:3000) 鏌ョ湅鏁堟灉銆?
+访问 [http://localhost:3000](http://localhost:3000) 查看效果。
+
 ---
 
-## 馃椇锔?寮€鍙戣矾绾垮浘
+## 🗺️ 开发路线图
 
-| 闃舵 | 鐩爣 | 鐘舵€?|
+| 阶段 | 目标 | 状态 |
 |:---:|------|:---:|
-| **Phase 1** | 鍩虹寤鸿锛氱敾寤娿€佸湴鍥惧熀纭€銆佺敤鎴风郴缁熴€佹敹钘忋€佺増鏉冩爣娉?| 馃攧 瑙勫垝涓?|
-| **Phase 2** | 瑙嗚浣撻獙锛?D 鍦板浘鐗规晥銆?D 鏂囧垱棰勮鍣ㄣ€佹紨鍖栨椂闂寸嚎銆侀€氱煡绯荤粺 | 鈴?寰呭紑濮?|
-| **Phase 3** | AI 娣卞寲锛欰I 鍥炬鐢熸垚銆佷互鍥炬悳鍥俱€佷妇鎶ユ不鐞嗐€佽础鐚€呯瓑绾?| 鈴?寰呭紑濮?|
-| **Phase 4** | 鐢熸€佹墿灞曪細澶氳瑷€銆丏eep Zoom銆佹暀鑲叉ā鍧椼€佸紑鏀?API | 鈴?寰呭紑濮?|
+| **Phase 1** | 基础建设：画廊、地图基础、用户系统、收藏、版权标注 | 📋 规划中 |
+| **Phase 2** | 视觉体验：3D 地图特效、3D 文创预览器、演化时间线、通知系统 | ⏳ 待开始 |
+| **Phase 3** | AI 深化：AI 图案生成、以图搜图、举报治理、贡献者等级 | ⏳ 待开始 |
+| **Phase 4** | 生态扩展：多语言、Deep Zoom、教育模块、开放 API | ⏳ 待开始 |
 
 ---
 
-## 馃 鍙備笌璐＄尞
+## 🤝 参与贡献
 
-娆㈣繋鍚勭褰㈠紡鐨勮础鐚紒鏃犺鏄細
+欢迎各种形式的贡献！无论是：
 
-- 馃悰 鎻愪氦 Bug 鎶ュ憡
-- 馃挕 鎻愬嚭鏂板姛鑳芥兂娉?- 馃摉 瀹屽杽鏂囨。
-- 馃柤锔?璐＄尞绾规鍥剧墖锛堥渶闄勭増鏉冨０鏄庯級
-- 馃捇 鎻愪氦浠ｇ爜
+- 🐛 提交 Bug 报告
+- 💡 提出新功能想法
+- 📖 完善文档
+- 🎨 贡献纹案图片（需附版权声明）
+- 💻 提交代码
 
-璇锋寜鐓т互涓嬫祦绋嬪弬涓庤础鐚細
+请按照以下流程参与贡献：
 
-1. Fork 鏈粨搴?2. 鍒涘缓鍔熻兘鍒嗘敮锛歚git checkout -b feature/your-feature`
-3. 鎻愪氦鏇存敼锛歚git commit -m "feat: add your feature"`
-4. 鎺ㄩ€佸垎鏀細`git push origin feature/your-feature`
-5. 鍒涘缓 Pull Request
+1. Fork 本仓库
+2. 创建功能分支：`git checkout -b feature/your-feature`
+3. 提交更改：`git commit -m "feat: add your feature"`
+4. 推送分支：`git push origin feature/your-feature`
+5. 创建 Pull Request
 
 ---
 
-## 馃搫 鐗堟潈璇存槑
+## 📋 版权说明
 
-- **婧愪唬鐮?*锛歔MIT License](./LICENSE)锛?026 HBPattern Contributors锛?- **绾规鍥剧墖**锛氬凡鏀跺綍鐨勭汗妗堝浘鐗囧悇鑷伒寰叾鏍囨敞鐨勭増鏉冨崗璁紙鍏湁棰嗗煙 / CC 鍗忚 / 鍘熷垱澹版槑锛夛紝璇锋煡闃呭悇绾规璇︽儏椤电殑鐗堟潈澹版槑
-- **AI 鐢熸垚鍐呭**锛氭爣娉?AI 鐢熸垚"鏍囪锛岀増鏉冨綊涓婁紶鐢ㄦ埛鎵€鏈?
+- **源代码**：[MIT License](./LICENSE)，© 2026 HBPattern Contributors
+- **纹案图片**：已收录的纹案图片各自遵守其标注的版权协议（公有领域 / CC 协议 / 原创声明），请查阅各纹案详情页的版权声明
+- **AI 生成内容**：标注"AI 生成"标记，版权归上传用户所有
+
 ---
 
-## 馃摤 鑱旂郴鎴戜滑
+## 📬 联系我们
 
-- 馃摦 GitHub Issues: [鎻愪氦闂](https://github.com/AIMFllys/HBPattern/issues)
-- 馃寪 缃戠珯锛堟殏瀹氾級: [HBpattern.husteread.com](https://HBpattern.husteread.com)
+- 📮 GitHub Issues: [提交问题](https://github.com/AIMFllys/HBPattern/issues)
+- 🌐 网站（暂定）: [HBpattern.husteread.com](https://HBpattern.husteread.com)
 
 ---
 
 <div align="center">
 
-**璁╂瘡涓€骞呮箹鍖楃汗缁ｏ紝閮借兘璺ㄨ秺鏃堕棿锛岃涓栫晫鐪嬭銆?*
+**让每一幅湖北纹绣，都能跨越时间，被世界看见。**
 
-猸?濡傛灉杩欎釜椤圭洰瀵规偍鏈夊府鍔╋紝娆㈣繋 Star 鏀寔锛?
+⭐ 如果这个项目对您有帮助，欢迎 Star 支持！
+
 </div>
