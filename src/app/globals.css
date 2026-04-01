@@ -1,26 +1,182 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   米色书香 (Beige Scholarly) - 湖北纹案文化展示平台 设计系统
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- Primary Palette --- */
+  --color-cinnabar:       #b84a39;   /* 朱砂红 - 主色调 CTA / Accent */
+  --color-cinnabar-deep:  #8c2f22;   /* 深朱砂 - Hover */
+  --color-cinnabar-light: #d4796a;   /* 浅朱砂 - Muted highlights */
+  --color-rice:           #f5f0e8;   /* 宣纸米 - 主背景 */
+  --color-rice-warm:      #ede7d9;   /* 暖米黄 - 卡片背景 */
+  --color-rice-deep:      #d6ccba;   /* 深米色 - 分隔线 */
+
+  /* --- Ink Palette --- */
+  --color-ink:            #1a1a14;   /* 浓墨 - 主标题文字 */
+  --color-ink-medium:     #3d3d30;   /* 中墨 - 正文文字 */
+  --color-ink-light:      #6b6b58;   /* 淡墨 - 辅助文字 */
+  --color-ink-faint:      #9e9e88;   /* 极淡墨 - 占位文字 */
+
+  /* --- Gold Accent --- */
+  --color-gold:           #c9a84c;   /* 烫金 - 强调装饰 */
+  --color-gold-light:     #e8c97a;   /* 浅金 */
+
+  /* --- Semantic Colors --- */
+  --color-success:        #4a7c59;
+  --color-warning:        #c9a84c;
+  --color-error:          #b84a39;
+  --color-info:           #4a6b8a;
+
+  /* --- Typography --- */
+  --font-serif:   "Noto Serif SC", "Newsreader", Georgia, serif;
+  --font-sans:    "Noto Sans SC", "Inter", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", monospace;
+
+  /* --- Spacing --- */
+  --spacing-section: 5rem;
+
+  /* --- Border Radius --- */
+  --radius-sm:   0.25rem;
+  --radius-md:   0.5rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.5rem;
+  --radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --shadow-card:  0 2px 12px rgba(26, 26, 20, 0.08);
+  --shadow-hover: 0 8px 32px rgba(26, 26, 20, 0.15);
+  --shadow-modal: 0 20px 60px rgba(26, 26, 20, 0.25);
+
+  /* --- Transitions --- */
+  --duration-fast:   150ms;
+  --duration-normal: 250ms;
+  --duration-slow:   400ms;
+  --ease-default:    cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* === Base Reset & Global Styles === */
+:root {
+  --background: var(--color-rice);
+  --foreground: var(--color-ink);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-rice);
+  color: var(--color-ink-medium);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* === Typography === */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+  color: var(--color-ink);
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+h3 { font-size: clamp(1.2rem, 2.5vw, 1.75rem); }
+
+a {
+  color: var(--color-cinnabar);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+a:hover { color: var(--color-cinnabar-deep); }
+
+/* === Utility Classes === */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  background-color: var(--color-cinnabar);
+  color: var(--color-rice);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-default),
+              box-shadow var(--duration-fast) var(--ease-default),
+              transform var(--duration-fast) var(--ease-default);
+}
+.btn-primary:hover {
+  background-color: var(--color-cinnabar-deep);
+  box-shadow: 0 4px 16px rgba(184, 74, 57, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  background: transparent;
+  color: var(--color-cinnabar);
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: 1.5px solid var(--color-cinnabar);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-default);
+}
+.btn-ghost:hover {
+  background-color: var(--color-cinnabar);
+  color: var(--color-rice);
+}
+
+.card {
+  background-color: var(--color-rice-warm);
+  border: 1px solid var(--color-rice-deep);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow var(--duration-normal) var(--ease-default),
+              transform var(--duration-normal) var(--ease-default);
+}
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+/* === Scroll bar customization === */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--color-rice); }
+::-webkit-scrollbar-thumb { background: var(--color-rice-deep); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
+
+/* === Selection === */
+::selection {
+  background-color: rgba(184, 74, 57, 0.2);
+  color: var(--color-cinnabar-deep);
+}
+
+/* === Focus Ring === */
+:focus-visible {
+  outline: 2px solid var(--color-cinnabar);
+  outline-offset: 2px;
 }
