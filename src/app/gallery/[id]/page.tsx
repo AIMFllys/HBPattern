@@ -7,7 +7,7 @@ export default function PatternDetailPage({ params }: { params: Promise<{ id: st
   
   return (
     <div className="layout-container flex h-full grow flex-col bg-[#f8f8f6]">
-      <SiteHeader logoIcon="landscape" siteName="纹样大观" primaryColor="gold" activeNav={1} />
+      <SiteHeader logoIcon="landscape" siteName="纹样大观" primaryColor="gold" />
       
       <main className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">

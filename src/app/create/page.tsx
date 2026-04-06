@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
+import { Icon } from '@/components/icons'
 
 const categories = ['陶瓷', '丝绸', '漆器', '壁画']
 
@@ -22,21 +23,21 @@ export default function CreatePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-rice">
-      <SiteHeader logoIcon="storm" siteName="AI 创意中心" primaryColor="cinnabar" activeNav={0} />
+      <SiteHeader logoIcon="storm" siteName="AI 创意中心" primaryColor="cinnabar" />
       
       <main className="flex flex-1 overflow-hidden">
         <aside className="w-16 border-r border-rice-deep flex flex-col items-center py-6 gap-6 bg-rice">
           <button className="w-10 h-10 flex items-center justify-center rounded bg-cinnabar text-white shadow-sm">
-            <span className="material-symbols-outlined">deployed_code</span>
+            <Icon name="deployed_code" />
           </button>
           <button className="w-10 h-10 flex items-center justify-center rounded hover:bg-rice-warm text-ink-medium">
-            <span className="material-symbols-outlined">brush</span>
+            <Icon name="brush" />
           </button>
           <button className="w-10 h-10 flex items-center justify-center rounded hover:bg-rice-warm text-ink-medium">
-            <span className="material-symbols-outlined">layers</span>
+            <Icon name="layers" />
           </button>
           <button className="w-10 h-10 flex items-center justify-center rounded hover:bg-rice-warm text-ink-medium">
-            <span className="material-symbols-outlined">photo_camera</span>
+            <Icon name="photo_camera" />
           </button>
         </aside>
         
@@ -60,10 +61,10 @@ export default function CreatePage() {
             
             <div className="absolute bottom-32 right-6 flex flex-col gap-2">
               <button className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-ink-medium hover:text-cinnabar">
-                <span className="material-symbols-outlined">zoom_in</span>
+                <Icon name="zoom_in" />
               </button>
               <button className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-ink-medium hover:text-cinnabar">
-                <span className="material-symbols-outlined">sync</span>
+                <Icon name="sync" />
               </button>
             </div>
           </div>
@@ -157,7 +158,7 @@ export default function CreatePage() {
                     {pattern.selected && (
                       <div className="absolute inset-0 bg-cinnabar/10">
                         <div className="absolute bottom-1 right-1 bg-cinnabar text-white p-0.5 rounded-full">
-                          <span className="material-symbols-outlined text-xs">check</span>
+                          <Icon name="check" size={12} />
                         </div>
                       </div>
                     )}
@@ -174,7 +175,7 @@ export default function CreatePage() {
           
           <div className="p-6 bg-rice-warm/20 border-t border-rice-deep">
             <button className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-cinnabar/40 rounded-lg text-cinnabar text-sm font-bold hover:bg-cinnabar/5 transition-colors">
-              <span className="material-symbols-outlined">add_circle</span>
+              <Icon name="add_circle" />
               上传自定义图案
             </button>
           </div>

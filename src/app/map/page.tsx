@@ -1,4 +1,5 @@
 ﻿import SiteHeader from '@/components/layout/SiteHeader'
+import { Icon } from '@/components/icons'
 import { mockRegions } from '../_mock/regions'
 
 export default function MapPage() {
@@ -10,7 +11,6 @@ export default function MapPage() {
         logoIcon="storm" 
         siteName="湖北非遗3D文化地图" 
         primaryColor="gold" 
-        activeNav={0} 
       />
       
       <main className="flex flex-col lg:flex-row h-[calc(100vh-73px)] overflow-hidden">
@@ -39,26 +39,26 @@ export default function MapPage() {
             <div className="flex flex-col gap-1">
               <h3 className="text-xs font-bold text-ink-faint uppercase tracking-widest mb-3">层级筛选</h3>
               <button className="flex items-center gap-3 px-4 py-3 rounded bg-gold text-ink font-medium">
-                <span className="material-symbols-outlined text-xl">grid_view</span>
+                <Icon name="grid_view" size={20} />
                 <span className="text-sm">全省概览</span>
               </button>
               <button className="flex items-center gap-3 px-4 py-3 rounded hover:bg-rice-warm text-ink-medium transition-colors">
-                <span className="material-symbols-outlined text-xl">map</span>
+                <Icon name="map" size={20} />
                 <span className="text-sm font-medium">地区分布</span>
               </button>
               <button className="flex items-center gap-3 px-4 py-3 rounded hover:bg-rice-warm text-ink-medium transition-colors">
-                <span className="material-symbols-outlined text-xl">category</span>
+                <Icon name="category" size={20} />
                 <span className="text-sm font-medium">类别检索</span>
               </button>
               <button className="flex items-center gap-3 px-4 py-3 rounded hover:bg-rice-warm text-ink-medium transition-colors">
-                <span className="material-symbols-outlined text-xl">bookmark</span>
+                <Icon name="bookmark" size={20} />
                 <span className="text-sm font-medium">我的收藏</span>
               </button>
             </div>
             
             <div className="mt-auto pt-6">
               <button className="w-full flex items-center justify-center gap-2 py-3 bg-cinnabar text-white rounded font-bold text-sm shadow-lg shadow-cinnabar/20">
-                <span className="material-symbols-outlined text-lg">download</span>
+                <Icon name="download" size={18} />
                 下载年度研究报告
               </button>
             </div>
@@ -79,18 +79,18 @@ export default function MapPage() {
               <div className="flex flex-col gap-2">
                 <div className="bg-white rounded shadow-md overflow-hidden flex flex-col border border-rice-deep">
                   <button className="p-2 hover:bg-rice-warm text-ink-medium">
-                    <span className="material-symbols-outlined">add</span>
+                    <Icon name="add" />
                   </button>
                   <div className="h-px bg-rice-deep mx-2"></div>
                   <button className="p-2 hover:bg-rice-warm text-ink-medium">
-                    <span className="material-symbols-outlined">remove</span>
+                    <Icon name="remove" />
                   </button>
                 </div>
                 <button className="bg-white p-2 rounded shadow-md border border-rice-deep text-ink-medium pointer-events-auto">
-                  <span className="material-symbols-outlined">my_location</span>
+                  <Icon name="my_location" />
                 </button>
                 <button className="bg-white p-2 rounded shadow-md border border-rice-deep text-ink-medium pointer-events-auto">
-                  <span className="material-symbols-outlined">layers</span>
+                  <Icon name="layers" />
                 </button>
               </div>
             </div>
@@ -126,7 +126,7 @@ export default function MapPage() {
                     <span className="text-cinnabar font-bold text-xs uppercase tracking-tighter">地区洞察</span>
                     <h2 className="text-2xl font-bold text-ink">{highlightedRegion.name} ({highlightedRegion.namePinyin})</h2>
                   </div>
-                  <span className="material-symbols-outlined text-ink-faint">info</span>
+                  <Icon name="info" className="text-ink-faint" />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -148,7 +148,7 @@ export default function MapPage() {
                     {highlightedRegion.stats.featuredProjects.map((project) => (
                       <div key={project} className="flex items-center justify-between p-2 rounded bg-rice-warm hover:bg-gold/10 transition-colors cursor-pointer group">
                         <span className="text-sm text-ink-medium group-hover:text-ink transition-colors">{project}</span>
-                        <span className="material-symbols-outlined text-sm text-ink-faint">chevron_right</span>
+                        <Icon name="chevron_right" size={14} className="text-ink-faint" />
                       </div>
                     ))}
                   </div>

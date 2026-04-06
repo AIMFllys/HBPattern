@@ -1,4 +1,5 @@
 ﻿import SiteHeader from '@/components/layout/SiteHeader'
+import { Icon } from '@/components/icons'
 import { mockStats } from '../_mock/stats'
 
 export default function DashboardPage() {
@@ -8,7 +9,6 @@ export default function DashboardPage() {
         logoIcon="account_balance" 
         siteName="2026年度管理后台" 
         primaryColor="gold" 
-        activeNav={0} 
       />
       
       <main className="max-w-[1200px] mx-auto w-full p-6 md:p-10 space-y-8">
@@ -21,11 +21,11 @@ export default function DashboardPage() {
           <div className="flex flex-col gap-2 rounded-xl p-6 bg-white border border-rice-deep shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
               <p className="text-ink-light text-sm font-medium uppercase tracking-wider">总模式数量</p>
-              <span className="material-symbols-outlined text-cinnabar/60">schema</span>
+              <Icon name="schema" className="text-cinnabar/60" />
             </div>
             <p className="text-ink text-3xl font-bold tabular-nums">{mockStats.totalPatterns.toLocaleString()}</p>
             <div className="flex items-center gap-1 text-emerald-600 text-sm font-semibold">
-              <span className="material-symbols-outlined text-sm">trending_up</span>
+              <Icon name="trending_up" size={16} />
               <span>+{mockStats.patternGrowth}%</span>
               <span className="text-ink-faint font-normal ml-1">较上月</span>
             </div>
@@ -34,11 +34,11 @@ export default function DashboardPage() {
           <div className="flex flex-col gap-2 rounded-xl p-6 bg-white border border-rice-deep shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
               <p className="text-ink-light text-sm font-medium uppercase tracking-wider">累计用户数</p>
-              <span className="material-symbols-outlined text-cinnabar/60">group</span>
+              <Icon name="group" className="text-cinnabar/60" />
             </div>
             <p className="text-ink text-3xl font-bold tabular-nums">{mockStats.totalUsers.toLocaleString()}</p>
             <div className="flex items-center gap-1 text-emerald-600 text-sm font-semibold">
-              <span className="material-symbols-outlined text-sm">trending_up</span>
+              <Icon name="trending_up" size={16} />
               <span>+{mockStats.userGrowth}%</span>
               <span className="text-ink-faint font-normal ml-1">较上月</span>
             </div>
@@ -47,11 +47,11 @@ export default function DashboardPage() {
           <div className="flex flex-col gap-2 rounded-xl p-6 bg-white border border-rice-deep shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start">
               <p className="text-ink-light text-sm font-medium uppercase tracking-wider">AI 调用次数</p>
-              <span className="material-symbols-outlined text-cinnabar/60">smart_toy</span>
+              <Icon name="smart_toy" className="text-cinnabar/60" />
             </div>
             <p className="text-ink text-3xl font-bold tabular-nums">{mockStats.aiCalls}</p>
             <div className="flex items-center gap-1 text-emerald-600 text-sm font-semibold">
-              <span className="material-symbols-outlined text-sm">trending_up</span>
+              <Icon name="trending_up" size={16} />
               <span>+{mockStats.aiCallsGrowth}%</span>
               <span className="text-ink-faint font-normal ml-1">较上月</span>
             </div>
@@ -70,7 +70,7 @@ export default function DashboardPage() {
             <div className="flex items-baseline gap-4 mb-4">
               <p className="text-ink text-4xl font-bold tabular-nums">{mockStats.totalPatterns.toLocaleString()}</p>
               <div className="flex items-center gap-1 text-emerald-600 font-semibold">
-                <span className="material-symbols-outlined text-sm">arrow_upward</span>
+                <Icon name="arrow_upward" size={16} />
                 <span className="text-sm">+15.8%</span>
               </div>
             </div>
@@ -112,7 +112,7 @@ export default function DashboardPage() {
             </div>
             <div className="mt-8 rounded bg-[#f8f8f6] p-4 border border-dashed border-rice-deep">
               <div className="flex items-center gap-2 text-ink-light text-xs">
-                <span className="material-symbols-outlined text-sm">info</span>
+                <Icon name="info" size={16} />
                 <span>数据根据2026年IP地理位置聚合而成。</span>
               </div>
             </div>

@@ -1,11 +1,12 @@
 ﻿import Link from 'next/link'
 import SiteHeader from '@/components/layout/SiteHeader'
+import { Icon } from '@/components/icons'
 import { mockPatterns, filterOptions } from '../_mock/patterns'
 
 export default function GalleryPage() {
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
-      <SiteHeader logoIcon="filter_vintage" siteName="湖北传统纹样库" primaryColor="cinnabar" activeNav={1} />
+      <SiteHeader logoIcon="filter_vintage" siteName="湖北传统纹样库" primaryColor="cinnabar" />
       
       <main className="flex flex-1 w-full max-w-7xl mx-auto px-6 lg:px-10 py-10 gap-10">
         <aside className="w-64 shrink-0 hidden lg:flex flex-col gap-8">
@@ -64,7 +65,7 @@ export default function GalleryPage() {
             </div>
             <div className="flex items-center gap-2">
               <button className="flex items-center gap-1 px-3 py-1.5 bg-rice-warm rounded-lg text-sm text-ink-medium hover:text-cinnabar">
-                <span className="material-symbols-outlined text-lg">sort</span>
+                <Icon name="sort" size={18} />
                 最新上传
               </button>
             </div>
@@ -94,7 +95,7 @@ export default function GalleryPage() {
           
           <div className="flex items-center justify-center gap-2 mt-16 py-10 border-t border-cinnabar/10">
             <button className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-faint hover:text-cinnabar transition-colors">
-              <span className="material-symbols-outlined">chevron_left</span>
+              <Icon name="chevron_left" />
             </button>
             <button className="w-10 h-10 rounded-full bg-cinnabar text-white text-sm font-bold">1</button>
             <button className="w-10 h-10 rounded-full hover:bg-rice-warm text-ink-medium text-sm font-medium">2</button>
@@ -102,7 +103,7 @@ export default function GalleryPage() {
             <span className="px-2 text-ink-faint">...</span>
             <button className="w-10 h-10 rounded-full hover:bg-rice-warm text-ink-medium text-sm font-medium">12</button>
             <button className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar transition-colors">
-              <span className="material-symbols-outlined">chevron_right</span>
+              <Icon name="chevron_right" />
             </button>
           </div>
         </section>
@@ -113,7 +114,7 @@ export default function GalleryPage() {
           <div className="max-w-xs">
             <div className="flex items-center gap-3 mb-6">
               <div className="text-cinnabar">
-                <span className="material-symbols-outlined text-2xl">filter_vintage</span>
+                <Icon name="filter_vintage" size={24} />
               </div>
               <h2 className="text-lg font-bold font-serif text-ink">湖北传统纹样库</h2>
             </div>
@@ -136,9 +137,9 @@ export default function GalleryPage() {
               <h4 className="text-xs font-bold text-ink uppercase">联系我们</h4>
               <p className="text-sm text-ink-light">contact@hubeipattern.org</p>
               <div className="flex gap-4 mt-2">
-                <span className="material-symbols-outlined text-ink-faint hover:text-cinnabar cursor-pointer">language</span>
-                <span className="material-symbols-outlined text-ink-faint hover:text-cinnabar cursor-pointer">share</span>
-              </div>
+                  <Icon name="language" className="text-ink-faint hover:text-cinnabar cursor-pointer" />
+                  <Icon name="share" className="text-ink-faint hover:text-cinnabar cursor-pointer" />
+                </div>
             </div>
           </div>
         </div>

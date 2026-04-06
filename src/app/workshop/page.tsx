@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
+import { Icon } from '@/components/icons'
 
 const categories = ['楚式纹样', '敦煌艺术', '故宫典藏', '现代简约']
 
@@ -22,46 +23,19 @@ export default function WorkshopPage() {
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-[#fbfbf8]">
-      <header className="flex items-center justify-between border-b border-rice-deep/50 bg-white/80 backdrop-blur-md px-8 py-3 z-50">
-        <div className="flex items-center gap-4">
-          <div className="size-8 bg-gold flex items-center justify-center rounded-lg text-white">
-            <span className="material-symbols-outlined">grid_view</span>
-          </div>
-          <div>
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-ink">纹样+ 跨界创作工坊</h1>
-            <p className="text-[10px] uppercase tracking-widest text-gold/80 font-bold">Crossover Creation Workshop</p>
-          </div>
-        </div>
-        <nav className="flex items-center gap-10">
-          <a className="text-gold text-sm font-bold border-b-2 border-gold pb-1" href="#">首页</a>
-          <a className="text-ink-medium hover:text-gold text-sm font-medium transition-colors" href="#">工作台</a>
-          <a className="text-ink-medium hover:text-gold text-sm font-medium transition-colors" href="#">灵感库</a>
-          <a className="text-ink-medium hover:text-gold text-sm font-medium transition-colors" href="#">社区</a>
-        </nav>
-        <div className="flex items-center gap-4">
-          <button className="p-2 hover:bg-rice-warm/30 rounded-full transition-colors">
-            <span className="material-symbols-outlined text-ink-medium">settings</span>
-          </button>
-          <button className="p-2 hover:bg-rice-warm/30 rounded-full transition-colors">
-            <span className="material-symbols-outlined text-ink-medium">share</span>
-          </button>
-          <div className="h-8 w-[1px] bg-rice-deep mx-2"></div>
-          <div className="flex items-center gap-3 bg-rice-warm/20 px-3 py-1.5 rounded-full border border-rice-deep/40">
-            <span className="text-xs font-bold text-ink-medium">设计者: 暖暖</span>
-            <div className="size-8 rounded-full bg-gold/20 border border-white flex items-center justify-center">
-              <span className="material-symbols-outlined text-gold text-sm">person</span>
-            </div>
-          </div>
-        </div>
-      </header>
+      <SiteHeader 
+        logoIcon="grid_view" 
+        siteName="纹样+ 跨界创作工坊" 
+        primaryColor="gold" 
+      />
       
       <main className="flex flex-1 overflow-hidden relative">
         <div className="flex-1 relative flex flex-col items-center justify-center p-12 bg-[#f4f1ea]">
           <div className="absolute top-6 left-8 flex items-center gap-2 text-sm">
             <span className="text-gold/60">跨界工坊</span>
-            <span className="material-symbols-outlined text-xs text-ink-faint">chevron_right</span>
+            <Icon name="chevron_right" size={12} className="text-ink-faint" />
             <span className="text-ink-faint">高端定制</span>
-            <span className="material-symbols-outlined text-xs text-ink-faint">chevron_right</span>
+            <Icon name="chevron_right" size={12} className="text-ink-faint" />
             <span className="text-ink font-bold">主题: 楚风凤鸟纹</span>
           </div>
           
@@ -78,7 +52,7 @@ export default function WorkshopPage() {
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-4xl glass-panel rounded-xl p-6 shadow-2xl border-t border-white/50">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-cinnabar">tune</span>
+                <Icon name="tune" className="text-cinnabar" />
                 <h3 className="font-bold text-ink">专业调色面板</h3>
               </div>
               <div className="flex gap-2">
@@ -137,14 +111,14 @@ export default function WorkshopPage() {
           <div className="p-6 border-b border-rice-deep/30">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-bold text-ink flex items-center gap-2">
-                <span className="material-symbols-outlined text-gold">auto_awesome</span>
+                <Icon name="auto_awesome" className="text-gold" />
                 纹样资产库
               </h2>
               <span className="text-[10px] font-bold bg-gold/10 text-gold px-2 py-0.5 rounded">NEW</span>
             </div>
             
             <div className="relative mb-4">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint text-sm">search</span>
+              <Icon name="search" size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint" />
               <input className="w-full pl-9 pr-4 py-2 bg-rice border-none rounded-lg text-sm focus:ring-1 focus:ring-gold/50" placeholder="搜索纹样..." type="text"/>
             </div>
             
@@ -186,7 +160,7 @@ export default function WorkshopPage() {
           
           <div className="p-6 bg-rice-warm/50 border-t border-rice-deep/30">
             <button className="w-full py-3 bg-ink text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-ink-medium transition-all shadow-xl">
-              <span className="material-symbols-outlined text-sm">download</span>
+              <Icon name="download" size={16} />
               导出高清设计稿
             </button>
             <p className="text-[10px] text-center mt-3 text-ink-faint font-medium">支持 PNG, SVG, 3D OBJ 格式</p>
