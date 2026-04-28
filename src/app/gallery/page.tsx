@@ -1,5 +1,6 @@
-﻿import Link from 'next/link'
+import Link from 'next/link'
 import SiteHeader from '@/components/layout/SiteHeader'
+import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons'
 import { mockPatterns, filterOptions } from '../_mock/patterns'
 
@@ -74,7 +75,10 @@ export default function GalleryPage() {
           <div className="masonry-grid">
             {mockPatterns.map((pattern) => (
               <Link key={pattern.id} href={`/gallery/${pattern.id}`} className="masonry-item group cursor-pointer">
-                <div className={`relative overflow-hidden rounded-xl bg-rice-warm aspect-[${pattern.aspectRatio}]`}>
+                <div 
+                  className="relative overflow-hidden rounded-xl bg-rice-warm"
+                  style={{ aspectRatio: pattern.aspectRatio }}
+                >
                   <div 
                     className="w-full h-full transition-transform duration-500 group-hover:scale-105"
                     style={{ backgroundColor: pattern.imagePlaceholderColor }}
@@ -109,44 +113,7 @@ export default function GalleryPage() {
         </section>
       </main>
       
-      <footer className="bg-rice-warm py-12 px-6 lg:px-20 mt-10">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
-          <div className="max-w-xs">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="text-cinnabar">
-                <Icon name="filter_vintage" size={24} />
-              </div>
-              <h2 className="text-lg font-bold font-serif text-ink">湖北传统纹样库</h2>
-            </div>
-            <p className="text-sm text-ink-light leading-relaxed">致力于通过数字技术保存和复兴荆楚大地数千年的文化遗产，为设计师、学者提供精准的传统美学资源。</p>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-10">
-            <div className="flex flex-col gap-4">
-              <h4 className="text-xs font-bold text-ink uppercase">快速链接</h4>
-              <a className="text-sm text-ink-light hover:text-cinnabar" href="#">纹样分类</a>
-              <a className="text-sm text-ink-light hover:text-cinnabar" href="#">学术文章</a>
-              <a className="text-sm text-ink-light hover:text-cinnabar" href="#">关于我们</a>
-            </div>
-            <div className="flex flex-col gap-4">
-              <h4 className="text-xs font-bold text-ink uppercase">合作伙伴</h4>
-              <a className="text-sm text-ink-light hover:text-cinnabar" href="#">湖北省博物馆</a>
-              <a className="text-sm text-ink-light hover:text-cinnabar" href="#">武汉美术馆</a>
-              <a className="text-sm text-ink-light hover:text-cinnabar" href="#">非遗研究所</a>
-            </div>
-            <div className="flex flex-col gap-4">
-              <h4 className="text-xs font-bold text-ink uppercase">联系我们</h4>
-              <p className="text-sm text-ink-light">contact@hubeipattern.org</p>
-              <div className="flex gap-4 mt-2">
-                  <Icon name="language" className="text-ink-faint hover:text-cinnabar cursor-pointer" />
-                  <Icon name="share" className="text-ink-faint hover:text-cinnabar cursor-pointer" />
-                </div>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-rice-deep text-center">
-          <p className="text-xs text-ink-faint">© 2024 湖北传统纹样库. 鄂ICP备2024XXXX号. 保留所有权利.</p>
-        </div>
-      </footer>
+      <SiteFooter variant="light" className="mt-10" />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next"
+import type { Metadata } from "next"
 import { Noto_Serif_SC, Noto_Sans_SC, Newsreader } from "next/font/google"
 import "./globals.css"
 

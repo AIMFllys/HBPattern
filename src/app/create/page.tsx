@@ -1,7 +1,8 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
+import ParameterSlider from '@/components/ui/ParameterSlider'
 import { Icon } from '@/components/icons'
 
 const categories = ['陶瓷', '丝绸', '漆器', '壁画']
@@ -71,48 +72,26 @@ export default function CreatePage() {
           
           <div className="h-32 bg-white border-t border-rice-deep flex items-center justify-between px-10">
             <div className="flex flex-1 gap-12 max-w-4xl">
-              <div className="flex-1 space-y-2">
-                <div className="flex justify-between">
-                  <label className="text-xs font-bold text-ink-faint uppercase tracking-tighter">图案缩放 SCALE</label>
-                  <span className="text-xs font-medium text-cinnabar">{scale}%</span>
-                </div>
-                <input 
-                  className="w-full h-1 bg-rice-deep rounded-lg appearance-none cursor-pointer accent-cinnabar" 
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={scale}
-                  onChange={(e) => setScale(Number(e.target.value))}
-                />
-              </div>
-              <div className="flex-1 space-y-2">
-                <div className="flex justify-between">
-                  <label className="text-xs font-bold text-ink-faint uppercase tracking-tighter">图案旋转 ROTATION</label>
-                  <span className="text-xs font-medium text-cinnabar">{rotation}°</span>
-                </div>
-                <input 
-                  className="w-full h-1 bg-rice-deep rounded-lg appearance-none cursor-pointer accent-cinnabar" 
-                  type="range"
-                  min="0"
-                  max="360"
-                  value={rotation}
-                  onChange={(e) => setRotation(Number(e.target.value))}
-                />
-              </div>
-              <div className="flex-1 space-y-2">
-                <div className="flex justify-between">
-                  <label className="text-xs font-bold text-ink-faint uppercase tracking-tighter">透明度 OPACITY</label>
-                  <span className="text-xs font-medium text-cinnabar">{opacity}%</span>
-                </div>
-                <input 
-                  className="w-full h-1 bg-rice-deep rounded-lg appearance-none cursor-pointer accent-cinnabar" 
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={opacity}
-                  onChange={(e) => setOpacity(Number(e.target.value))}
-                />
-              </div>
+              <ParameterSlider 
+                label="图案缩放 SCALE" 
+                value={scale} 
+                onChange={setScale} 
+                className="flex-1"
+              />
+              <ParameterSlider 
+                label="图案旋转 ROTATION" 
+                value={rotation} 
+                onChange={setRotation} 
+                max={360}
+                unit="°"
+                className="flex-1"
+              />
+              <ParameterSlider 
+                label="透明度 OPACITY" 
+                value={opacity} 
+                onChange={setOpacity} 
+                className="flex-1"
+              />
             </div>
             <div className="ml-10 flex gap-4">
               <button className="px-6 py-2 border border-cinnabar text-cinnabar text-sm font-bold rounded-lg hover:bg-cinnabar/5 transition-colors">

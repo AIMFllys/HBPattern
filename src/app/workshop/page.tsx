@@ -1,7 +1,8 @@
-﻿'use client'
+'use client'
 
 import { useState } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
+import ParameterSlider from '@/components/ui/ParameterSlider'
 import { Icon } from '@/components/icons'
 
 const categories = ['楚式纹样', '敦煌艺术', '故宫典藏', '现代简约']
@@ -61,48 +62,24 @@ export default function WorkshopPage() {
               </div>
             </div>
             <div className="grid grid-cols-3 gap-8">
-              <div className="space-y-3">
-                <div className="flex justify-between text-xs font-bold text-ink-medium">
-                  <span>纹样密度</span>
-                  <span className="text-gold">{density}%</span>
-                </div>
-                <input 
-                  className="w-full h-1.5 bg-rice-deep rounded-lg appearance-none cursor-pointer accent-cinnabar" 
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={density}
-                  onChange={(e) => setDensity(Number(e.target.value))}
-                />
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between text-xs font-bold text-ink-medium">
-                  <span>金属感</span>
-                  <span className="text-gold">{metallic}%</span>
-                </div>
-                <input 
-                  className="w-full h-1.5 bg-rice-deep rounded-lg appearance-none cursor-pointer accent-cinnabar" 
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={metallic}
-                  onChange={(e) => setMetallic(Number(e.target.value))}
-                />
-              </div>
-              <div className="space-y-3">
-                <div className="flex justify-between text-xs font-bold text-ink-medium">
-                  <span>丝绸光泽</span>
-                  <span className="text-gold">{silk}%</span>
-                </div>
-                <input 
-                  className="w-full h-1.5 bg-rice-deep rounded-lg appearance-none cursor-pointer accent-cinnabar" 
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={silk}
-                  onChange={(e) => setSilk(Number(e.target.value))}
-                />
-              </div>
+              <ParameterSlider 
+                label="纹样密度" 
+                value={density} 
+                onChange={setDensity} 
+                primaryColor="gold"
+              />
+              <ParameterSlider 
+                label="金属感" 
+                value={metallic} 
+                onChange={setMetallic} 
+                primaryColor="gold"
+              />
+              <ParameterSlider 
+                label="丝绸光泽" 
+                value={silk} 
+                onChange={setSilk} 
+                primaryColor="gold"
+              />
             </div>
           </div>
         </div>

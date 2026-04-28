@@ -1,9 +1,11 @@
 import Link from 'next/link'
 import SiteHeader from '@/components/layout/SiteHeader'
+import SiteFooter from '@/components/layout/SiteFooter'
 import { mockPatterns } from '../../_mock/patterns'
 
-export default function PatternDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const pattern = mockPatterns[0]
+export default async function PatternDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const pattern = mockPatterns.find(p => p.id === id) || mockPatterns[0]
   
   return (
     <div className="layout-container flex h-full grow flex-col bg-[#f8f8f6]">
@@ -145,37 +147,7 @@ export default function PatternDetailPage({ params }: { params: Promise<{ id: st
         </section>
       </main>
       
-      <footer className="bg-ink text-ink-faint py-12 px-8">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-3 text-ink">
-              <span className="material-symbols-outlined text-gold">landscape</span>
-              <span className="text-xl font-bold tracking-widest">纹样大观 · 数字化博物馆</span>
-            </div>
-            <p className="text-sm opacity-60">致力于中国传统纹样的数字化整理与美学传播</p>
-          </div>
-          <div className="flex gap-12 text-sm">
-            <div className="flex flex-col gap-3">
-              <span className="text-ink font-bold">探索</span>
-              <a className="hover:text-gold transition-colors" href="#">纹样全集</a>
-              <a className="hover:text-gold transition-colors" href="#">工艺溯源</a>
-            </div>
-            <div className="flex flex-col gap-3">
-              <span className="text-ink font-bold">研究</span>
-              <a className="hover:text-gold transition-colors" href="#">学术论文</a>
-              <a className="hover:text-gold transition-colors" href="#">出版物</a>
-            </div>
-            <div className="flex flex-col gap-3">
-              <span className="text-ink font-bold">联络</span>
-              <a className="hover:text-gold transition-colors" href="#">关于我们</a>
-              <a className="hover:text-gold transition-colors" href="#">版权申明</a>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/10 text-xs text-center opacity-40">
-          © 2024 纹样大观数字库. 保留所有权利.
-        </div>
-      </footer>
+      <SiteFooter variant="dark" />
     </div>
   )
 }

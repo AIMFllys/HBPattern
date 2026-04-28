@@ -1,4 +1,4 @@
-﻿import SiteHeader from '@/components/layout/SiteHeader'
+import SiteHeader from '@/components/layout/SiteHeader'
 import { Icon } from '@/components/icons'
 import { mockRegions } from '../_mock/regions'
 
@@ -6,7 +6,7 @@ export default function MapPage() {
   const highlightedRegion = mockRegions.find(r => r.isHighlighted) || mockRegions[0]
 
   return (
-    <div className="relative flex h-auto min-screen w-full flex-col overflow-x-hidden">
+    <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
       <SiteHeader 
         logoIcon="storm" 
         siteName="湖北非遗3D文化地图" 
