@@ -399,10 +399,10 @@ c:\project\HBPattern\
 - [x] ✅ TypeScript + ESLint 零错误
 - [x] ✅ pnpm 文件已删除
 - [x] ✅ 云端 19 张 `hp_` 表已创建 + RLS 已启用
-- [ ] Task 1: SiteHeader 拆分为 Server + Client
-- [ ] Task 2: Icon 字体本地化
-- [ ] Task 3: Mock 数据迁移到 `src/data/mock/`
-- [ ] Task 4: metadataBase 配置
-- [ ] Task 5: 动态类名修复
-- [ ] Task 6: clsx 安装 + utils.ts
-- [ ] Task 7: Login Auth 接入
+- [x] ✅ Task 1: SiteHeader 拆分为 Server + Client (NavLinks + MobileDrawer dynamic ssr:false)
+- [x] ✅ Task 2: Icon 字体本地化 (public/fonts/material-symbols-outlined.woff2)
+- [x] ✅ Task 3: Mock 数据迁移到 `src/data/mock/`
+- [x] ✅ Task 4: metadataBase 配置
+- [x] ✅ Task 5: 动态类名修复 (bgMutedClass)
+- [x] ✅ Task 6: clsx@2.1.1 安装 + src/lib/utils.ts
+- [x] ✅ Task 7: Login Auth 接入 (GitHub OAuth + email/password + Suspense)

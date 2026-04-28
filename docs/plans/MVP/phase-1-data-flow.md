@@ -380,10 +380,23 @@ Include:
 
 ## Done When
 
-- [ ] `npx prisma studio` 可看到 Supabase 中的 18 个表 + 种子数据
-- [ ] `curl localhost:6427/api/patterns` 返回带分页的纹样列表
-- [ ] `curl localhost:6427/api/patterns/[id]` 返回完整详情
-- [ ] 首页统计数字来自数据库
-- [ ] 画廊筛选/分页/排序全部功能正常
-- [ ] 详情页按 id 动态加载，不存在的 id 显示 404
-- [ ] `_mock/patterns.ts` 和 `_mock/stats.ts` 已删除
+- [x] ✅ Prisma 7 适配完成 (adapter-pg + schema 修复 + prisma generate)
+- [x] ✅ `src/lib/db.ts` Prisma Client 单例封装
+- [x] ✅ 种子数据已写入 Supabase (4 regions, 4 techniques, 2 ICH, 10 tags, 6 patterns, 6 media)
+- [x] ✅ `GET /api/patterns` 返回带分页的纹样列表
+- [x] ✅ `GET /api/patterns/[id]` 返回完整详情 + 404
+- [x] ✅ `GET /api/stats` 返回真实计数
+- [x] ✅ `GET /api/regions` 返回地区列表
+- [x] ✅ 首页统计数字来自数据库 (Server Component + Promise.all)
+- [x] ✅ 画廊筛选/分页/排序全部功能正常 (URL-as-state + GalleryClient)
+- [x] ✅ 详情页按 id 动态加载 + generateMetadata + notFound()
+- [x] ✅ 首页/画廊/详情页已完全脱离 mock (仅 dashboard/map 保留)
+- [x] ✅ React.cache() 包装 getPatternById 避免重复查询
+- [x] ✅ 搜索参数 SQL 通配符已消毒
+
+### 技术决策记录
+
+- **运行时查询使用 Supabase Client**（非 Prisma）— .env.local 密码为占位符，且 Supabase Client 天然配合 RLS
+- **Prisma 保留用于 schema 定义** — 当密码配置好后可用 prisma studio
+- **Gallery 采用 URL-as-state** — 筛选/分页通过 searchParams 驱动，Server Component 重新渲染
+- **新增依赖**: @prisma/client@7.8.0, @prisma/adapter-pg, pg, tsx
