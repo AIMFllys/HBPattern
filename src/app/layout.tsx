@@ -25,6 +25,9 @@ const newsreader = Newsreader({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:6427'
+  ),
   title: {
     default: "湖北纹案文化展示平台",
     template: "%s | 湖北纹案",
@@ -39,12 +42,16 @@ export const metadata: Metadata = {
   },
 }
 
+import AuthProvider from '@/components/providers/AuthProvider'
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="zh-CN" className={`${notoSerif.variable} ${notoSans.variable} ${newsreader.variable}`}>
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   )
 }
