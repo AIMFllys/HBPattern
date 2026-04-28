@@ -1,5 +1,5 @@
 import SiteHeader from '@/components/layout/SiteHeader'
-import { Icon } from '@/components/icons'
+import { Icon } from '@/components/icons/Icon'
 import { mockRegions } from '../_mock/regions'
 
 export default function MapPage() {

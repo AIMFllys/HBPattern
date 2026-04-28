@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
 import ParameterSlider from '@/components/ui/ParameterSlider'
-import { Icon } from '@/components/icons'
+import { Icon } from '@/components/icons/Icon'
 
 const categories = ['楚式纹样', '敦煌艺术', '故宫典藏', '现代简约']
 

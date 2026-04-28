@@ -1,5 +1,6 @@
-﻿import SiteHeader from '@/components/layout/SiteHeader'
-import { Icon } from '@/components/icons'
+import SiteHeader from '@/components/layout/SiteHeader'
+import SiteFooter from '@/components/layout/SiteFooter'
+import { Icon } from '@/components/icons/Icon'
 import { mockStats } from '../_mock/stats'
 
 export default function DashboardPage() {
@@ -157,9 +158,7 @@ export default function DashboardPage() {
         </div>
       </main>
       
-      <footer className="mt-auto border-t border-rice-deep p-8 text-center bg-[#f8f8f6]">
-        <p className="text-ink-faint text-sm">© 2026 学术管理平台 - 专业 · 严谨 · 智能</p>
-      </footer>
+      <SiteFooter variant="light" />
     </div>
   )
 }
