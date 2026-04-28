@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Icon } from '@/components/icons'
+import { Icon } from '@/components/icons/Icon'
 
 interface SiteFooterProps {
   variant?: 'light' | 'dark'

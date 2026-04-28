@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'motion/react'
-import { Icon } from '@/components/icons'
+import { Icon } from '@/components/icons/Icon'
 
 interface SiteHeaderProps {
   logoIcon?: string

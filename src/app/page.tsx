@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
-import { Icon } from '@/components/icons'
+import { Icon } from '@/components/icons/Icon'
 import { mockPatterns } from './_mock/patterns'
 import { mockStats } from './_mock/stats'
 
