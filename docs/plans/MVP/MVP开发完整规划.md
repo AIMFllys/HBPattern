@@ -31,7 +31,7 @@ Phase 0 → Phase 0.5 → Phase 1 → Phase 2 → Phase 3
 | **Phase 0.5** ✅ | [phase-0.5-arch-refactor.md](phase-0.5-arch-refactor.md) | 架构重构：barrel export 消除 + 类型目录 + scripts + Server/Client 拆分 + Auth 接入 |
 | **Phase 1** ✅ | [phase-1-data-flow.md](phase-1-data-flow.md) | Supabase 连接 + API + 首页/画廊/详情数据化 |
 | **Phase 2** ✅ | [phase-2-user-interaction.md](phase-2-user-interaction.md) | 点赞 + 收藏 + 评论 + 上传 + 个人中心 + 后台 |
-| **Phase 3** | [phase-3-polish.md](phase-3-polish.md) | Motion 动效 + 移动端 + SEO + 性能 + 质量审计 |
+| **Phase 3** ✅ | [phase-3-polish.md](phase-3-polish.md) | Motion 动效 + SEO + 性能 + 无障碍 + 代码质量 |
 
 ---
 
