@@ -1,11 +1,13 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import LikeButton from '@/components/pattern/LikeButton'
-import CommentSection from '@/components/pattern/CommentSection'
 import { getPatternById, getRelatedPatterns } from '@/lib/queries'
+
+const CommentSection = dynamic(() => import('@/components/pattern/CommentSection'), { ssr: false })
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
@@ -36,6 +38,8 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
             <div className="museum-frame bg-white overflow-hidden rounded-lg">
               <div
                 className="w-full aspect-[4/5] hover:scale-105 transition-transform duration-700 bg-cover bg-center"
+                role="img"
+                aria-label={pattern.name}
                 style={{ backgroundColor: palette[0] ?? '#2a1f0e', backgroundImage: mainImage ? `url("${mainImage}")` : undefined }}
               />
             </div>

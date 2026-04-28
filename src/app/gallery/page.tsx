@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import GalleryClient from '@/components/gallery/GalleryClient'
 import { getPatterns } from '@/lib/queries'
+
+export const metadata: Metadata = {
+  title: '纹样画廊',
+  description: '浏览楚文化凤鸟纹、土家织锦、汉绣等湖北传统纹饰精品。支持按年代、地域、工艺多维检索。',
+}
 
 export default async function GalleryPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const params = await searchParams

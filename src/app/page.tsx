@@ -1,8 +1,18 @@
 import Link from 'next/link'
+import type { Metadata } from 'next'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons/Icon'
 import { getFeaturedPatterns, getStats } from '@/lib/queries'
+
+export const metadata: Metadata = {
+  title: '湖北纹案文化展示平台 — 千年纹饰之美',
+  description: '探索湖北传统纹绣文化的数字化平台。浏览纹样画廊、3D文化地图、AI创作中心。',
+  openGraph: {
+    title: '湖北纹案文化展示平台',
+    description: '探索湖北传统纹绣文化的数字化平台。浏览纹样画廊、3D文化地图、AI创作中心。',
+  },
+}
 
 export default async function HomePage() {
   const [stats, featured] = await Promise.all([getStats(), getFeaturedPatterns(4)])

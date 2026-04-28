@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -40,7 +41,7 @@ export default function UserMenu() {
         aria-label="用户菜单"
       >
         {user.avatar_url ? (
-          <img src={user.avatar_url} alt={user.nickname} className="w-full h-full object-cover" />
+          <Image src={user.avatar_url} alt={user.nickname} width={40} height={40} className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full bg-cinnabar/10 flex items-center justify-center text-cinnabar font-bold text-sm">
             {user.nickname[0]}

@@ -2,6 +2,11 @@ import SiteHeader from '@/components/layout/SiteHeader'
 import { Icon } from '@/components/icons/Icon'
 import { mockRegions } from '@/data/mock/regions'
 
+export const metadata = {
+  title: '3D 文化地图',
+  description: '以交互式地图探索湖北各地纹绣文化的地理分布与非遗传承。',
+}
+
 export default function MapPage() {
   const highlightedRegion = mockRegions.find(r => r.isHighlighted) || mockRegions[0]
 
