@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons/Icon'
@@ -41,7 +42,7 @@ export default async function ProfilePage() {
         <div className="flex items-center gap-6 mb-12">
           <div className="w-20 h-20 rounded-full overflow-hidden bg-cinnabar/10 flex items-center justify-center text-cinnabar text-2xl font-bold">
             {profile?.avatar_url ? (
-              <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+              <Image src={profile.avatar_url} alt="" width={80} height={80} className="w-full h-full object-cover" />
             ) : (
               profile?.nickname?.[0] ?? '?'
             )}

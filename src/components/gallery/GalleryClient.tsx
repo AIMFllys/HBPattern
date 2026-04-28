@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { motion } from 'motion/react'
 import { Icon } from '@/components/icons/Icon'
 import type { PatternListItem } from '@/lib/queries'
 
@@ -91,29 +92,37 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
           </div>
         ) : (
           <div className="masonry-grid">
-            {patterns.map((pattern) => {
+            {patterns.map((pattern, index) => {
               const palette = pattern.color_palette ?? []
               const imageUrl = pattern.media?.[0]?.url
               return (
-                <Link key={pattern.id} href={`/gallery/${pattern.id}`} className="masonry-item group cursor-pointer">
-                  <div className="relative overflow-hidden rounded-xl bg-rice-warm aspect-[4/5]">
-                    <div
-                      className="w-full h-full transition-transform duration-500 group-hover:scale-105 bg-cover bg-center"
-                      style={{ backgroundColor: palette[0] ?? '#3d3d30', backgroundImage: imageUrl ? `url("${imageUrl}")` : undefined }}
-                    />
-                    {pattern.is_ai_generated && (
-                      <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-cinnabar uppercase tracking-tight">
-                        AI 生成
-                      </div>
-                    )}
-                  </div>
-                  <div className="mt-4 px-1">
-                    <h3 className="text-base font-bold text-ink group-hover:text-cinnabar transition-colors">{pattern.name}</h3>
-                    <p className="text-sm text-ink-light font-serif italic">
-                      {pattern.region?.name ?? ''} · {pattern.technique?.name ?? ''}
-                    </p>
-                  </div>
-                </Link>
+                <motion.div
+                  key={pattern.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  className="masonry-item"
+                >
+                  <Link href={`/gallery/${pattern.id}`} className="group cursor-pointer block">
+                    <div className="relative overflow-hidden rounded-xl bg-rice-warm aspect-[4/5]">
+                      <div
+                        className="w-full h-full transition-transform duration-500 group-hover:scale-105 bg-cover bg-center"
+                        style={{ backgroundColor: palette[0] ?? '#3d3d30', backgroundImage: imageUrl ? `url("${imageUrl}")` : undefined }}
+                      />
+                      {pattern.is_ai_generated && (
+                        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-cinnabar uppercase tracking-tight">
+                          AI 生成
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-4 px-1">
+                      <h3 className="text-base font-bold text-ink group-hover:text-cinnabar transition-colors">{pattern.name}</h3>
+                      <p className="text-sm text-ink-light font-serif italic">
+                        {pattern.region?.name ?? ''} · {pattern.technique?.name ?? ''}
+                      </p>
+                    </div>
+                  </Link>
+                </motion.div>
               )
             })}
           </div>

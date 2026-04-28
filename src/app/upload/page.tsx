@@ -68,6 +68,7 @@ export default function UploadPage() {
           {/* Image Upload */}
           <label className="aspect-[4/5] border-2 border-dashed border-rice-deep rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-cinnabar transition-colors overflow-hidden bg-white">
             {preview ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={preview} alt="预览" className="w-full h-full object-cover" />
             ) : (
               <>

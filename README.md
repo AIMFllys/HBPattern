@@ -5,11 +5,10 @@
 **湖北传统纹饰文化的数字化展示、探索、AI 创作与共享平台**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql)](https://www.postgresql.org/)
-[![Alibaba Cloud](https://img.shields.io/badge/Alibaba_Cloud-RDS+OSS-ff6a00?logo=alibabacloud)](https://www.aliyun.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL_17-3ecf8e?logo=supabase)](https://supabase.com/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/AIMFllys/HBPattern/issues)
 
 [🌐 在线体验（即将上线）](#) · [📖 网站功能介绍](./docs/湖北纹案文化展示平台%20—%20网站功能介绍.md) · [🏗️ 技术架构文档](./docs/湖北纹案-具体技术架构规划.md) · [💬 提交反馈](https://github.com/AIMFllys/HBPattern/issues)
