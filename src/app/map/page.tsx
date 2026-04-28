@@ -1,6 +1,6 @@
 import SiteHeader from '@/components/layout/SiteHeader'
 import { Icon } from '@/components/icons/Icon'
-import { mockRegions } from '../_mock/regions'
+import { mockRegions } from '@/data/mock/regions'
 
 export default function MapPage() {
   const highlightedRegion = mockRegions.find(r => r.isHighlighted) || mockRegions[0]
