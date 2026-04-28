@@ -1,10 +1,8 @@
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import { Icon } from '@/components/icons/Icon'
 import NavLinks from './NavLinks'
+import MobileDrawer from './MobileDrawer'
 import UserMenu from './UserMenu'
-
-const MobileDrawer = dynamic(() => import('./MobileDrawer'), { ssr: false })
 
 interface SiteHeaderProps {
   logoIcon?: string
