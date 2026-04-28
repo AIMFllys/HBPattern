@@ -5,8 +5,6 @@ generator client {
 
 datasource db {
   provider   = "postgresql"
-  url        = env("DATABASE_URL")
-  directUrl  = env("DIRECT_URL")
   extensions = [postgis, vector]
 }
 
@@ -314,7 +312,7 @@ model Comment {
 model Tag {
   id       String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name     String       @unique
-  category String? // 朝代/技法/颜色/风格
+  category String? // 朝代/技�?颜色/风格
 
   patterns PatternTag[]
 
