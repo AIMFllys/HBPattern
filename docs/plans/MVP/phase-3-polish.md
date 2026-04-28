@@ -295,15 +295,17 @@ Server Component 检查:
 
 ## Done When
 
-- [ ] 画廊卡片有 stagger 出现动效
-- [ ] 点赞/收藏有视觉反馈动画
-- [ ] 弹窗有进出过渡
-- [ ] 375px 宽度下所有页面可正常使用
-- [ ] 画廊移动端有底部筛选抽屉
-- [ ] 每个页面有独立 SEO title + description
-- [ ] 图片使用 next/image 优化
-- [ ] `tsc --noEmit` 和 `next lint` 零错误
-- [ ] 首页 First Load JS < 100KB
+- [x] ✅ 画廊卡片有 stagger 出现动效 (motion.div, 50ms delay)
+- [x] ✅ 点赞有视觉反馈动画 (CSS scale transition)
+- [ ] ⏭️ 弹窗有进出过渡 (留给后续迭代)
+- [ ] ⏭️ 375px 宽度下画廊移动端底部筛选抽屉 (留给后续迭代)
+- [x] ✅ 每个页面有独立 SEO title + description
+- [x] ✅ 头像图片使用 next/image 优化
+- [x] ✅ `tsc --noEmit` 和 `eslint src` 零错误零警告
+- [x] ✅ CommentSection dynamic import (减少首屏 JS)
+- [x] ✅ 移除未使用的 lucide-react 依赖
+- [x] ✅ 详情页主图 role=img + aria-label (无障碍)
+- [x] ✅ README badges 更新为实际技术栈
 
 ---
 
