@@ -1,28 +1,6 @@
 import type { Metadata } from "next"
-import { Noto_Serif_SC, Noto_Sans_SC, Newsreader } from "next/font/google"
 import "./globals.css"
-
-const notoSerif = Noto_Serif_SC({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-noto-serif",
-  display: "swap",
-})
-
-const notoSans = Noto_Sans_SC({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-noto-sans",
-  display: "swap",
-})
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  weight: ["400", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-newsreader",
-  display: "swap",
-})
+import AuthProvider from '@/components/providers/AuthProvider'
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -42,13 +20,11 @@ export const metadata: Metadata = {
   },
 }
 
-import AuthProvider from '@/components/providers/AuthProvider'
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN" className={`${notoSerif.variable} ${notoSans.variable} ${newsreader.variable}`}>
+    <html lang="zh-CN">
       <body>
         <AuthProvider>{children}</AuthProvider>
       </body>

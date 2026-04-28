@@ -42,7 +42,7 @@ async function main() {
     update: {},
     create: { id: '00000000-0000-0000-0001-000000000002', name: '织锦', category: 'weaving', description: '以经纬线交织形成图案的纺织工艺' },
   })
-  const dyeing = await prisma.technique.upsert({
+  await prisma.technique.upsert({
     where: { id: '00000000-0000-0000-0001-000000000003' },
     update: {},
     create: { id: '00000000-0000-0000-0001-000000000003', name: '蜡染', category: 'dyeing', description: '以蜡防染的传统印染工艺' },

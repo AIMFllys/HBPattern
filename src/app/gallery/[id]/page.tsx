@@ -1,13 +1,11 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import type { Metadata } from 'next'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import LikeButton from '@/components/pattern/LikeButton'
+import CommentSection from '@/components/pattern/CommentSection'
 import { getPatternById, getRelatedPatterns } from '@/lib/queries'
-
-const CommentSection = dynamic(() => import('@/components/pattern/CommentSection'), { ssr: false })
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
