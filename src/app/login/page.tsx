@@ -19,6 +19,8 @@ function LoginForm() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [isRegister, setIsRegister] = useState(false)
+  const [emailSent, setEmailSent] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -38,18 +40,56 @@ function LoginForm() {
     setLoading(true)
 
     const supabase = createClient()
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
 
-    if (error) {
-      setError(error.message)
+    if (isRegister) {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+      })
+      if (error) {
+        setError(error.message)
+      } else {
+        setEmailSent(true)
+      }
       setLoading(false)
     } else {
-      router.push('/')
-      router.refresh()
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        setError(error.message)
+        setLoading(false)
+      } else {
+        router.push('/')
+        router.refresh()
+      }
     }
   }
 
   const displayError = error || (errorParam ? '认证失败，请重试' : null)
+
+  if (emailSent) {
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center bg-rice p-8">
+        <div className="w-full max-w-md text-center space-y-6">
+          <div className="w-16 h-16 mx-auto rounded-full bg-success/10 flex items-center justify-center">
+            <Icon name="mail" size={32} className="text-success" />
+          </div>
+          <h1 className="text-2xl font-bold text-ink">验证邮件已发送</h1>
+          <p className="text-ink-light text-sm">
+            我们已向 <span className="font-bold text-ink">{email}</span> 发送了一封验证邮件。<br />
+            请查收并点击链接完成注册。
+          </p>
+          <p className="text-xs text-ink-faint">没有收到？请检查垃圾邮件文件夹</p>
+          <button
+            onClick={() => { setEmailSent(false); setIsRegister(false) }}
+            className="text-cinnabar font-bold text-sm hover:underline"
+          >
+            返回登录
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen w-full flex bg-rice">
@@ -88,8 +128,8 @@ function LoginForm() {
 
         <div className="w-full max-w-md space-y-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-ink mb-2">欢迎回来</h1>
-            <p className="text-ink-light text-sm">登录以访问您的收藏与创作</p>
+            <h1 className="text-3xl font-bold text-ink mb-2">{isRegister ? '创建账号' : '欢迎回来'}</h1>
+            <p className="text-ink-light text-sm">{isRegister ? '注册以开始探索与创作' : '登录以访问您的收藏与创作'}</p>
           </div>
 
           {displayError && (
@@ -157,13 +197,17 @@ function LoginForm() {
                 disabled={loading}
                 className="w-full py-3 bg-cinnabar text-white rounded-lg font-bold shadow-lg shadow-cinnabar/20 hover:bg-cinnabar-deep hover:shadow-xl transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? '登录中...' : '登录'}
+                {loading ? (isRegister ? '注册中...' : '登录中...') : (isRegister ? '注册' : '登录')}
               </button>
             </form>
           </div>
 
           <p className="text-center text-xs text-ink-light pt-8">
-            还没有账号? <a href="#" className="text-cinnabar font-bold hover:underline">立即注册</a>
+            {isRegister ? (
+              <>已有账号? <button onClick={() => { setIsRegister(false); setError(null) }} className="text-cinnabar font-bold hover:underline">返回登录</button></>
+            ) : (
+              <>还没有账号? <button onClick={() => { setIsRegister(true); setError(null) }} className="text-cinnabar font-bold hover:underline">立即注册</button></>
+            )}
           </p>
         </div>
       </div>
