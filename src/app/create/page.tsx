@@ -4,6 +4,8 @@ import { useState } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
 import ParameterSlider from '@/components/ui/ParameterSlider'
 import { Icon } from '@/components/icons/Icon'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { useAuthModal } from '@/stores/useAuthModal'
 
 const categories = ['陶瓷', '丝绸', '漆器', '壁画']
 
@@ -21,6 +23,13 @@ export default function CreatePage() {
   const [scale, setScale] = useState(65)
   const [rotation, setRotation] = useState(45)
   const [opacity, setOpacity] = useState(80)
+  const user = useAuthStore(s => s.user)
+  const { openModal } = useAuthModal()
+
+  function requireAuth(message: string, action: () => void) {
+    if (!user) { openModal(message); return }
+    action()
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-rice">
@@ -97,7 +106,9 @@ export default function CreatePage() {
               <button className="px-6 py-2 border border-cinnabar text-cinnabar text-sm font-bold rounded-lg hover:bg-cinnabar/5 transition-colors">
                 重置
               </button>
-              <button className="px-8 py-2 bg-cinnabar text-white text-sm font-bold rounded-lg shadow-lg shadow-cinnabar/20 hover:bg-cinnabar-deep transition-transform active:scale-95">
+              <button className="px-8 py-2 bg-cinnabar text-white text-sm font-bold rounded-lg shadow-lg shadow-cinnabar/20 hover:bg-cinnabar-deep transition-transform active:scale-95"
+                onClick={() => requireAuth('登录后即可保存您的创作成品', () => { /* TODO: save logic */ })}
+              >
                 保存成品
               </button>
             </div>
@@ -153,7 +164,9 @@ export default function CreatePage() {
           </div>
           
           <div className="p-6 bg-rice-warm/20 border-t border-rice-deep">
-            <button className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-cinnabar/40 rounded-lg text-cinnabar text-sm font-bold hover:bg-cinnabar/5 transition-colors">
+            <button className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-cinnabar/40 rounded-lg text-cinnabar text-sm font-bold hover:bg-cinnabar/5 transition-colors"
+              onClick={() => requireAuth('登录后即可上传自定义图案', () => { /* TODO: upload logic */ })}
+            >
               <Icon name="add_circle" />
               上传自定义图案
             </button>
