@@ -27,12 +27,12 @@ export default function SiteHeader({
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-rice-deep/50 bg-rice/80 backdrop-blur-md px-6 lg:px-10 py-4 flex items-center justify-between">
-      <div className="flex items-center gap-12">
-        <Link href="/" className="flex items-center gap-3 group">
+      <div className="flex items-center gap-10">
+        <Link href="/" className="flex items-center gap-2.5 group">
           <div className={`${colorClass} transition-transform group-hover:scale-110`}>
-            <Icon name={logoIcon} size={36} />
+            <Icon name={logoIcon} size={28} />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-ink group-hover:text-cinnabar transition-colors">
+          <h1 className="text-lg font-bold tracking-tight text-ink group-hover:text-cinnabar transition-colors">
             {siteName}
           </h1>
         </Link>
