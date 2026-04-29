@@ -44,3 +44,7 @@ next-env.d.ts
 
 .agent/
 .claude/
+
+# AI Agent Configs
+AGENTS.md
+CLAUDE.md
