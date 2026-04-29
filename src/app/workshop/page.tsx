@@ -4,6 +4,8 @@ import { useState } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
 import ParameterSlider from '@/components/ui/ParameterSlider'
 import { Icon } from '@/components/icons/Icon'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { useAuthModal } from '@/stores/useAuthModal'
 
 const categories = ['楚式纹样', '敦煌艺术', '故宫典藏', '现代简约']
 
@@ -21,6 +23,13 @@ export default function WorkshopPage() {
   const [density, setDensity] = useState(75)
   const [metallic, setMetallic] = useState(42)
   const [silk, setSilk] = useState(90)
+  const user = useAuthStore(s => s.user)
+  const { openModal } = useAuthModal()
+
+  function requireAuth(message: string, action: () => void) {
+    if (!user) { openModal(message); return }
+    action()
+  }
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-[#fbfbf8]">
@@ -57,7 +66,9 @@ export default function WorkshopPage() {
                 <h3 className="font-bold text-ink">专业调色面板</h3>
               </div>
               <div className="flex gap-2">
-                <button className="px-4 py-1.5 bg-cinnabar text-white text-xs font-bold rounded-lg shadow-lg hover:bg-cinnabar/90 transition-all">应用更改</button>
+                <button className="px-4 py-1.5 bg-cinnabar text-white text-xs font-bold rounded-lg shadow-lg hover:bg-cinnabar/90 transition-all"
+                  onClick={() => requireAuth('登录后即可应用纹样更改', () => { /* TODO: apply logic */ })}
+                >应用更改</button>
                 <button className="px-4 py-1.5 bg-slate-200 text-ink-medium text-xs font-bold rounded-lg hover:bg-slate-300 transition-all">重置</button>
               </div>
             </div>
@@ -136,7 +147,9 @@ export default function WorkshopPage() {
           </div>
           
           <div className="p-6 bg-rice-warm/50 border-t border-rice-deep/30">
-            <button className="w-full py-3 bg-ink text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-ink-medium transition-all shadow-xl">
+            <button className="w-full py-3 bg-ink text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-ink-medium transition-all shadow-xl"
+              onClick={() => requireAuth('登录后即可导出高清设计稿', () => { /* TODO: export logic */ })}
+            >
               <Icon name="download" size={16} />
               导出高清设计稿
             </button>
