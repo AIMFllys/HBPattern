@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import "./globals.css"
 import AuthProvider from '@/components/providers/AuthProvider'
+import AuthModal from '@/components/auth/AuthModal'
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -26,7 +27,10 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <AuthModal />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
