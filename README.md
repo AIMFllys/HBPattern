@@ -57,7 +57,7 @@
 
 | 技术 | 说明 |
 |------|------|
-| [Next.js 15](https://nextjs.org/) (App Router) | 核心框架，SSR + SEO 优先 |
+| [Next.js 16.2.1](https://nextjs.org/) (App Router) | 核心框架，SSR + SEO 优先 |
 | [TypeScript 5](https://www.typescriptlang.org/) | 全类型安全 |
 | [Tailwind CSS v4](https://tailwindcss.com/) | 样式解决方案 |
 | [Framer Motion](https://www.framer.com/motion/) | 动效与动画 |
