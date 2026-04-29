@@ -71,10 +71,9 @@
 | 技术 | 说明 |
 |------|------|
 | [Next.js API Routes](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) | 后端接口层 (BFF) |
-| [阿里云 RDS PostgreSQL](https://www.aliyun.com/product/rds/postgresql) | 核心数据库（同地域内网 <1ms 延迟）|
-| [PostGIS](https://postgis.net/) + [pgvector](https://github.com/pgvector/pgvector) | 地理空间 + 向量检索扩展 |
+| [Supabase PostgreSQL](https://supabase.com/) | 核心数据库，包含 PostGIS 地理空间与 pgvector 向量检索 |
 | [阿里云 OSS](https://www.aliyun.com/product/oss) | 对象存储（纹案图片、3D 模型）|
-| [NextAuth.js](https://next-auth.js.org/) | 用户认证（替代 Supabase Auth）|
+| [NextAuth.js](https://next-auth.js.org/) + [阿里云邮件推送](https://www.aliyun.com/product/directmail) | 用户认证体系（邮件验证码/无密码登录）|
 | [阿里云 Redis](https://www.aliyun.com/product/kvstore) | 缓存（热点数据、会话管理）|
 
 ### AI 服务
