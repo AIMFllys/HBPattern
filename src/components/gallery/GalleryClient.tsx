@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'motion/react'
 import { Icon } from '@/components/icons/Icon'
-import type { PatternListItem } from '@/lib/queries'
+import type { PatternListItem } from '@/types/pattern'
 
 interface GalleryClientProps {
   patterns: PatternListItem[]

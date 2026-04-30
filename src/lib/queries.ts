@@ -1,21 +1,7 @@
 import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
+import type { PatternListItem } from '@/types/pattern'
 
-export interface PatternListItem {
-  id: string
-  name: string
-  description: string | null
-  era: string | null
-  is_ai_generated: boolean
-  status: string
-  color_palette: string[] | null
-  view_count: number
-  like_count: number
-  region: { name: string } | null
-  technique: { name: string } | null
-  media: { url: string; thumbnail_url: string | null }[]
-  tags: { tag: { name: string } }[]
-}
 
 export async function getPatterns(opts: {
   page?: number
