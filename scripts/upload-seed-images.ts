@@ -54,7 +54,7 @@ async function main() {
     
     // Upload as PNG (Supabase will serve it regardless of extension)
     // The bucket allows image/webp and image/png
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(BUCKET)
       .upload(storagePath, fileBuffer, {
         contentType: 'image/png',
