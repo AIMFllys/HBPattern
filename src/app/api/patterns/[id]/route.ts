@@ -1,18 +1,26 @@
-import { NextResponse } from 'next/server'
 import { getPatternById, getRelatedPatterns } from '@/lib/queries'
+import { AppError } from '@/lib/api/errors'
+import { ok } from '@/lib/api/response'
+import { withApi } from '@/lib/api/withApi'
+import { parseOrThrow } from '@/lib/validation/parse'
+import { PatternIdParam } from '@/lib/validation/schemas'
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
+/**
+ * GET /api/patterns/[id]
+ *
+ * _Validates: Requirements 1.4, 2.1, 2.7, 3.3；Property 2, 3, 7_
+ * _Depends on: 2.4, 3.1, 3.2_
+ */
+export const GET = withApi<object, { params: Promise<{ id: string }> }>(
+  async (_req, ctx) => {
+    const { id } = parseOrThrow(PatternIdParam, await ctx.params)
 
-  try {
     const pattern = await getPatternById(id)
     if (!pattern) {
-      return NextResponse.json({ error: { code: 'NOT_FOUND', message: '纹样不存在' } }, { status: 404 })
+      throw new AppError('PATTERN_NOT_FOUND', '纹样不存在')
     }
 
-    const related = await getRelatedPatterns(id, pattern.technique_id)
-    return NextResponse.json({ data: { ...pattern, related } })
-  } catch {
-    return NextResponse.json({ error: { code: 'INTERNAL_ERROR', message: '获取纹样详情失败' } }, { status: 500 })
-  }
-}
+    const related = await getRelatedPatterns(id, pattern.technique_id ?? null)
+    return ok({ ...pattern, related })
+  },
+)

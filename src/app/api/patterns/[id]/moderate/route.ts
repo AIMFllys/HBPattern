@@ -1,33 +1,40 @@
-import { NextResponse } from 'next/server'
+import { withApi } from '@/lib/api/withApi'
+import { ok } from '@/lib/api/response'
+import { AppError } from '@/lib/api/errors'
+import { parseOrThrow } from '@/lib/validation/parse'
+import { PatternIdParam, ModeratePatternBody } from '@/lib/validation/schemas'
+import { requireRole } from '@/lib/auth/checks'
 import { createClient } from '@/lib/supabase/server'
+import type { NextRequest } from 'next/server'
 
-export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const supabase = await createClient()
+/**
+ * PATCH /api/patterns/[id]/moderate
+ *
+ * 管理员审核纹样（approve / reject）。
+ * 使用 withApi 包装，通过 requireRole(['admin']) 替代内联角色判断。
+ *
+ * _Validates: Requirements 2.7, 3.3, 5.4, 5.5, 5.8；Property 7, 8_
+ */
+export const PATCH = withApi<{ id: string; status: string }, { params: Promise<{ id: string }> }>(
+  async (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => {
+    // 步骤 1：校验路径参数
+    const { id } = parseOrThrow(PatternIdParam, await ctx.params)
 
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    return NextResponse.json({ error: { code: 'UNAUTHORIZED', message: '请先登录' } }, { status: 401 })
-  }
+    // 步骤 2：校验请求体
+    const { action } = parseOrThrow(ModeratePatternBody, await req.json())
 
-  // Check admin role
-  const { data: profile } = await supabase.from('hp_users').select('role').eq('id', user.id).single()
-  if (profile?.role !== 'admin') {
-    return NextResponse.json({ error: { code: 'FORBIDDEN', message: '无权限' } }, { status: 403 })
-  }
+    // 步骤 3：鉴权 —— 仅 admin 可操作（Requirement 5.8）
+    await requireRole(['admin'])
 
-  const body = await request.json()
-  const { action } = body
-  if (!['approve', 'reject'].includes(action)) {
-    return NextResponse.json({ error: { code: 'BAD_REQUEST', message: '无效操作' } }, { status: 400 })
-  }
+    // 步骤 4：写库
+    const status = action === 'approve' ? 'approved' : 'rejected'
+    const supabase = await createClient()
+    const { error } = await supabase.from('hp_patterns').update({ status }).eq('id', id)
 
-  const status = action === 'approve' ? 'approved' : 'rejected'
-  const { error } = await supabase.from('hp_patterns').update({ status }).eq('id', id)
+    if (error) {
+      throw new AppError('INTERNAL_ERROR', '操作失败', { cause: error })
+    }
 
-  if (error) {
-    return NextResponse.json({ error: { code: 'INTERNAL_ERROR', message: '操作失败' } }, { status: 500 })
-  }
-
-  return NextResponse.json({ data: { id, status } })
-}
+    return ok({ id, status })
+  },
+)

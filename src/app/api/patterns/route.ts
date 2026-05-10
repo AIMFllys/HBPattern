@@ -1,49 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest } from 'next/server'
 import { getPatterns } from '@/lib/queries'
 import { createClient } from '@/lib/supabase/server'
+import { withApi } from '@/lib/api/withApi'
+import { ok, okList } from '@/lib/api/response'
+import { AppError } from '@/lib/api/errors'
+import { parseOrThrow } from '@/lib/validation/parse'
+import { ListPatternsQuery, CreatePatternBody } from '@/lib/validation/schemas'
+import { requireAuth } from '@/lib/auth/checks'
+import { rateLimit } from '@/lib/rate-limit'
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const page = Number(searchParams.get('page')) || 1
-  const limit = Math.min(Number(searchParams.get('limit')) || 12, 50)
-  const era = searchParams.get('era') || undefined
-  const region = searchParams.get('region') || undefined
-  const sort = searchParams.get('sort') || 'newest'
-  const q = searchParams.get('q') || undefined
+export const GET = withApi(async (req: NextRequest) => {
+  const query = parseOrThrow(ListPatternsQuery, Object.fromEntries(new URL(req.url).searchParams))
+  const { patterns, total } = await getPatterns(query)
+  return okList(patterns, { page: query.page, limit: query.limit, total })
+})
 
-  try {
-    const { patterns, total } = await getPatterns({ page, limit, era, region, sort, q })
-    return NextResponse.json({
-      data: patterns,
-      pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
-    })
-  } catch {
-    return NextResponse.json({ error: { code: 'INTERNAL_ERROR', message: '获取纹样列表失败' } }, { status: 500 })
-  }
-}
+export const POST = withApi(async (req: NextRequest) => {
+  // 步骤 1：校验请求体
+  const body = parseOrThrow(CreatePatternBody, await req.json())
 
-export async function POST(request: NextRequest) {
+  // 步骤 2：鉴权
+  const user = await requireAuth()
+
+  // 步骤 3：限流
+  rateLimit('POST /api/patterns', user.id)
+
+  // 步骤 4：写入数据库
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) {
-    return NextResponse.json({ error: { code: 'UNAUTHORIZED', message: '请先登录' } }, { status: 401 })
-  }
-
-  const body = await request.json()
-  const { name, description, era, regionId, techniqueId, imageUrl } = body
-
-  if (!name || !imageUrl) {
-    return NextResponse.json({ error: { code: 'BAD_REQUEST', message: '名称和图片必填' } }, { status: 400 })
-  }
 
   const { data: pattern, error } = await supabase
     .from('hp_patterns')
     .insert({
-      name,
-      description: description || null,
-      era: era || null,
-      region_id: regionId || null,
-      technique_id: techniqueId || null,
+      name: body.name,
+      description: body.description ?? null,
+      era: body.era ?? null,
+      region_id: body.regionId ?? null,
+      technique_id: body.techniqueId ?? null,
       uploader_id: user.id,
       status: 'pending',
       license_type: 'copyright',
@@ -52,16 +44,16 @@ export async function POST(request: NextRequest) {
     .single()
 
   if (error) {
-    return NextResponse.json({ error: { code: 'INTERNAL_ERROR', message: '创建失败' } }, { status: 500 })
+    throw new AppError('INTERNAL_ERROR', '创建失败', { cause: error })
   }
 
-  // Create media record
+  // 步骤 5：回填 hp_pattern_media
   await supabase.from('hp_pattern_media').insert({
     pattern_id: pattern.id,
     media_type: 'image',
-    url: imageUrl,
+    url: body.imageUrl,
     sort_order: 0,
   })
 
-  return NextResponse.json({ data: pattern }, { status: 201 })
-}
+  return ok(pattern, { status: 201 })
+})
