@@ -17,7 +17,7 @@ export default function SiteFooter({ variant = 'light', className = '' }: SiteFo
   const borderClass = isDark ? 'border-white/10' : 'border-rice-deep'
 
   return (
-    <footer className={`${bgClass} py-12 px-6 lg:px-20 ${className}`}>
+    <footer role="contentinfo" className={`${bgClass} py-12 px-6 lg:px-20 ${className}`}>
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
         <div className="max-w-xs">
           <div className="flex items-center gap-3 mb-6">

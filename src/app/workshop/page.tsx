@@ -1,3 +1,4 @@
+// 全屏跨界创作工坊交互视图，不渲染 Footer（Requirement 8.7）
 'use client'
 
 import { useState } from 'react'

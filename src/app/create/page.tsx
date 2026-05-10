@@ -1,3 +1,4 @@
+// 全屏 AI 创意中心交互视图，不渲染 Footer（Requirement 8.7）
 'use client'
 
 import { useState } from 'react'

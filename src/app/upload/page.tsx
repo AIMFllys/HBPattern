@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import SiteHeader from '@/components/layout/SiteHeader'
+import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons/Icon'
 import { createClient } from '@/lib/supabase/client'
 
@@ -114,6 +115,7 @@ export default function UploadPage() {
           </div>
         </form>
       </main>
+      <SiteFooter variant="light" />
     </div>
   )
 }

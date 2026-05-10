@@ -1,3 +1,4 @@
+// 全屏 3D/地图交互视图，不渲染 Footer（Requirement 8.7）
 import SiteHeader from '@/components/layout/SiteHeader'
 import { Icon } from '@/components/icons/Icon'
 import { mockRegions } from '@/data/mock/regions'

@@ -1,3 +1,4 @@
+// 全屏登录/鉴权视图，不渲染 Footer（Requirement 8.7）
 'use client'
 
 import Link from 'next/link'

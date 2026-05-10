@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, unstable_rethrow } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import SiteHeader from '@/components/layout/SiteHeader'
@@ -18,10 +18,31 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function PatternDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const pattern = await getPatternById(id)
-  if (!pattern) notFound()
 
-  const related = await getRelatedPatterns(id, pattern.technique_id)
+  // 数据获取阶段：在 try/catch 中完成，JSX 渲染在外部（Requirement 1.2.a）
+  let pattern: Awaited<ReturnType<typeof getPatternById>>
+  let related: Awaited<ReturnType<typeof getRelatedPatterns>>
+
+  try {
+    pattern = await getPatternById(id)
+    if (!pattern) notFound()
+    related = await getRelatedPatterns(id, pattern.technique_id)
+  } catch (err) {
+    // 保留 Next.js 内部控制流错误（notFound、redirect 等）
+    unstable_rethrow(err)
+    // 关联数据缺失或模板异常：记录结构化日志后降级为 404（Requirement 1.2.a）
+    const ts = new Date().toISOString()
+    console.error(JSON.stringify({
+      ts,
+      level: 'error',
+      path: '/gallery/[id]',
+      id,
+      err: String(err),
+      stack: (err as Error)?.stack,
+    }))
+    notFound()
+  }
+
   const palette = (pattern.color_palette as string[] | null) ?? []
   const mainImage = pattern.media?.[0]?.url
 
