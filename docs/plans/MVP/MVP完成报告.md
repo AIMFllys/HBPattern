@@ -77,7 +77,7 @@ f6debb2 feat(p1): core data flow + API routes
 
 | 资源 | 状态 |
 |------|------|
-| Supabase 项目 | `YOUR_PROJECT_REF` (ap-southeast-1, ACTIVE_HEALTHY) |
+| Supabase 项目 | `your-project-ref`（区域与健康状态略；对外文档不写真实租户标识） |
 | PostgreSQL | 17.6.1, 19 张 `hp_` 表 + RLS 全部启用 |
 | Storage | `pattern-images` bucket (public, 10MB, jpeg/png/webp) |
 | RPC | `hp_toggle_like` (原子性点赞 toggle + count 更新) |

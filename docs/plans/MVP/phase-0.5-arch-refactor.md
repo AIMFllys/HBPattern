@@ -265,11 +265,11 @@ Step 7: 在 UI 中显示 error 提示
 
 | 属性 | 值 |
 |------|-----|
-| **Project ID** | `YOUR_PROJECT_REF` |
-| **Project Name** | AIMFllys_share（多项目共享库） |
-| **Region** | ap-southeast-1 (新加坡) |
-| **Status** | ACTIVE_HEALTHY ✅ |
-| **PostgreSQL** | 17.6.1 |
+| **Project ID** | `your-project-ref`（示例占位） |
+| **Project Name** | `your-shared-instance-name`（多项目共享库） |
+| **Region** | `your-region`（示例） |
+| **Status** | 以控制台为准 |
+| **PostgreSQL** | 以控制台版本为准 |
 | **HBPattern 前缀** | `hp_` |
 
 ### 共享库命名规范
@@ -278,11 +278,11 @@ Step 7: 在 UI 中显示 error 提示
 
 | 前缀 | 项目 | 表数量 |
 |------|------|--------|
-| `in_` | AIMFllys Introduce（个人介绍） | 13 |
-| `oc_` | 小护关爱（智慧养老） | 9 |
-| `hr_` | HUSTERead 华科读书会 | 10 |
-| `ws_` | WalletSolo（个人财务） | 4 |
-| **`hp_`** | **HBPattern（湖北纹样）** | **19 ✅** |
+| `in_` | ProjectA（示例应用） | 13 |
+| `oc_` | ProjectB（示例应用） | 9 |
+| `hr_` | ProjectC（示例应用） | 10 |
+| `ws_` | ProjectD（示例应用） | 4 |
+| **`hp_`** | **HBPattern（本项目）** | **19 ✅** |
 
 ### 已创建的 `hp_` 表（19 张）
 

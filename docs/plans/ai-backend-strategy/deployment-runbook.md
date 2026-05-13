@@ -2,6 +2,8 @@
 
 > 基于 deployment-procedures skill 的 5-Phase 部署流程、回滚策略和监控原则设计。
 
+> **路径说明**：下文中的 `/www/wwwroot/your-frontend-app`、`/www/wwwroot/your-ai-service` 仅为示例目录名；PM2 / Gunicorn 进程名亦为占位。部署时请替换为你方服务器上的实际路径与进程名。
+
 ---
 
 ## 1. 部署架构概览
@@ -39,7 +41,7 @@
 # 1. 安装 Python 3.11+
 # 2. 创建虚拟环境
 
-cd /www/wwwroot/hbpattern-ai-service
+cd /www/wwwroot/your-ai-service
 python3.11 -m venv .venv
 source .venv/bin/activate
 
@@ -100,10 +102,10 @@ LOG_LEVEL=info
 
 ```bash
 # 拉取最新代码
-cd /www/wwwroot/HBPattern
+cd /www/wwwroot/your-frontend-app
 git pull origin main
 
-cd /www/wwwroot/hbpattern-ai-service
+cd /www/wwwroot/your-ai-service
 git pull origin main
 
 # 检查环境变量
@@ -126,20 +128,20 @@ pg_dump $DATABASE_URL > /www/backup/db_$(date +%Y%m%d_%H%M%S).sql
 #### Next.js 部署
 
 ```bash
-cd /www/wwwroot/HBPattern
+cd /www/wwwroot/your-frontend-app
 npm install
 npx prisma generate
 npm run build
 
 # 通过宝塔 PM2 管理器重启 Node 项目
 # 或命令行：
-pm2 restart hbpattern_next
+pm2 restart your-frontend-pm2-process
 ```
 
 #### FastAPI 部署
 
 ```bash
-cd /www/wwwroot/hbpattern-ai-service
+cd /www/wwwroot/your-ai-service
 source .venv/bin/activate
 pip install -e .
 
@@ -168,7 +170,7 @@ curl http://127.0.0.1:8000/api/v1/health   # FastAPI
 
 # 检查错误日志
 tail -20 /www/wwwlogs/ai-service-error.log
-pm2 logs hbpattern_next --lines 20
+pm2 logs your-frontend-pm2-process --lines 20
 
 # 关键用户流程测试
 # - 打开首页，确认渲染正常
@@ -250,14 +252,14 @@ server {
 
 ```bash
 # Next.js 回滚
-cd /www/wwwroot/HBPattern
+cd /www/wwwroot/your-frontend-app
 git log --oneline -5          # 找到上一个稳定 commit
 git checkout <stable-commit>
 npm run build
-pm2 restart hbpattern_next
+pm2 restart your-frontend-pm2-process
 
 # FastAPI 回滚
-cd /www/wwwroot/hbpattern-ai-service
+cd /www/wwwroot/your-ai-service
 git checkout <stable-commit>
 source .venv/bin/activate
 pip install -e .
@@ -273,7 +275,7 @@ alembic downgrade -1          # 回滚最近一次迁移（如需要）
 
 | 服务 | 日志路径 |
 |------|---------|
-| Next.js | `pm2 logs hbpattern_next` 或 `/root/.pm2/logs/` |
+| Next.js | `pm2 logs your-frontend-pm2-process` 或 `/root/.pm2/logs/` |
 | FastAPI access | `/www/wwwlogs/ai-service-access.log` |
 | FastAPI error | `/www/wwwlogs/ai-service-error.log` |
 | Nginx access | `/www/wwwlogs/your-domain.com.log` |

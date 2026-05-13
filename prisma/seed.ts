@@ -9,6 +9,11 @@ const adapter = new PrismaPg({ connectionString, ssl: { rejectUnauthorized: fals
 const prisma = new PrismaClient({ adapter })
 
 async function main() {
+  const supabasePublicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim().replace(/\/+$/, '')
+  if (!supabasePublicUrl) {
+    throw new Error('NEXT_PUBLIC_SUPABASE_URL is required for seed media URLs (set in .env.local)')
+  }
+
   // --- Regions ---
   const wuhan = await prisma.region.upsert({
     where: { id: '00000000-0000-0000-0000-000000000001' },
@@ -115,7 +120,7 @@ async function main() {
         id: p.id.replace('0010', '0011'),
         pattern_id: p.id,
         media_type: 'image',
-        url: `https://YOUR_PROJECT_REF.supabase.co/storage/v1/object/public/pattern-images/seed/${p.id}.webp`,
+        url: `${supabasePublicUrl}/storage/v1/object/public/pattern-images/seed/${p.id}.webp`,
         sort_order: 0,
       },
     })
