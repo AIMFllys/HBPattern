@@ -13,8 +13,9 @@ export type ApiErrorCode =
   | 'UNSUPPORTED_MEDIA_TYPE'
   | 'RATE_LIMIT_EXCEEDED'
   | 'INTERNAL_ERROR'
+  | 'SERVICE_UNAVAILABLE'
 
-export type HttpStatus = 400 | 401 | 403 | 404 | 409 | 413 | 415 | 429 | 500
+export type HttpStatus = 400 | 401 | 403 | 404 | 409 | 413 | 415 | 429 | 500 | 503
 
 /** Requirement 2.7 的单一真相表。 */
 export const ERROR_CODE_TO_STATUS: Record<ApiErrorCode, HttpStatus> = {
@@ -29,6 +30,7 @@ export const ERROR_CODE_TO_STATUS: Record<ApiErrorCode, HttpStatus> = {
   UNSUPPORTED_MEDIA_TYPE: 415,
   RATE_LIMIT_EXCEEDED: 429,
   INTERNAL_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503,
 }
 
 export function codeToStatus(code: ApiErrorCode): HttpStatus {

@@ -13,6 +13,7 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 import { AppError, codeToStatus, type ApiErrorCode } from './errors'
 import { resolveRequestId } from './requestId'
+import { versionHeaders } from './versioning'
 import type { ApiError, ApiSuccess, PaginatedResponse, PaginationMeta } from './response'
 
 /** 业务 handler 可返回的形状，由 ok/okList/fail 产生。 */
@@ -46,6 +47,7 @@ export function withApi<T, Ctx = unknown>(
         const status = result.status ?? 200
         const response = NextResponse.json(body, { status })
         response.headers.set('X-Request-Id', requestId)
+        Object.entries(versionHeaders()).forEach(([k, v]) => response.headers.set(k, v))
         return response
       }
 
@@ -57,6 +59,7 @@ export function withApi<T, Ctx = unknown>(
         }
         const response = NextResponse.json(body, { status: 200 })
         response.headers.set('X-Request-Id', requestId)
+        Object.entries(versionHeaders()).forEach(([k, v]) => response.headers.set(k, v))
         return response
       }
 
