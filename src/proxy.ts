@@ -1,6 +1,8 @@
 import { createServerClient } from "@supabase/ssr"
 import { NextResponse, type NextRequest } from "next/server"
 import { resolveRequestId } from "@/lib/api/requestId"
+import { SECURITY_HEADERS } from "@/lib/security/headers"
+import { buildCsp } from "@/lib/security/csp"
 
 export async function proxy(request: NextRequest) {
   // ── X-Request-Id 前置注入（失败安全，不得抛错）──────────────────────────
@@ -51,6 +53,10 @@ export async function proxy(request: NextRequest) {
     url.pathname = "/login"
     return NextResponse.redirect(url)
   }
+
+  // 注入安全 headers
+  Object.entries(SECURITY_HEADERS).forEach(([k, v]) => supabaseResponse.headers.set(k, v))
+  supabaseResponse.headers.set('Content-Security-Policy', buildCsp())
 
   return supabaseResponse
 }
