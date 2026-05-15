@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { corsHeaders, handleOptions } from '@/lib/api/cors'
+import { NextRequest } from 'next/server'
+import { handleOptions } from '@/lib/api/cors'
 import { getPatterns } from '@/lib/queries'
 import { withApi } from '@/lib/api/withApi'
 import { okList } from '@/lib/api/response'

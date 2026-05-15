@@ -58,6 +58,13 @@ export async function proxy(request: NextRequest) {
   Object.entries(SECURITY_HEADERS).forEach(([k, v]) => supabaseResponse.headers.set(k, v))
   supabaseResponse.headers.set('Content-Security-Policy', buildCsp())
 
+  // 为公开 API (v1) 注入 CORS headers
+  if (request.nextUrl.pathname.startsWith('/api/v1/')) {
+    supabaseResponse.headers.set('Access-Control-Allow-Origin', '*')
+    supabaseResponse.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS')
+    supabaseResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type, X-API-Key, X-Request-Id')
+  }
+
   return supabaseResponse
 }
 
