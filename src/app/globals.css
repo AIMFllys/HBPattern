@@ -71,6 +71,12 @@
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #d2ae1e; border-radius: 10px; }
 
+.canvas-3d-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 16px;

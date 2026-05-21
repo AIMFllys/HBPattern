@@ -1,178 +1,34 @@
-// 全屏 AI 创意中心交互视图，不渲染 Footer（Requirement 8.7）
 'use client'
 
-import { useState } from 'react'
+import dynamic from 'next/dynamic'
 import SiteHeader from '@/components/layout/SiteHeader'
-import ParameterSlider from '@/components/ui/ParameterSlider'
-import { Icon } from '@/components/icons/Icon'
-import { useAuthStore } from '@/stores/useAuthStore'
-import { useAuthModal } from '@/stores/useAuthModal'
 
-const categories = ['陶瓷', '丝绸', '漆器', '壁画']
-
-const patternLibrary = [
-  { id: 1, name: '缠枝莲纹', selected: true },
-  { id: 2, name: '祥云瑞气', selected: false },
-  { id: 3, name: '龙纹云锦', selected: false },
-  { id: 4, name: '花鸟图卷', selected: false },
-  { id: 5, name: '万字回纹', selected: false },
-  { id: 6, name: '水墨江山', selected: false },
-]
+const Canvas3D = dynamic(() => import('@/components/create/Canvas3D'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full min-h-[400px] flex-1 items-center justify-center bg-rice-warm">
+      <div className="flex flex-col items-center gap-3">
+        <div className="h-10 w-10 animate-spin rounded-full border-2 border-gold border-t-transparent" />
+        <span className="text-sm font-medium text-ink-light">加载 3D 引擎...</span>
+      </div>
+    </div>
+  ),
+})
 
 export default function CreatePage() {
-  const [activeTab, setActiveTab] = useState(0)
-  const [scale, setScale] = useState(65)
-  const [rotation, setRotation] = useState(45)
-  const [opacity, setOpacity] = useState(80)
-  const user = useAuthStore(s => s.user)
-  const { openModal } = useAuthModal()
-
-  function requireAuth(message: string, action: () => void) {
-    if (!user) { openModal(message); return }
-    action()
-  }
-
   return (
-    <div className="min-h-screen flex flex-col bg-rice">
+    <div className="flex min-h-screen flex-col bg-rice">
       <SiteHeader logoIcon="storm" siteName="AI 创意中心" primaryColor="cinnabar" />
-      
-      <main className="flex flex-1 overflow-hidden">
-        <aside className="w-16 border-r border-rice-deep flex flex-col items-center py-6 gap-6 bg-rice">
-          <button className="w-10 h-10 flex items-center justify-center rounded bg-cinnabar text-white shadow-sm">
-            <Icon name="deployed_code" />
-          </button>
-          <button className="w-10 h-10 flex items-center justify-center rounded hover:bg-rice-warm text-ink-medium">
-            <Icon name="brush" />
-          </button>
-          <button className="w-10 h-10 flex items-center justify-center rounded hover:bg-rice-warm text-ink-medium">
-            <Icon name="layers" />
-          </button>
-          <button className="w-10 h-10 flex items-center justify-center rounded hover:bg-rice-warm text-ink-medium">
-            <Icon name="photo_camera" />
-          </button>
-        </aside>
-        
-        <section className="flex-1 flex flex-col relative bg-[#efede8]">
-          <div className="flex-1 flex items-center justify-center p-12 relative overflow-hidden">
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-cinnabar via-transparent to-transparent"></div>
-            
-            <div className="relative w-80 h-[450px] group">
-              <div className="absolute inset-0 bg-white rounded-t-[100px] rounded-b-[40px] shadow-2xl border border-slate-200 overflow-hidden">
-                <div className="absolute inset-0 opacity-60 mix-blend-multiply bg-repeat" style={{ backgroundColor: '#c9a84c' }} />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-white/30"></div>
-                <div className="absolute top-0 left-1/4 w-1/2 h-full bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
-              </div>
-              <div className="absolute -right-12 top-24 w-20 h-32 border-[16px] border-white rounded-full shadow-lg -z-10"></div>
-            </div>
-            
-            <div className="absolute top-6 left-6 bg-white/60 backdrop-blur px-4 py-2 rounded border border-white/40 shadow-sm">
-              <span className="text-xs uppercase tracking-widest text-ink-faint font-bold">当前模型</span>
-              <p className="text-sm font-bold">白瓷茶盏 - 极简系列</p>
-            </div>
-            
-            <div className="absolute bottom-32 right-6 flex flex-col gap-2">
-              <button className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-ink-medium hover:text-cinnabar">
-                <Icon name="zoom_in" />
-              </button>
-              <button className="w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center text-ink-medium hover:text-cinnabar">
-                <Icon name="sync" />
-              </button>
-            </div>
+      <main className="flex flex-1 overflow-hidden bg-rice-warm">
+        <section className="relative flex flex-1 flex-col">
+          <div className="absolute left-6 top-6 z-10 rounded-lg border border-white/50 bg-white/70 px-4 py-2.5 shadow-card backdrop-blur-sm">
+            <span className="block text-xs font-bold uppercase tracking-widest text-ink-faint">
+              当前模型
+            </span>
+            <p className="text-sm font-bold text-ink">画框 / 3D 预览基础视口</p>
           </div>
-          
-          <div className="h-32 bg-white border-t border-rice-deep flex items-center justify-between px-10">
-            <div className="flex flex-1 gap-12 max-w-4xl">
-              <ParameterSlider 
-                label="图案缩放 SCALE" 
-                value={scale} 
-                onChange={setScale} 
-                className="flex-1"
-              />
-              <ParameterSlider 
-                label="图案旋转 ROTATION" 
-                value={rotation} 
-                onChange={setRotation} 
-                max={360}
-                unit="°"
-                className="flex-1"
-              />
-              <ParameterSlider 
-                label="透明度 OPACITY" 
-                value={opacity} 
-                onChange={setOpacity} 
-                className="flex-1"
-              />
-            </div>
-            <div className="ml-10 flex gap-4">
-              <button className="px-6 py-2 border border-cinnabar text-cinnabar text-sm font-bold rounded-lg hover:bg-cinnabar/5 transition-colors">
-                重置
-              </button>
-              <button className="px-8 py-2 bg-cinnabar text-white text-sm font-bold rounded-lg shadow-lg shadow-cinnabar/20 hover:bg-cinnabar-deep transition-transform active:scale-95"
-                onClick={() => requireAuth('登录后即可保存您的创作成品', () => { /* TODO: save logic */ })}
-              >
-                保存成品
-              </button>
-            </div>
-          </div>
+          <Canvas3D />
         </section>
-        
-        <aside className="w-80 border-l border-rice-deep flex flex-col bg-rice">
-          <div className="p-6 border-b border-rice-deep">
-            <h3 className="text-lg font-bold text-ink mb-1">文化素材库</h3>
-            <p className="text-sm text-ink-light">选择传统纹样应用于3D模型</p>
-          </div>
-          
-          <div className="flex p-2 gap-1 border-b border-rice-deep bg-rice-warm/30">
-            {categories.map((cat, index) => (
-              <button
-                key={cat}
-                onClick={() => setActiveTab(index)}
-                className={`flex-1 py-1.5 text-xs font-bold rounded shadow-sm transition-colors ${
-                  activeTab === index
-                    ? 'bg-white text-cinnabar'
-                    : 'text-ink-light hover:text-ink-medium'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-4">
-            <div className="grid grid-cols-2 gap-3">
-              {patternLibrary.map((pattern) => (
-                <div key={pattern.id} className="group cursor-pointer">
-                  <div className={`aspect-square rounded-lg border-2 overflow-hidden relative ${
-                    pattern.selected ? 'border-cinnabar' : 'border-rice-deep hover:border-cinnabar'
-                  }`}>
-                    <div className="w-full h-full transition-transform group-hover:scale-110" style={{ backgroundColor: pattern.selected ? '#c9a84c' : '#ede7d9' }} />
-                    {pattern.selected && (
-                      <div className="absolute inset-0 bg-cinnabar/10">
-                        <div className="absolute bottom-1 right-1 bg-cinnabar text-white p-0.5 rounded-full">
-                          <Icon name="check" size={12} />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                  <p className={`mt-2 text-xs font-medium text-center ${
-                    pattern.selected ? 'text-cinnabar' : 'text-ink-light group-hover:text-ink-medium'
-                  }`}>
-                    {pattern.name}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="p-6 bg-rice-warm/20 border-t border-rice-deep">
-            <button className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-cinnabar/40 rounded-lg text-cinnabar text-sm font-bold hover:bg-cinnabar/5 transition-colors"
-              onClick={() => requireAuth('登录后即可上传自定义图案', () => { /* TODO: upload logic */ })}
-            >
-              <Icon name="add_circle" />
-              上传自定义图案
-            </button>
-          </div>
-        </aside>
       </main>
     </div>
   )
