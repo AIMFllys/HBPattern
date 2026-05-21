@@ -51,12 +51,15 @@ const initialMaterialParams: MaterialParams = {
 export const useCreateStore = create<CreateState>((set) => ({
   selectedProduct: 'frame',
   setProduct: product =>
-    set({
+    set(state => ({
       selectedProduct: product,
       textureParams: DEFAULT_TEXTURE_PARAMS,
-      materialParams: initialMaterialParams,
+      materialParams: {
+        ...DEFAULT_MATERIAL_PARAMS,
+        baseColor: state.selectedPattern?.suggestedBaseColor ?? initialMaterialParams.baseColor,
+      },
       cameraPreset: 'front',
-    }),
+    })),
 
   selectedPattern: defaultPattern,
   setPattern: pattern =>
@@ -79,7 +82,13 @@ export const useCreateStore = create<CreateState>((set) => ({
     set(state => ({
       materialParams: { ...state.materialParams, [key]: value },
     })),
-  resetMaterialParams: () => set({ materialParams: initialMaterialParams }),
+  resetMaterialParams: () =>
+    set(state => ({
+      materialParams: {
+        ...DEFAULT_MATERIAL_PARAMS,
+        baseColor: state.selectedPattern?.suggestedBaseColor ?? initialMaterialParams.baseColor,
+      },
+    })),
 
   cameraPreset: 'front',
   setCameraPreset: preset => set({ cameraPreset: preset }),

@@ -2,6 +2,11 @@
 
 import dynamic from 'next/dynamic'
 import SiteHeader from '@/components/layout/SiteHeader'
+import { ModelInfo } from '@/components/create/ModelInfo'
+import { ParameterPanel } from '@/components/create/ParameterPanel'
+import { PatternPanel } from '@/components/create/PatternPanel'
+import { ProductSelector } from '@/components/create/ProductSelector'
+import { ViewportToolbar } from '@/components/create/ViewportToolbar'
 
 const Canvas3D = dynamic(() => import('@/components/create/Canvas3D'), {
   ssr: false,
@@ -19,16 +24,17 @@ export default function CreatePage() {
   return (
     <div className="flex min-h-screen flex-col bg-rice">
       <SiteHeader logoIcon="storm" siteName="AI 创意中心" primaryColor="cinnabar" />
-      <main className="flex flex-1 overflow-hidden bg-rice-warm">
+      <ProductSelector />
+      <main className="flex flex-1 overflow-hidden">
         <section className="relative flex flex-1 flex-col">
-          <div className="absolute left-6 top-6 z-10 rounded-lg border border-white/50 bg-white/70 px-4 py-2.5 shadow-card backdrop-blur-sm">
-            <span className="block text-xs font-bold uppercase tracking-widest text-ink-faint">
-              当前模型
-            </span>
-            <p className="text-sm font-bold text-ink">画框 / 3D 预览基础视口</p>
+          <div className="relative flex-1 bg-rice-warm">
+            <Canvas3D />
+            <ModelInfo />
+            <ViewportToolbar />
           </div>
-          <Canvas3D />
+          <ParameterPanel />
         </section>
+        <PatternPanel />
       </main>
     </div>
   )
