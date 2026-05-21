@@ -145,7 +145,7 @@ describe('Property 1: Gallery 详情页数据来自数据库', () => {
   // ─── Static source guard: no mockPatterns reference ──────────────────────
 
   it('page.tsx 源文件中不出现 mockPatterns 字符串', () => {
-    const source = fs.readFileSync('src/app/gallery/[id]/page.tsx', 'utf8')
+    const source = fs.readFileSync('src/app/(main)/gallery/[id]/page.tsx', 'utf8')
     expect(source).not.toContain('mockPatterns')
   })
 })

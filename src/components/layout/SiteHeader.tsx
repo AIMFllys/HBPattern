@@ -32,9 +32,9 @@ export default function SiteHeader({
           <div className={`${colorClass} transition-transform group-hover:scale-110`}>
             <Icon name={logoIcon} size={28} />
           </div>
-          <h1 className="text-lg font-bold tracking-tight text-ink group-hover:text-cinnabar transition-colors">
+          <span className="text-lg font-bold tracking-tight text-ink group-hover:text-cinnabar transition-colors">
             {siteName}
-          </h1>
+          </span>
         </Link>
         <NavLinks items={navItems} primaryColor={primaryColor} />
       </div>
