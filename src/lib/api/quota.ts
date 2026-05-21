@@ -12,5 +12,7 @@ export const TIER_QUOTAS: Record<ApiKeyTier, { requestsPerMinute: number }> = {
  * 未来接入 Redis 计数器后启用。
  */
 export function checkQuota(_tier: ApiKeyTier, _endpoint: string): void {
+  void _tier
+  void _endpoint
   // TODO: 接入 Redis 滑动窗口计数器
 }
