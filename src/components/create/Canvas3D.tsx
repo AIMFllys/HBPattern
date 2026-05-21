@@ -4,7 +4,6 @@ import { Suspense, useEffect, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import {
   ContactShadows,
-  Environment,
   OrbitControls,
   PerspectiveCamera,
 } from '@react-three/drei'
@@ -42,9 +41,9 @@ function Scene() {
     <>
       <PerspectiveCamera makeDefault position={CAMERA_POSITIONS.front} fov={45} />
       <ambientLight intensity={0.45} />
+      <hemisphereLight args={['#f5f0e8', '#3a2a1a', 0.55]} />
       <directionalLight position={[5, 5, 5]} intensity={0.85} castShadow />
       <directionalLight position={[-3, 2, -2]} intensity={0.3} />
-      <Environment preset="apartment" />
       <Suspense fallback={null}>
         <ProductModel productId={selectedProduct} />
       </Suspense>

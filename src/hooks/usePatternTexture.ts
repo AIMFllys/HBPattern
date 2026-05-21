@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useDeferredValue, useEffect, useMemo } from 'react'
 import * as THREE from 'three'
 import { useCreateStore } from '@/stores/useCreateStore'
 import { getCachedTexture } from '@/lib/textures/textureCache'
@@ -8,6 +8,7 @@ import { getCachedTexture } from '@/lib/textures/textureCache'
 export function usePatternTexture(): THREE.Texture | null {
   const selectedPattern = useCreateStore(state => state.selectedPattern)
   const textureParams = useCreateStore(state => state.textureParams)
+  const deferredTextureParams = useDeferredValue(textureParams)
 
   const texture = useMemo(() => {
     if (!selectedPattern) return null
@@ -16,10 +17,10 @@ export function usePatternTexture(): THREE.Texture | null {
     const nextTexture = cachedTexture.clone()
     nextTexture.image = cachedTexture.image
     nextTexture.colorSpace = THREE.SRGBColorSpace
-    configureTexture(nextTexture, textureParams)
+    configureTexture(nextTexture, deferredTextureParams)
     nextTexture.needsUpdate = true
     return nextTexture
-  }, [selectedPattern, textureParams])
+  }, [deferredTextureParams, selectedPattern])
 
   useEffect(() => {
     return () => {

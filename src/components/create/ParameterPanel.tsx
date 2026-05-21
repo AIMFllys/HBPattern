@@ -6,6 +6,7 @@ import { ColorPicker } from '@/components/ui/ColorPicker'
 import { Icon } from '@/components/icons/Icon'
 import { useCreateStore } from '@/stores/useCreateStore'
 import type { CameraPreset, TilingMode } from '@/types/create'
+import { ExportButton, SaveCreationButton } from './ExportButton'
 import { OffsetPad } from './OffsetPad'
 
 const TILING_OPTIONS: { value: TilingMode; label: string; icon: string }[] = [
@@ -44,7 +45,7 @@ export const ParameterPanel = memo(function ParameterPanel() {
   return (
     <div className="border-t border-rice-deep bg-white">
       <div className="p-4">
-        <div className="flex items-start gap-5">
+        <div className="flex flex-wrap items-start gap-5">
           <div className="grid flex-1 grid-cols-2 gap-4 xl:grid-cols-4">
             <ParameterSlider
               label="缩放 SCALE"
@@ -112,7 +113,7 @@ export const ParameterPanel = memo(function ParameterPanel() {
         </div>
       </div>
 
-      <div className="flex items-center justify-between border-t border-rice-deep bg-rice-warm/30 px-4 py-2">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rice-deep bg-rice-warm/30 px-4 py-2">
         <button
           type="button"
           onClick={handleReset}
@@ -124,6 +125,10 @@ export const ParameterPanel = memo(function ParameterPanel() {
         <div className="flex items-center gap-2 text-xs text-ink-faint">
           <span>X偏移: {textureParams.offsetX}%</span>
           <span>Y偏移: {textureParams.offsetY}%</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <SaveCreationButton />
+          <ExportButton />
         </div>
       </div>
     </div>

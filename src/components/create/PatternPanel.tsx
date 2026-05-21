@@ -7,7 +7,7 @@ import { useCreateStore } from '@/stores/useCreateStore'
 import type { PatternPreset } from '@/types/create'
 import { PatternThumbnail } from './PatternThumbnail'
 
-export function PatternPanel() {
+export function PatternPanel({ className = '' }: { className?: string }) {
   const [searchQuery, setSearchQuery] = useState('')
   const activeCategory = useCreateStore(state => state.activeCategory)
   const setActiveCategory = useCreateStore(state => state.setActiveCategory)
@@ -35,7 +35,7 @@ export function PatternPanel() {
   )
 
   return (
-    <aside className="flex w-80 flex-col border-l border-rice-deep bg-rice">
+    <aside className={`flex w-80 flex-col border-l border-rice-deep bg-rice ${className}`}>
       <div className="border-b border-rice-deep p-5">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="flex items-center gap-2 text-base font-bold text-ink">
