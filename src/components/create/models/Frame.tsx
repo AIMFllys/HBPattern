@@ -3,11 +3,10 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useCreateStore } from '@/stores/useCreateStore'
+import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function Frame() {
   const groupRef = useRef<THREE.Group>(null)
-  const baseColor = useCreateStore(state => state.materialParams.baseColor)
 
   useFrame(state => {
     if (!groupRef.current) return
@@ -19,7 +18,7 @@ export default function Frame() {
     <group ref={groupRef}>
       <mesh position={[0, 0, 0]}>
         <planeGeometry args={[2.4, 1.8]} />
-        <meshStandardMaterial color={baseColor} roughness={0.5} side={THREE.DoubleSide} />
+        <TexturedMaterial roughnessOverride={50} side={THREE.DoubleSide} />
       </mesh>
       <mesh position={[0, 0.975, 0.03]}>
         <boxGeometry args={[2.65, 0.16, 0.08]} />

@@ -3,11 +3,10 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useCreateStore } from '@/stores/useCreateStore'
+import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function Scarf() {
   const meshRef = useRef<THREE.Mesh>(null)
-  const baseColor = useCreateStore(state => state.materialParams.baseColor)
 
   const geometry = useMemo(() => {
     const geo = new THREE.PlaneGeometry(2.25, 2.25, 36, 36)
@@ -33,11 +32,7 @@ export default function Scarf() {
 
   return (
     <mesh ref={meshRef} geometry={geometry} rotation={[-0.32, 0, 0]}>
-      <meshStandardMaterial
-        color={baseColor}
-        roughness={0.85}
-        side={THREE.DoubleSide}
-      />
+      <TexturedMaterial roughnessOverride={85} side={THREE.DoubleSide} />
     </mesh>
   )
 }

@@ -3,11 +3,10 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useCreateStore } from '@/stores/useCreateStore'
+import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function Fan() {
   const groupRef = useRef<THREE.Group>(null)
-  const baseColor = useCreateStore(state => state.materialParams.baseColor)
 
   const fanGeometry = useMemo(() => {
     const theta = Math.PI * 0.72
@@ -30,7 +29,7 @@ export default function Fan() {
   return (
     <group ref={groupRef} position={[0, -0.45, 0]}>
       <mesh geometry={fanGeometry}>
-        <meshStandardMaterial color={baseColor} roughness={0.72} side={THREE.DoubleSide} />
+        <TexturedMaterial roughnessOverride={72} side={THREE.DoubleSide} />
       </mesh>
       {boneAngles.map(angle => (
         <mesh

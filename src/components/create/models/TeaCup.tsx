@@ -3,11 +3,10 @@
 import { useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { useCreateStore } from '@/stores/useCreateStore'
+import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function TeaCup() {
   const groupRef = useRef<THREE.Group>(null)
-  const baseColor = useCreateStore(state => state.materialParams.baseColor)
 
   const cupGeometry = useMemo(() => {
     const points: THREE.Vector2[] = [
@@ -45,10 +44,10 @@ export default function TeaCup() {
   return (
     <group ref={groupRef} position={[0, 0.08, 0]}>
       <mesh geometry={cupGeometry}>
-        <meshStandardMaterial color={baseColor} roughness={0.32} metalness={0.05} side={THREE.DoubleSide} />
+        <TexturedMaterial roughnessOverride={32} metalnessOverride={5} side={THREE.DoubleSide} />
       </mesh>
       <mesh geometry={baseGeometry}>
-        <meshStandardMaterial color={baseColor} roughness={0.35} metalness={0.05} side={THREE.DoubleSide} />
+        <TexturedMaterial roughnessOverride={35} metalnessOverride={5} side={THREE.DoubleSide} />
       </mesh>
       <mesh position={[0, 0.755, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[0.53, 48]} />
