@@ -1,14 +1,18 @@
 'use client'
 
+import { useEffect } from 'react'
 import SiteHeader from '@/components/layout/SiteHeader'
 import { Icon } from '@/components/icons/Icon'
+import { useCanvasHistory } from '@/hooks/useCanvasHistory'
 import { useWorkshopStore } from '@/stores/useWorkshopStore'
 import type { PatternListItem } from '@/types/pattern'
 import { CANVAS_PRESETS } from '@/types/workshop'
 import { AdjustPanel } from './AdjustPanel'
+import { ExportDialog } from './ExportDialog'
 import { LayerPanel } from './LayerPanel'
 import { PatternAssetPanel } from './PatternAssetPanel'
 import { ToolBar } from './ToolBar'
+import { WorkshopMobileBar } from './WorkshopMobileBar'
 import { WorkshopCanvas } from './WorkshopCanvas'
 
 interface WorkshopClientProps {
@@ -22,6 +26,64 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
   const canvasSize = useWorkshopStore(state => state.canvasSize)
   const setCanvasSize = useWorkshopStore(state => state.setCanvasSize)
   const resetViewport = useWorkshopStore(state => state.resetViewport)
+  const setActiveTool = useWorkshopStore(state => state.setActiveTool)
+  const setIsExporting = useWorkshopStore(state => state.setIsExporting)
+  const activeLayerId = useWorkshopStore(state => state.activeLayerId)
+  const removeLayer = useWorkshopStore(state => state.removeLayer)
+  const zoom = useWorkshopStore(state => state.zoom)
+  const setZoom = useWorkshopStore(state => state.setZoom)
+  const history = useCanvasHistory()
+
+  useEffect(() => {
+    function isEditableTarget(target: EventTarget | null) {
+      if (!(target instanceof HTMLElement)) return false
+      return target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (isEditableTarget(event.target)) return
+
+      const key = event.key.toLowerCase()
+      if ((event.ctrlKey || event.metaKey) && key === 'e') {
+        event.preventDefault()
+        setIsExporting(true)
+        return
+      }
+      if ((event.ctrlKey || event.metaKey) && (key === '+' || key === '=')) {
+        event.preventDefault()
+        setZoom(zoom + 0.1)
+        return
+      }
+      if ((event.ctrlKey || event.metaKey) && key === '-') {
+        event.preventDefault()
+        setZoom(zoom - 0.1)
+        return
+      }
+      if ((event.ctrlKey || event.metaKey) && key === '0') {
+        event.preventDefault()
+        resetViewport()
+        return
+      }
+      if (event.key === 'Delete' && activeLayerId) {
+        event.preventDefault()
+        removeLayer(activeLayerId)
+        return
+      }
+
+      const toolMap: Record<string, Parameters<typeof setActiveTool>[0]> = {
+        v: 'select',
+        h: 'pan',
+        t: 'transform',
+        c: 'color',
+        s: 'symmetry',
+      }
+      const nextTool = toolMap[key]
+      if (nextTool) setActiveTool(nextTool)
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [activeLayerId, removeLayer, resetViewport, setActiveTool, setIsExporting, setZoom, zoom])
 
   return (
     <div className="relative flex h-screen w-full flex-col overflow-hidden bg-rice pb-14 md:pb-0">
@@ -36,6 +98,11 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
             setCanvasSize={setCanvasSize}
             layerCount={layers.length}
             resetViewport={resetViewport}
+            canUndo={history.canUndo}
+            canRedo={history.canRedo}
+            undo={history.undo}
+            redo={history.redo}
+            openExport={() => setIsExporting(true)}
           />
 
           <WorkshopCanvas />
@@ -49,6 +116,8 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
           className="hidden lg:flex"
         />
       </main>
+      <WorkshopMobileBar initialPatterns={initialPatterns} initialTotal={initialTotal} />
+      <ExportDialog />
     </div>
   )
 }
@@ -59,12 +128,22 @@ function WorkshopTopBar({
   setCanvasSize,
   layerCount,
   resetViewport,
+  canUndo,
+  canRedo,
+  undo,
+  redo,
+  openExport,
 }: {
   selectedPattern: PatternListItem | null
   canvasSize: { width: number; height: number }
   setCanvasSize: (size: { width: number; height: number }) => void
   layerCount: number
   resetViewport: () => void
+  canUndo: boolean
+  canRedo: boolean
+  undo: () => void
+  redo: () => void
+  openExport: () => void
 }) {
   const activePreset =
     CANVAS_PRESETS.find(preset => preset.width === canvasSize.width && preset.height === canvasSize.height)?.id ??
@@ -86,6 +165,26 @@ function WorkshopTopBar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={undo}
+          disabled={!canUndo}
+          className="hidden h-8 w-8 items-center justify-center rounded border border-rice-deep bg-white text-ink-light transition-colors hover:border-gold/40 hover:text-gold disabled:opacity-35 md:flex"
+          title="撤销"
+          aria-label="撤销"
+        >
+          <Icon name="undo" size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={redo}
+          disabled={!canRedo}
+          className="hidden h-8 w-8 items-center justify-center rounded border border-rice-deep bg-white text-ink-light transition-colors hover:border-gold/40 hover:text-gold disabled:opacity-35 md:flex"
+          title="重做"
+          aria-label="重做"
+        >
+          <Icon name="redo" size={16} />
+        </button>
         <span className="rounded bg-rice-warm px-2 py-1 text-xs font-bold text-ink-faint">
           {layerCount} 图层
         </span>
@@ -117,6 +216,14 @@ function WorkshopTopBar({
         >
           <Icon name="center_focus_strong" size={14} />
           复位
+        </button>
+        <button
+          type="button"
+          onClick={openExport}
+          className="flex items-center gap-1 rounded bg-ink px-3 py-1.5 text-xs font-bold text-white shadow-sm transition-colors hover:bg-ink-medium"
+        >
+          <Icon name="download" size={14} />
+          导出
         </button>
       </div>
     </div>
