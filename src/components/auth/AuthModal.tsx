@@ -63,7 +63,7 @@ export default function AuthModal() {
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center">
           {/* 遮罩 */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -92,8 +92,9 @@ export default function AuthModal() {
           >
             {/* 关闭按钮 */}
             <button
+              type="button"
               onClick={handleClose}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-ink-faint hover:text-ink hover:bg-rice-warm transition-colors"
+              className="absolute right-4 top-4 z-20 flex h-8 w-8 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-rice-warm hover:text-ink"
               aria-label="关闭"
             >
               <Icon name="close" size={20} />

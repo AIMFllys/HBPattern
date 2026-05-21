@@ -42,6 +42,7 @@ export function ExportDialog() {
 
   const handleExport = useCallback(async () => {
     if (!user) {
+      setIsExporting(false)
       openModal('登录后即可导出高清设计稿')
       return
     }
