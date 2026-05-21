@@ -4,8 +4,10 @@ import SiteHeader from '@/components/layout/SiteHeader'
 import { Icon } from '@/components/icons/Icon'
 import { useWorkshopStore } from '@/stores/useWorkshopStore'
 import type { PatternListItem } from '@/types/pattern'
+import { AdjustPanel } from './AdjustPanel'
 import { LayerPanel } from './LayerPanel'
 import { PatternAssetPanel } from './PatternAssetPanel'
+import { ToolBar } from './ToolBar'
 import { WorkshopCanvas } from './WorkshopCanvas'
 
 interface WorkshopClientProps {
@@ -22,6 +24,7 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
       <SiteHeader logoIcon="grid_view" siteName="纹样+ 跨界创作工坊" primaryColor="gold" />
 
       <main className="relative flex flex-1 overflow-hidden">
+        <ToolBar />
         <section className="relative flex flex-1 flex-col overflow-hidden bg-rice-warm">
           <div className="flex items-center justify-between border-b border-rice-deep/40 bg-white/80 px-4 py-2 backdrop-blur">
             <div className="flex items-center gap-2 text-sm">
@@ -37,6 +40,7 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
           </div>
 
           <WorkshopCanvas />
+          <AdjustPanel />
           <LayerPanel />
         </section>
 

@@ -1,4 +1,5 @@
 import type { LayerTransform, SymmetryConfig, WorkshopLayer } from '@/types/workshop'
+import { applyColorAdjustment, hasColorAdjustment } from './colorAdjust'
 import { createSymmetryGuideLines, createSymmetryInstructions } from './symmetry'
 import { hasRenderablePattern, normalizeBlendMode } from './layerCompositor'
 
@@ -202,6 +203,7 @@ function renderPatternLayer(
   image: LoadedImage,
   symmetry: SymmetryConfig
 ) {
+  const sourceImage = prepareImageForLayer(image, layer)
   const instructions = createSymmetryInstructions(layer.transform, symmetry)
   const centerX = width * symmetry.centerX
   const centerY = height * symmetry.centerY
@@ -220,8 +222,30 @@ function renderPatternLayer(
       ctx.translate(-centerX, -centerY)
     }
 
-    drawTransformedImage(ctx, width, height, image, instruction.transform)
+    drawTransformedImage(ctx, width, height, sourceImage, instruction.transform)
     ctx.restore()
+  }
+}
+
+function prepareImageForLayer(image: LoadedImage, layer: WorkshopLayer): LoadedImage {
+  if (!hasColorAdjustment(layer.colorAdjust)) return image
+
+  const canvas = document.createElement('canvas')
+  canvas.width = image.width
+  canvas.height = image.height
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })
+  if (!ctx) return image
+
+  ctx.drawImage(image.source, 0, 0, image.width, image.height)
+  const imageData = ctx.getImageData(0, 0, image.width, image.height)
+  const adjusted = applyColorAdjustment(imageData, layer.colorAdjust)
+  ctx.putImageData(adjusted, 0, 0)
+
+  return {
+    url: image.url,
+    source: canvas,
+    width: image.width,
+    height: image.height,
   }
 }
 
