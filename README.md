@@ -4,7 +4,11 @@
 
 **湖北非遗纹样数字展示与互动平台**
 
-[GitHub 仓库](https://github.com/AIMFllys/HBPattern) · [在线网站（暂定）](https://HBpattern.husteread.com) · [提交问题](https://github.com/AIMFllys/HBPattern/issues)
+[项目地址](https://github.com/AIMFllys/HBPattern) · [在线网站（暂定）](https://HBpattern.husteread.com) · [问题反馈](https://github.com/AIMFllys/HBPattern/issues) · [本地开发](http://localhost:6427) · [开源协议](./LICENSE)
+
+项目地址：<https://github.com/AIMFllys/HBPattern>  
+在线网站（暂定）：<https://HBpattern.husteread.com>  
+Issues：<https://github.com/AIMFllys/HBPattern/issues>
 
 </div>
 
