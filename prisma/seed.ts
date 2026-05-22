@@ -1,140 +1,257 @@
+import { createHash } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { config } from 'dotenv'
+import { hubeiRegions } from '../src/data/map/hubei'
 
 config({ path: '.env.local' })
 
-const connectionString = process.env.DIRECT_URL || process.env.DATABASE_URL!
+const connectionString = process.env.DIRECT_URL || process.env.DATABASE_URL
+if (!connectionString) throw new Error('DATABASE_URL or DIRECT_URL is required')
+
 const adapter = new PrismaPg({ connectionString, ssl: { rejectUnauthorized: false } })
 const prisma = new PrismaClient({ adapter })
 
+type ResearchPattern = {
+  id: string
+  name: string
+  nameEn?: string
+  category: string
+  region: string
+  specificLocation?: string
+  era: string
+  technique: 'embroidery' | 'dyeing' | 'weaving' | 'printing'
+  ichRecord?: string
+  description: string
+  historicalBackground?: string
+  symbolism?: string
+  colorPalette?: string[]
+  story?: string
+  usage?: string
+  imageUrl?: string | null
+  status?: 'approved' | 'featured'
+}
+
+type ResearchCategory = {
+  id: string
+  name: string
+  city: string
+  technique: ResearchPattern['technique']
+  ichLevel: string
+  ichCode?: string
+  description: string
+  patterns: ResearchPattern[]
+}
+
+type ResearchData = {
+  categories: ResearchCategory[]
+}
+
+const researchData = JSON.parse(
+  readFileSync('scripts/hubei-patterns-data.json', 'utf8'),
+) as ResearchData
+
+const systemUserId = '00000000-0000-0000-0009-000000000001'
+
+const techniqueInfo: Record<ResearchPattern['technique'], { name: string; category: ResearchPattern['technique']; description: string }> = {
+  embroidery: { name: '刺绣与挑花', category: 'embroidery', description: '以针线、挑花、绣活或剪纸构成的平面装饰工艺。' },
+  dyeing: { name: '印染', category: 'dyeing', description: '以蓝印、防染和民间染织形成的纹样工艺。' },
+  weaving: { name: '织锦', category: 'weaving', description: '以经纬线组织生成几何和图腾纹样的织造工艺。' },
+  printing: { name: '器物与雕刻纹', category: 'printing', description: '覆盖漆器、青铜、陶器、木雕和拓印等器物纹饰。' },
+}
+
+function uuidFromSlug(scope: string, slug: string) {
+  const hex = createHash('sha1').update(`hbpattern:${scope}:${slug}`).digest('hex').slice(0, 32)
+  return [
+    hex.slice(0, 8),
+    hex.slice(8, 12),
+    `5${hex.slice(13, 16)}`,
+    ((parseInt(hex.slice(16, 18), 16) & 0x3f) | 0x80).toString(16).padStart(2, '0') + hex.slice(18, 20),
+    hex.slice(20, 32),
+  ].join('-')
+}
+
+function normalizeRegionName(name: string) {
+  return name.replace(/湖北省/g, '').replace(/土家族苗族自治州/g, '州').replace(/[市区县]/g, '').trim()
+}
+
+function findRegionId(name: string) {
+  const normalized = normalizeRegionName(name)
+  const region = hubeiRegions.find(item => {
+    const candidates = [item.name, item.shortName]
+    return candidates.some(candidate => {
+      const current = normalizeRegionName(candidate)
+      return normalized === current || normalized.includes(current) || current.includes(normalized)
+    })
+  })
+  return uuidFromSlug('region', region?.id ?? normalized)
+}
+
+function mapIchLevel(level: string) {
+  if (level.includes('国家') || level.includes('人类')) return 'national'
+  if (level.includes('省')) return 'provincial'
+  return 'municipal'
+}
+
+function pseudoCount(seed: string, min: number, max: number) {
+  const value = parseInt(createHash('sha1').update(seed).digest('hex').slice(0, 8), 16)
+  return min + (value % (max - min + 1))
+}
+
+function escapeXml(value: string) {
+  return value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' }[char]!))
+}
+
+function placeholderUrl(pattern: ResearchPattern) {
+  if (pattern.imageUrl) return pattern.imageUrl
+  const palette = pattern.colorPalette?.length ? pattern.colorPalette : ['#8c2f22', '#c9a84c', '#f5f0e8']
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100"><defs><linearGradient id="g" x1="0" x2="1" y1="0" y2="1">${palette.map((color, index) => `<stop offset="${Math.round((index / Math.max(1, palette.length - 1)) * 100)}%" stop-color="${color}"/>`).join('')}</linearGradient><pattern id="p" width="90" height="90" patternUnits="userSpaceOnUse"><path d="M45 8 82 45 45 82 8 45Z" fill="none" stroke="rgba(255,255,255,.36)" stroke-width="8"/></pattern></defs><rect width="900" height="1100" fill="url(#g)"/><rect width="900" height="1100" fill="url(#p)" opacity=".64"/><text x="450" y="540" fill="rgba(255,255,255,.92)" font-size="82" font-family="serif" font-weight="700" text-anchor="middle">${escapeXml(pattern.name.slice(0, 6))}</text><text x="450" y="625" fill="rgba(255,255,255,.72)" font-size="34" font-family="sans-serif" text-anchor="middle">${escapeXml(pattern.region)} · ${escapeXml(pattern.era)}</text></svg>`
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
+}
+
 async function main() {
-  const supabasePublicUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim().replace(/\/+$/, '')
-  if (!supabasePublicUrl) {
-    throw new Error('NEXT_PUBLIC_SUPABASE_URL is required for seed media URLs (set in .env.local)')
+  await prisma.user.upsert({
+    where: { email: 'system@hbpattern.local' },
+    update: {},
+    create: {
+      id: systemUserId,
+      email: 'system@hbpattern.local',
+      nickname: '湖北纹样资料库',
+      role: 'admin',
+      agreed_privacy_policy: true,
+    },
+  })
+
+  for (const region of hubeiRegions) {
+    await prisma.region.upsert({
+      where: { id: uuidFromSlug('region', region.id) },
+      update: { name: region.name, cultural_intro: region.culturalIntro },
+      create: {
+        id: uuidFromSlug('region', region.id),
+        name: region.name,
+        province: '湖北省',
+        city: region.shortName,
+        cultural_intro: region.culturalIntro,
+      },
+    })
   }
 
-  // --- Regions ---
-  const wuhan = await prisma.region.upsert({
-    where: { id: '00000000-0000-0000-0000-000000000001' },
-    update: {},
-    create: { id: '00000000-0000-0000-0000-000000000001', name: '武汉市', province: '湖北省', city: '武汉', cultural_intro: '楚文化核心区域，汉绣发源地' },
-  })
-  const enshi = await prisma.region.upsert({
-    where: { id: '00000000-0000-0000-0000-000000000002' },
-    update: {},
-    create: { id: '00000000-0000-0000-0000-000000000002', name: '恩施州', province: '湖北省', city: '恩施', cultural_intro: '土家族苗族聚居区，西兰卡普织锦之乡' },
-  })
-  const jingzhou = await prisma.region.upsert({
-    where: { id: '00000000-0000-0000-0000-000000000003' },
-    update: {},
-    create: { id: '00000000-0000-0000-0000-000000000003', name: '荆州市', province: '湖北省', city: '荆州', cultural_intro: '楚国故都，漆器纹饰出土重地' },
-  })
-  const suizhou = await prisma.region.upsert({
-    where: { id: '00000000-0000-0000-0000-000000000004' },
-    update: {},
-    create: { id: '00000000-0000-0000-0000-000000000004', name: '随州市', province: '湖北省', city: '随州', cultural_intro: '曾侯乙墓所在地，青铜纹饰宝库' },
-  })
+  for (const [key, info] of Object.entries(techniqueInfo)) {
+    await prisma.technique.upsert({
+      where: { id: uuidFromSlug('technique', key) },
+      update: { name: info.name, description: info.description },
+      create: { id: uuidFromSlug('technique', key), ...info, difficulty_level: 2 },
+    })
+  }
 
-  // --- Techniques ---
-  const embroidery = await prisma.technique.upsert({
-    where: { id: '00000000-0000-0000-0001-000000000001' },
-    update: {},
-    create: { id: '00000000-0000-0000-0001-000000000001', name: '刺绣', category: 'embroidery', description: '以针引线在织物上绣制图案的传统工艺' },
-  })
-  const weaving = await prisma.technique.upsert({
-    where: { id: '00000000-0000-0000-0001-000000000002' },
-    update: {},
-    create: { id: '00000000-0000-0000-0001-000000000002', name: '织锦', category: 'weaving', description: '以经纬线交织形成图案的纺织工艺' },
-  })
-  await prisma.technique.upsert({
-    where: { id: '00000000-0000-0000-0001-000000000003' },
-    update: {},
-    create: { id: '00000000-0000-0000-0001-000000000003', name: '蜡染', category: 'dyeing', description: '以蜡防染的传统印染工艺' },
-  })
-  const printing = await prisma.technique.upsert({
-    where: { id: '00000000-0000-0000-0001-000000000004' },
-    update: {},
-    create: { id: '00000000-0000-0000-0001-000000000004', name: '漆器', category: 'printing', description: '以天然漆涂饰器物并绘制纹饰的工艺' },
-  })
+  for (const category of researchData.categories) {
+    await prisma.ichRecord.upsert({
+      where: { id: uuidFromSlug('ich', category.id) },
+      update: { name: category.name, description: category.description },
+      create: {
+        id: uuidFromSlug('ich', category.id),
+        name: category.name,
+        official_code: category.ichCode ?? null,
+        level: mapIchLevel(category.ichLevel),
+        protection_status: 'good',
+        description: category.description,
+      },
+    })
+  }
 
-  // --- ICH Records ---
-  const hanxiu = await prisma.ichRecord.upsert({
-    where: { id: '00000000-0000-0000-0002-000000000001' },
-    update: {},
-    create: { id: '00000000-0000-0000-0002-000000000001', name: '汉绣', level: 'national', protection_status: 'good', description: '国家级非物质文化遗产，以武汉为中心的传统刺绣技艺' },
-  })
-  const xilankapu = await prisma.ichRecord.upsert({
-    where: { id: '00000000-0000-0000-0002-000000000002' },
-    update: {},
-    create: { id: '00000000-0000-0000-0002-000000000002', name: '西兰卡普', level: 'national', protection_status: 'good', description: '土家族传统织锦工艺，国家级非物质文化遗产' },
-  })
-
-  // --- Tags ---
-  const tagNames = ['凤鸟纹', '云纹', '几何纹', '花卉纹', '龙纹', '莲花纹', '回纹', '饕餮纹', '水波纹', '如意纹']
-  const tags = await Promise.all(
-    tagNames.map((name, i) =>
-      prisma.tag.upsert({
-        where: { name },
-        update: {},
-        create: { id: `00000000-0000-0000-0003-00000000000${i + 1}`.slice(0, 36), name, category: '纹饰类型' },
-      })
-    )
+  const allPatterns = researchData.categories.flatMap(category =>
+    category.patterns.map(pattern => ({ ...pattern, categoryId: category.id, categoryName: category.name })),
   )
 
-  // --- Seed User (system uploader) ---
-  const systemUser = await prisma.user.upsert({
-    where: { email: 'system@hbpattern.com' },
-    update: {},
-    create: { id: '00000000-0000-0000-0009-000000000001', email: 'system@hbpattern.com', nickname: '系统管理员', role: 'admin' },
-  })
-
-  // --- Patterns ---
-  const patterns = [
-    { id: '00000000-0000-0000-0010-000000000001', name: '战国凤鸟纹', description: '以凤凰翱翔于盛开的牡丹花丛为主题，象征着权力的尊贵与生命的繁荣。凤凰的线条流转如云，展现了楚文化的浪漫诡谲。', era: '战国', region_id: wuhan.id, technique_id: embroidery.id, status: 'featured' as const, color_palette: ['#c9a84c', '#a63d33', '#e8e4d9'], is_ai_generated: false },
-    { id: '00000000-0000-0000-0010-000000000002', name: '楚式云雷纹', description: '流云纹是汉代常见的装饰纹样，象征着天上的云彩和神仙的意象。线条流畅，气韵生动。', era: '战国', region_id: jingzhou.id, technique_id: printing.id, status: 'approved' as const, color_palette: ['#1a1a14', '#c9a84c', '#f5f0e8'], is_ai_generated: false },
-    { id: '00000000-0000-0000-0010-000000000003', name: '土家织锦·西兰卡普', description: '西兰卡普是土家族传统织锦工艺，以其独特的几何图案闻名。色彩对比强烈，构图严谨。', era: '明清', region_id: enshi.id, technique_id: weaving.id, ich_record_id: xilankapu.id, status: 'featured' as const, color_palette: ['#1e3a8a', '#ffffff', '#c9a84c'], is_ai_generated: false },
-    { id: '00000000-0000-0000-0010-000000000004', name: '汉绣凤穿牡丹', description: '牡丹花开富贵的传统寓意，在荆楚地区有着悠久的历史。汉绣技法精湛，色彩浓烈。', era: '清代', region_id: wuhan.id, technique_id: embroidery.id, ich_record_id: hanxiu.id, status: 'approved' as const, color_palette: ['#b84a39', '#c9a84c', '#f5f0e8'], is_ai_generated: false },
-    { id: '00000000-0000-0000-0010-000000000005', name: '黄梅挑花', description: '传统蓝印花布技术，历史悠久，具有浓郁的乡土气息。针法独特，图案质朴。', era: '近现代', region_id: wuhan.id, technique_id: embroidery.id, status: 'approved' as const, color_palette: ['#1e3a8a', '#ffffff', '#1a1a14'], is_ai_generated: false },
-    { id: '00000000-0000-0000-0010-000000000006', name: 'AI·新楚风凤鸟', description: '基于楚文化凤鸟纹元素，由 AI 重新演绎的现代纹样设计。保留传统神韵，融入当代审美。', era: '当代', region_id: suizhou.id, technique_id: printing.id, status: 'approved' as const, color_palette: ['#c9a84c', '#1a1a14', '#b84a39'], is_ai_generated: true, ai_model_version: 'Seedream 5.0' },
-  ]
-
-  for (const p of patterns) {
+  for (const pattern of allPatterns) {
+    const patternId = uuidFromSlug('pattern', pattern.id)
+    const palette = pattern.colorPalette?.length ? pattern.colorPalette : ['#8c2f22', '#c9a84c', '#f5f0e8']
     await prisma.pattern.upsert({
-      where: { id: p.id },
-      update: {},
+      where: { id: patternId },
+      update: {
+        name: pattern.name,
+        description: pattern.description,
+        historical_background: pattern.historicalBackground ?? null,
+        color_palette: palette,
+        metadata: {
+          nameEn: pattern.nameEn ?? null,
+          category: pattern.category,
+          specificLocation: pattern.specificLocation ?? null,
+          symbolism: pattern.symbolism ?? null,
+          story: pattern.story ?? null,
+          usage: pattern.usage ?? null,
+          source: 'scripts/hubei-patterns-research-report.md',
+        },
+      },
       create: {
-        ...p,
-        uploader_id: systemUser.id,
-        license_type: 'public_domain',
-        view_count: Math.floor(Math.random() * 500) + 100,
-        like_count: Math.floor(Math.random() * 50) + 5,
+        id: patternId,
+        name: pattern.name,
+        description: pattern.description,
+        historical_background: pattern.historicalBackground ?? null,
+        era: pattern.era,
+        region_id: findRegionId(pattern.region),
+        uploader_id: systemUserId,
+        technique_id: uuidFromSlug('technique', pattern.technique),
+        ich_record_id: uuidFromSlug('ich', pattern.categoryId),
+        status: pattern.status ?? 'approved',
+        license_type: 'copyright',
+        source_declaration: 'Research seed from scripts/hubei-patterns-research-report.md; image is placeholder unless source imageUrl exists.',
+        color_palette: palette,
+        metadata: {
+          nameEn: pattern.nameEn ?? null,
+          category: pattern.category,
+          specificLocation: pattern.specificLocation ?? null,
+          symbolism: pattern.symbolism ?? null,
+          story: pattern.story ?? null,
+          usage: pattern.usage ?? null,
+          source: 'scripts/hubei-patterns-research-report.md',
+        },
+        view_count: pseudoCount(pattern.id, 80, 1680),
+        like_count: pseudoCount(`${pattern.id}:likes`, 8, 260),
       },
     })
 
-    // Add a placeholder media entry
     await prisma.patternMedia.upsert({
-      where: { id: p.id.replace('0010', '0011') },
-      update: {},
+      where: { id: uuidFromSlug('media', pattern.id) },
+      update: { url: placeholderUrl(pattern) },
       create: {
-        id: p.id.replace('0010', '0011'),
-        pattern_id: p.id,
+        id: uuidFromSlug('media', pattern.id),
+        pattern_id: patternId,
         media_type: 'image',
-        url: `${supabasePublicUrl}/storage/v1/object/public/pattern-images/seed/${p.id}.webp`,
+        url: placeholderUrl(pattern),
+        thumbnail_url: placeholderUrl(pattern),
         sort_order: 0,
+        metadata: { placeholder: !pattern.imageUrl },
       },
     })
+
+    const tagNames = [pattern.category, pattern.region, pattern.era, pattern.usage]
+      .filter((value): value is string => Boolean(value))
+      .flatMap(value => value.split(/[、，,]/).map(item => item.trim()).filter(Boolean))
+      .slice(0, 6)
+
+    for (const tagName of tagNames) {
+      const tagId = uuidFromSlug('tag', tagName)
+      await prisma.tag.upsert({
+        where: { name: tagName },
+        update: {},
+        create: { id: tagId, name: tagName, category: '调研标签' },
+      })
+      await prisma.patternTag.upsert({
+        where: { pattern_id_tag_id: { pattern_id: patternId, tag_id: tagId } },
+        update: {},
+        create: { pattern_id: patternId, tag_id: tagId },
+      })
+    }
   }
 
-  // --- Pattern Tags ---
-  await prisma.patternTag.upsert({ where: { pattern_id_tag_id: { pattern_id: patterns[0].id, tag_id: tags[0].id } }, update: {}, create: { pattern_id: patterns[0].id, tag_id: tags[0].id } })
-  await prisma.patternTag.upsert({ where: { pattern_id_tag_id: { pattern_id: patterns[1].id, tag_id: tags[1].id } }, update: {}, create: { pattern_id: patterns[1].id, tag_id: tags[1].id } })
-  await prisma.patternTag.upsert({ where: { pattern_id_tag_id: { pattern_id: patterns[2].id, tag_id: tags[2].id } }, update: {}, create: { pattern_id: patterns[2].id, tag_id: tags[2].id } })
-  await prisma.patternTag.upsert({ where: { pattern_id_tag_id: { pattern_id: patterns[3].id, tag_id: tags[3].id } }, update: {}, create: { pattern_id: patterns[3].id, tag_id: tags[3].id } })
-
-  console.log('✅ Seed completed: 4 regions, 4 techniques, 2 ICH records, 10 tags, 6 patterns')
+  console.log(`Seed completed: ${hubeiRegions.length} regions, ${Object.keys(techniqueInfo).length} techniques, ${researchData.categories.length} ICH records, ${allPatterns.length} patterns`)
 }
 
 main()
-  .catch((e) => { console.error(e); process.exit(1) })
+  .catch(error => {
+    console.error(error)
+    process.exit(1)
+  })
   .finally(() => prisma.$disconnect())

@@ -89,7 +89,7 @@ export function MapSidebar({
           <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em] text-gold">Demo 地理数据</p>
           <h1 className="font-serif text-2xl font-black leading-tight text-ink">湖北纹样地理溯源</h1>
           <p className="mt-2 text-sm leading-6 text-ink-light">
-            本地矢量轮廓 + 17 个区域点位。Demo 绑定写入浏览器本地存储，不要求登录。
+            高细节地市矢量边界 + 17 个区域点位。画廊纹样会按地区自动落点，本地草稿继续写入浏览器存储。
           </p>
         </section>
 
@@ -194,7 +194,7 @@ export function MapSidebar({
 
         <section className="border border-rice-deep bg-rice-warm p-4">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-sm font-black text-ink">本地绑定记录</h2>
+          <h2 className="text-sm font-black text-ink">地图纹样链接</h2>
             <span className="text-[11px] text-ink-faint">{storageReady ? '已启用 localStorage' : '读取中'}</span>
           </div>
           <div className="space-y-2">
@@ -217,7 +217,7 @@ export function MapSidebar({
             ))}
             {displayBindings.length === 0 && (
               <p className="border border-dashed border-rice-deep bg-white px-3 py-4 text-center text-xs text-ink-faint">
-                暂无本地绑定。选择画廊纹样或新建草稿后即可在地图上显示。
+                暂无地图链接。选择画廊纹样或新建草稿后即可在地图上显示。
               </p>
             )}
           </div>

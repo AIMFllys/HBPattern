@@ -28,6 +28,7 @@ import {
   parseStoredState,
 } from './utils/mapDemoUtils'
 import { readImageForDemo } from './utils/imageProcessing'
+import { createGalleryMapBindings } from '@/lib/map/patternGeo'
 
 interface HubeiMapClientProps {
   initialPatterns: MapPatternOption[]
@@ -95,6 +96,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
     () => [...initialPatterns, ...demoPatternOptions],
     [demoPatternOptions, initialPatterns],
   )
+  const galleryBindings = useMemo(() => createGalleryMapBindings(initialPatterns), [initialPatterns])
 
   const effectiveSelectedPatternId = selectedPatternId || allPatternOptions[0]?.id || ''
   const selectedPattern = allPatternOptions.find(pattern => pattern.id === effectiveSelectedPatternId) ?? null
@@ -111,7 +113,13 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   }, [allPatternOptions, patternQuery])
 
   const displayBindings = useMemo<DisplayBinding[]>(() => {
-    return bindings
+    const localPatternIds = new Set(bindings.map(binding => `${binding.patternSource}:${binding.patternId}`))
+    const mergedBindings = [
+      ...bindings,
+      ...galleryBindings.filter(binding => !localPatternIds.has(`${binding.patternSource}:${binding.patternId}`)),
+    ]
+
+    return mergedBindings
       .map(binding => {
         const region = findHubeiRegion(binding.regionId)
         const place = findHubeiPlace(binding.regionId, binding.placeId)
@@ -120,7 +128,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         return { binding, pattern, region, place }
       })
       .filter((item): item is DisplayBinding => Boolean(item))
-  }, [allPatternOptions, bindings])
+  }, [allPatternOptions, bindings, galleryBindings])
 
   const draftAnalysis = useMemo<PatternAnalysisResult>(
     () => analyzePatternDraft(draftForm, bindings),
@@ -276,7 +284,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
       <MapSidebar
         selectedRegion={selectedRegion}
         totalPlaces={totalPlaces}
-        bindingCount={bindings.length}
+        bindingCount={displayBindings.length}
         mode={mode}
         patternQuery={patternQuery}
         filteredPatterns={filteredPatterns}

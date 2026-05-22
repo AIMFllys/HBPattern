@@ -5,6 +5,7 @@ import {
   HUBEI_OUTLINE_PATH,
   projectHubeiPoint,
 } from '@/data/map/hubei'
+import { hubeiBoundaryFeatures } from '@/data/map/hubeiBoundaries'
 import type { HubeiKeyPlace, HubeiRegion } from '@/types'
 import { MapText } from './MapText'
 import type { DisplayBinding } from './mapDemoTypes'
@@ -67,24 +68,55 @@ export function MapCanvas({
             <stop offset="52%" stopColor="#e8d8ac" />
             <stop offset="100%" stopColor="#d9b86b" />
           </linearGradient>
+          <linearGradient id="regionFill" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="#fff5d8" />
+            <stop offset="100%" stopColor="#e7c878" />
+          </linearGradient>
         </defs>
 
         <g transform={`translate(${pan.x} ${pan.y}) scale(${zoom})`}>
           <path
             d={HUBEI_OUTLINE_PATH}
             fill="url(#provinceFill)"
-            stroke="#8c2f22"
-            strokeWidth={0.42 / zoom}
+            stroke="none"
             filter="url(#mapShadow)"
-            className="transition-[stroke-width] duration-200"
+            opacity={0.36}
           />
+          {hubeiBoundaryFeatures.map(feature => {
+            const isSelected = feature.id === selectedRegion.id
+            return (
+              <path
+                key={feature.id}
+                d={feature.path}
+                role="button"
+                tabIndex={0}
+                aria-label={`查看${feature.name}纹样地点`}
+                fill={isSelected ? '#f1d387' : 'url(#regionFill)'}
+                stroke={isSelected ? '#8c2f22' : '#a96d38'}
+                strokeWidth={(isSelected ? 0.42 : 0.2) / zoom}
+                opacity={isSelected ? 0.98 : 0.78}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  selectRegion(feature.id)
+                }}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    selectRegion(feature.id)
+                  }
+                }}
+                className="cursor-pointer transition-opacity duration-200 hover:opacity-100"
+              >
+                <title>{feature.name}</title>
+              </path>
+            )
+          })}
           <path
             d={HUBEI_OUTLINE_PATH}
             fill="none"
-            stroke="#fff7df"
-            strokeWidth={0.15 / zoom}
-            strokeDasharray={`${1.1 / zoom} ${1.4 / zoom}`}
-            opacity={0.9}
+            stroke="#8c2f22"
+            strokeWidth={0.28 / zoom}
+            opacity={0.72}
           />
 
           {zoom < HUBEI_MAP_LABEL_THRESHOLDS.province && (
@@ -197,42 +229,49 @@ export function MapCanvas({
             const offset = ((index % 3) - 1) * (1.6 / zoom)
             const size = zoom >= HUBEI_MAP_LABEL_THRESHOLDS.patternThumbnail ? 3.6 / zoom : 1.6 / zoom
             const clipId = `thumb-${clipIdPrefix}-${item.binding.id}`
+            const marker = (
+              <g
+                role="button"
+                tabIndex={0}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  selectPlace(item.region.id, item.place.id)
+                }}
+                className="cursor-pointer"
+              >
+                <circle
+                  cx={projected.x + offset}
+                  cy={projected.y - 2.8 / zoom}
+                  r={size * 0.68}
+                  fill={item.pattern.colorPalette[0] ?? '#b84a39'}
+                  stroke="#fffaf0"
+                  strokeWidth={0.28 / zoom}
+                />
+                {zoom >= HUBEI_MAP_LABEL_THRESHOLDS.patternThumbnail && item.pattern.imageUrl && (
+                  <>
+                    <clipPath id={clipId}>
+                      <circle cx={projected.x + offset} cy={projected.y - 2.8 / zoom} r={size * 0.58} />
+                    </clipPath>
+                    <image
+                      href={item.pattern.imageUrl}
+                      x={projected.x + offset - size * 0.58}
+                      y={projected.y - 2.8 / zoom - size * 0.58}
+                      width={size * 1.16}
+                      height={size * 1.16}
+                      clipPath={`url(#${clipId})`}
+                      preserveAspectRatio="xMidYMid slice"
+                    />
+                  </>
+                )}
+              </g>
+            )
             return (
               <g key={item.binding.id}>
-                <g
-                  role="button"
-                  tabIndex={0}
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    selectPlace(item.region.id, item.place.id)
-                  }}
-                  className="cursor-pointer"
-                >
-                  <circle
-                    cx={projected.x + offset}
-                    cy={projected.y - 2.8 / zoom}
-                    r={size * 0.68}
-                    fill={item.pattern.colorPalette[0] ?? '#b84a39'}
-                    stroke="#fffaf0"
-                    strokeWidth={0.28 / zoom}
-                  />
-                  {zoom >= HUBEI_MAP_LABEL_THRESHOLDS.patternThumbnail && item.pattern.imageUrl && (
-                    <>
-                      <clipPath id={clipId}>
-                        <circle cx={projected.x + offset} cy={projected.y - 2.8 / zoom} r={size * 0.58} />
-                      </clipPath>
-                      <image
-                        href={item.pattern.imageUrl}
-                        x={projected.x + offset - size * 0.58}
-                        y={projected.y - 2.8 / zoom - size * 0.58}
-                        width={size * 1.16}
-                        height={size * 1.16}
-                        clipPath={`url(#${clipId})`}
-                        preserveAspectRatio="xMidYMid slice"
-                      />
-                    </>
-                  )}
-                </g>
+                {item.pattern.source === 'gallery' ? (
+                  <a href={`/gallery/${item.pattern.id}`} aria-label={`查看${item.pattern.name}详情`}>
+                    {marker}
+                  </a>
+                ) : marker}
                 {zoom >= HUBEI_MAP_LABEL_THRESHOLDS.patternThumbnail && (
                   <MapText
                     x={projected.x + offset + 1.55 / zoom}

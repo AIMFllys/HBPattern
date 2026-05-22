@@ -11,13 +11,12 @@ export const HUBEI_MAP_LABEL_THRESHOLDS = {
 } as const
 
 export const HUBEI_GEO_SOURCE = {
-  name: 'geoBoundaries CHN ADM1 simplified boundary',
-  license: 'Public Domain',
-  apiUrl: 'https://www.geoboundaries.org/api/current/gbOpen/CHN/ADM1/',
-  geometryUrl:
-    'https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/CHN/ADM1/geoBoundaries-CHN-ADM1_simplified.geojson',
-  shapeName: 'Hubei Province',
-  extractedAt: '2026-05-22',
+  name: 'DataV.GeoAtlas Hubei ADM2 full boundary',
+  license: 'Open web atlas data; verify redistribution requirements before commercial release',
+  apiUrl: 'https://geo.datav.aliyun.com/areas_v3/bound/420000_full.json',
+  geometryUrl: 'src/data/map/hubei-boundaries.json',
+  shapeName: 'Hubei Province prefecture boundaries',
+  extractedAt: '2026-05-23',
 } as const
 
 export const HUBEI_BBOX = {
@@ -664,6 +663,27 @@ export const hubeiRegions: HubeiRegion[] = [
 
 export function findHubeiRegion(regionId: string): HubeiRegion | undefined {
   return hubeiRegions.find(region => region.id === regionId)
+}
+
+export function normalizeHubeiRegionName(name: string): string {
+  return name
+    .replace(/湖北省/g, '')
+    .replace(/土家族苗族自治州/g, '州')
+    .replace(/自治州/g, '州')
+    .replace(/[市区县]/g, '')
+    .trim()
+}
+
+export function findHubeiRegionByName(name: string | null | undefined): HubeiRegion | undefined {
+  if (!name) return undefined
+  const normalized = normalizeHubeiRegionName(name)
+  return hubeiRegions.find(region => {
+    const candidates = [region.name, region.shortName, region.namePinyin]
+    return candidates.some(candidate => {
+      const current = normalizeHubeiRegionName(candidate)
+      return normalized === current || normalized.includes(current) || current.includes(normalized)
+    })
+  })
 }
 
 export function findHubeiPlace(regionId: string, placeId: string): HubeiRegion['keyPlaces'][number] | undefined {

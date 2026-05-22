@@ -7,6 +7,7 @@ import {
   hubeiRegions,
   projectHubeiPoint,
 } from '../hubei'
+import { hubeiBoundaryFeatures } from '../hubeiBoundaries'
 
 describe('hubeiRegions', () => {
   it('覆盖湖北 17 个地级和省直管区域', () => {
@@ -66,8 +67,17 @@ describe('Hubei map constants', () => {
       place: 1.45,
       patternThumbnail: 1.8,
     })
-    expect(HUBEI_GEO_SOURCE.license).toBe('Public Domain')
+    expect(HUBEI_GEO_SOURCE.name).toContain('ADM2')
+    expect(HUBEI_GEO_SOURCE.apiUrl).toContain('420000_full.json')
     expect(HUBEI_OUTLINE_PATH.startsWith('M')).toBe(true)
     expect(HUBEI_OUTLINE_PATH.endsWith('Z')).toBe(true)
+  })
+
+  it('加载 17 个高细节地市边界 path', () => {
+    expect(hubeiBoundaryFeatures).toHaveLength(17)
+    for (const feature of hubeiBoundaryFeatures) {
+      expect(feature.path.startsWith('M')).toBe(true)
+      expect(feature.path.length).toBeGreaterThan(500)
+    }
   })
 })
