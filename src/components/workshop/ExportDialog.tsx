@@ -1,7 +1,6 @@
 'use client'
 
-import { useCallback, useState } from 'react'
-import { AnimatePresence, motion } from 'motion/react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Icon } from '@/components/icons/Icon'
 import { downloadBlob, estimateFileSize, exportWorkshopBlob, generateExportFilename } from '@/lib/workshop/exportUtils'
 import { useAuthModal } from '@/stores/useAuthModal'
@@ -27,6 +26,7 @@ export function ExportDialog() {
   const selectedPattern = useWorkshopStore(state => state.selectedSourcePattern)
   const user = useAuthStore(state => state.user)
   const openModal = useAuthModal(state => state.openModal)
+  const dialogRef = useRef<HTMLDialogElement>(null)
   const [config, setConfig] = useState<ExportConfig>({
     format: 'png',
     quality: 0.92,
@@ -39,6 +39,32 @@ export function ExportDialog() {
   const outputWidth = canvasSize.width * config.scale
   const outputHeight = canvasSize.height * config.scale
   const estimate = estimateFileSize(outputWidth, outputHeight, config.format, config.quality)
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    if (isExporting && !dialog.open) {
+      dialog.showModal()
+      return
+    }
+
+    if (!isExporting && dialog.open) {
+      dialog.close()
+    }
+  }, [isExporting])
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    function handleClose() {
+      setIsExporting(false)
+    }
+
+    dialog.addEventListener('close', handleClose)
+    return () => dialog.removeEventListener('close', handleClose)
+  }, [setIsExporting])
 
   const handleExport = useCallback(async () => {
     if (!user) {
@@ -62,24 +88,17 @@ export function ExportDialog() {
   }, [canvasSize, config, layers, openModal, selectedPattern, setIsExporting, symmetry, user])
 
   return (
-    <AnimatePresence>
-      {isExporting && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/55 p-4 backdrop-blur-sm"
-          onClick={() => setIsExporting(false)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.94, y: 12 }}
-            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-modal"
-            onClick={event => event.stopPropagation()}
-          >
+    <dialog
+      ref={dialogRef}
+      className="workshop-export-dialog w-[min(28rem,calc(100vw-2rem))] max-w-md rounded-2xl border-0 bg-white p-0 text-left shadow-modal backdrop:bg-ink/55 backdrop:backdrop-blur-sm"
+      aria-labelledby="workshop-export-title"
+      onClick={(event) => {
+        if (event.target === dialogRef.current) setIsExporting(false)
+      }}
+    >
+      <div className="p-6">
             <div className="mb-5 flex items-center justify-between">
-              <h2 className="flex items-center gap-2 text-lg font-bold text-ink">
+              <h2 id="workshop-export-title" className="flex items-center gap-2 text-lg font-bold text-ink">
                 <Icon name="download" className="text-gold" />
                 导出设计稿
               </h2>
@@ -194,9 +213,7 @@ export function ExportDialog() {
                 )}
               </button>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+      </div>
+    </dialog>
   )
 }

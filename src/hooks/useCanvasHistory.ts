@@ -7,6 +7,7 @@ import type { HistoryEntry, SerializableLayer, SymmetryConfig } from '@/types/wo
 
 const MAX_HISTORY = 30
 const DRAFT_STORAGE_KEY = 'hbpattern-workshop-draft'
+const DRAFT_SAVE_DEBOUNCE_MS = 500
 
 interface WorkshopDraft {
   canvasSize: { width: number; height: number }
@@ -27,6 +28,8 @@ export function useCanvasHistory() {
   const indexRef = useRef(-1)
   const lastSnapshotRef = useRef('')
   const isRestoringRef = useRef(false)
+  const draftSaveTimerRef = useRef<number | null>(null)
+  const draftSaveIdleRef = useRef<number | null>(null)
   const [historyState, setHistoryState] = useState({
     canUndo: false,
     canRedo: false,
@@ -39,6 +42,20 @@ export function useCanvasHistory() {
       canRedo: indexRef.current < historyRef.current.length - 1,
       historyLength: historyRef.current.length,
     })
+  }, [])
+
+  const cancelPendingDraftSave = useCallback(() => {
+    if (draftSaveTimerRef.current !== null) {
+      window.clearTimeout(draftSaveTimerRef.current)
+      draftSaveTimerRef.current = null
+    }
+    if (draftSaveIdleRef.current !== null) {
+      const idleWindow = window as Window & {
+        cancelIdleCallback?: (handle: number) => void
+      }
+      idleWindow.cancelIdleCallback?.(draftSaveIdleRef.current)
+      draftSaveIdleRef.current = null
+    }
   }, [])
 
   const restoreLayers = useCallback(
@@ -129,8 +146,27 @@ export function useCanvasHistory() {
       symmetry,
       savedAt: new Date().toISOString(),
     }
-    window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft))
-  }, [canvasSize, layers, symmetry, syncHistoryState])
+    cancelPendingDraftSave()
+    draftSaveTimerRef.current = window.setTimeout(() => {
+      draftSaveTimerRef.current = null
+      const saveDraft = () => {
+        window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft))
+      }
+      const idleWindow = window as Window & {
+        requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number
+      }
+      if (typeof idleWindow.requestIdleCallback === 'function') {
+        draftSaveIdleRef.current = idleWindow.requestIdleCallback(() => {
+          draftSaveIdleRef.current = null
+          saveDraft()
+        }, { timeout: 1200 })
+      } else {
+        saveDraft()
+      }
+    }, DRAFT_SAVE_DEBOUNCE_MS)
+
+    return cancelPendingDraftSave
+  }, [cancelPendingDraftSave, canvasSize, layers, symmetry, syncHistoryState])
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {

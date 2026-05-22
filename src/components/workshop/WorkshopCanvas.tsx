@@ -22,12 +22,8 @@ export function WorkshopCanvas() {
   const updateLayer = useWorkshopStore(state => state.updateLayer)
   const activeTool = useWorkshopStore(state => state.activeTool)
   const initialCanvasSizeRef = useRef<{ width: number; height: number } | null>(null)
-  const initialLayersRef = useRef<typeof layers | null>(null)
-  const initialSymmetryRef = useRef<typeof symmetry | null>(null)
 
   if (initialCanvasSizeRef.current === null) initialCanvasSizeRef.current = canvasSize
-  if (initialLayersRef.current === null) initialLayersRef.current = layers
-  if (initialSymmetryRef.current === null) initialSymmetryRef.current = symmetry
 
   const loadingCount = useMemo(
     () => layers.filter(layer => layer.type === 'pattern' && layer.loadStatus === 'loading').length,
@@ -41,13 +37,10 @@ export function WorkshopCanvas() {
   useEffect(() => {
     const canvas = canvasRef.current
     const initialCanvasSize = initialCanvasSizeRef.current
-    const initialLayers = initialLayersRef.current
-    const initialSymmetry = initialSymmetryRef.current
-    if (!canvas || !initialCanvasSize || !initialLayers || !initialSymmetry) return
+    if (!canvas || !initialCanvasSize) return
 
     const engine = new CanvasEngine(canvas, initialCanvasSize.width, initialCanvasSize.height)
     engineRef.current = engine
-    engine.render(initialLayers, initialSymmetry, { showGuides: initialSymmetry.showGuides })
 
     return () => {
       if (renderFrameRef.current !== null) cancelAnimationFrame(renderFrameRef.current)
@@ -55,13 +48,6 @@ export function WorkshopCanvas() {
       engineRef.current = null
     }
   }, [])
-
-  useEffect(() => {
-    const engine = engineRef.current
-    if (!engine) return
-    engine.resize(canvasSize.width, canvasSize.height)
-    engine.render(layers, symmetry, { showGuides: symmetry.showGuides })
-  }, [canvasSize, layers, symmetry])
 
   useEffect(() => {
     const engine = engineRef.current
@@ -83,6 +69,7 @@ export function WorkshopCanvas() {
 
     if (renderFrameRef.current !== null) cancelAnimationFrame(renderFrameRef.current)
     renderFrameRef.current = requestAnimationFrame(() => {
+      engine.resize(canvasSize.width, canvasSize.height)
       engine.render(layers, symmetry, { showGuides: symmetry.showGuides })
       renderFrameRef.current = null
     })
@@ -93,7 +80,7 @@ export function WorkshopCanvas() {
         renderFrameRef.current = null
       }
     }
-  }, [layers, symmetry])
+  }, [canvasSize, layers, symmetry])
 
   const handleWheel = useCallback(
     (event: React.WheelEvent<HTMLDivElement>) => {

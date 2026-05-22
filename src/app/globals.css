@@ -259,6 +259,35 @@ a:hover { color: var(--color-cinnabar-deep); }
 ::-webkit-scrollbar-thumb { background: var(--color-rice-deep); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
 
+/* === Native dialog animation === */
+.workshop-export-dialog {
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity var(--duration-fast) var(--ease-default),
+              transform var(--duration-fast) var(--ease-default);
+}
+.workshop-export-dialog[open] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.workshop-export-dialog::backdrop {
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-default);
+}
+.workshop-export-dialog[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .workshop-export-dialog[open] {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  .workshop-export-dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
 /* === Selection === */
 ::selection {
   background-color: rgba(184, 74, 57, 0.2);
