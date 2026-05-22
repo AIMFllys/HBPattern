@@ -66,9 +66,9 @@ const invalidBodyArb = fc.oneof(
   // imageUrl 非 URL（使用不含协议的字符串）
   fc.record({
     name: fc.string({ minLength: 1, maxLength: 100 }),
-    imageUrl: fc.string({ minLength: 1, maxLength: 50 }).filter(
-      (s) => !s.startsWith('http://') && !s.startsWith('https://') && !s.startsWith('ftp://'),
-    ),
+    imageUrl: fc.string({ minLength: 1, maxLength: 50 }).filter((s) => (
+      !CreatePatternBody.safeParse({ name: 'valid-name', imageUrl: s }).success
+    )),
   }),
   // regionId 非 UUID（当存在时）
   fc.record({

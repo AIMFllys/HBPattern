@@ -67,6 +67,10 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #d2ae1e transparent;
+}
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: #d2ae1e; border-radius: 10px; }
@@ -254,10 +258,49 @@ a:hover { color: var(--color-cinnabar-deep); }
 }
 
 /* === Scroll bar customization === */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-rice-deep) var(--color-rice);
+}
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: var(--color-rice); }
 ::-webkit-scrollbar-thumb { background: var(--color-rice-deep); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
+
+/* === Rendering performance === */
+.workshop-pattern-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 180px 220px;
+}
+
+/* === Native dialog animation === */
+.workshop-export-dialog {
+  opacity: 0;
+  transform: translateY(12px) scale(0.96);
+  transition: opacity var(--duration-fast) var(--ease-default),
+              transform var(--duration-fast) var(--ease-default);
+}
+.workshop-export-dialog[open] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.workshop-export-dialog::backdrop {
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-default);
+}
+.workshop-export-dialog[open]::backdrop {
+  opacity: 1;
+}
+
+@starting-style {
+  .workshop-export-dialog[open] {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  .workshop-export-dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
 
 /* === Selection === */
 ::selection {
@@ -269,4 +312,25 @@ a:hover { color: var(--color-cinnabar-deep); }
 :focus-visible {
   outline: 2px solid var(--color-cinnabar);
   outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .custom-scrollbar {
+    scrollbar-color: var(--color-ink) var(--color-rice-deep);
+  }
+
+  :focus-visible {
+    outline-width: 3px;
+  }
 }
