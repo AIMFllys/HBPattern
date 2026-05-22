@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { ensureUserProfile } from '@/lib/auth/profile'
 import { useAuthStore } from '@/stores/useAuthStore'
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -13,7 +14,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (user) {
         supabase.from('hp_users').select('id, email, nickname, avatar_url, role').eq('id', user.id).single()
-          .then(({ data }) => setUser(data))
+          .then(async ({ data }) => setUser(data ?? await ensureUserProfile(supabase, user)))
       } else {
         setUser(null)
       }
@@ -22,7 +23,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         supabase.from('hp_users').select('id, email, nickname, avatar_url, role').eq('id', session.user.id).single()
-          .then(({ data }) => setUser(data))
+          .then(async ({ data }) => setUser(data ?? await ensureUserProfile(supabase, session.user)))
       } else {
         setUser(null)
       }

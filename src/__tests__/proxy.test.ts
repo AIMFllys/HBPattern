@@ -19,10 +19,12 @@ const UUID_V4_RE =
 // ── Mock @supabase/ssr ────────────────────────────────────────────────────────
 // proxy() 调用 createServerClient，需要 mock 以避免真实 Supabase 连接。
 // 返回一个最小化的 fake client：auth.getUser() 返回未登录状态。
+let mockUser: { id: string; email?: string } | null = null
+
 vi.mock('@supabase/ssr', () => ({
   createServerClient: () => ({
     auth: {
-      getUser: async () => ({ data: { user: null }, error: null }),
+      getUser: async () => ({ data: { user: mockUser }, error: null }),
     },
   }),
 }))
@@ -43,6 +45,7 @@ function makeRequest(headers?: Record<string, string>): NextRequest {
 
 // ── 设置 Supabase 环境变量（proxy.ts 中 createServerClient 需要） ─────────────
 beforeEach(() => {
+  mockUser = null
   process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co'
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key'
 })
@@ -90,7 +93,7 @@ describe('proxy() — X-Request-Id 前置注入', () => {
   })
 
   it('受保护路由 + 未登录时，应重定向到 /login', async () => {
-    const request = new NextRequest('http://localhost/dashboard', {
+    const request = new NextRequest('http://localhost/dashboard?tab=pending', {
       headers: {},
     })
     const response = await proxy(request)
@@ -99,5 +102,23 @@ describe('proxy() — X-Request-Id 前置注入', () => {
     expect(response.status).toBeLessThan(400)
     const location = response.headers.get('location')
     expect(location).toContain('/login')
+    expect(location).toContain('next=%2Fdashboard%3Ftab%3Dpending')
+  })
+
+  it('登录页 + 已登录时，应跳转到安全 next 路径', async () => {
+    mockUser = { id: 'user-1', email: 'user@example.com' }
+    const request = new NextRequest('http://localhost/login?next=%2Fprofile%3Fmode%3Dpassword')
+    const response = await proxy(request)
+
+    expect(response.status).toBeGreaterThanOrEqual(300)
+    expect(response.headers.get('location')).toBe('http://localhost/profile?mode=password')
+  })
+
+  it('登录页 + 外部 next 时，应回退到首页', async () => {
+    mockUser = { id: 'user-1', email: 'user@example.com' }
+    const request = new NextRequest('http://localhost/login?next=https%3A%2F%2Fevil.example')
+    const response = await proxy(request)
+
+    expect(response.headers.get('location')).toBe('http://localhost/')
   })
 })

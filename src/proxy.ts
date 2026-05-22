@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server"
 import { resolveRequestId } from "@/lib/api/requestId"
 import { SECURITY_HEADERS } from "@/lib/security/headers"
 import { buildCsp } from "@/lib/security/csp"
+import { AUTH_ROUTES, isProtectedPagePath, resolveSafeNextPath } from "@/lib/auth/routes"
 
 export async function proxy(request: NextRequest) {
   // ── X-Request-Id 前置注入（失败安全，不得抛错）──────────────────────────
@@ -45,18 +46,22 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  const protectedPaths = ["/dashboard", "/upload", "/profile"]
-  const isProtected = protectedPaths.some(p => request.nextUrl.pathname.startsWith(p))
+  const pathname = request.nextUrl.pathname
 
-  if (isProtected && !user) {
+  if (isProtectedPagePath(pathname) && !user) {
     const url = request.nextUrl.clone()
-    url.pathname = "/login"
-    return NextResponse.redirect(url)
+    url.pathname = AUTH_ROUTES.login
+    url.searchParams.set('next', `${pathname}${request.nextUrl.search}`)
+    return withSecurityHeaders(NextResponse.redirect(url))
+  }
+
+  if (pathname === AUTH_ROUTES.login && user) {
+    const nextPath = resolveSafeNextPath(request.nextUrl.searchParams.get('next'))
+    return withSecurityHeaders(NextResponse.redirect(new URL(nextPath, request.nextUrl.origin)))
   }
 
   // 注入安全 headers
-  Object.entries(SECURITY_HEADERS).forEach(([k, v]) => supabaseResponse.headers.set(k, v))
-  supabaseResponse.headers.set('Content-Security-Policy', buildCsp())
+  withSecurityHeaders(supabaseResponse)
 
   // 为公开 API (v1) 注入 CORS headers
   if (request.nextUrl.pathname.startsWith('/api/v1/')) {
@@ -66,6 +71,12 @@ export async function proxy(request: NextRequest) {
   }
 
   return supabaseResponse
+}
+
+function withSecurityHeaders(response: NextResponse) {
+  Object.entries(SECURITY_HEADERS).forEach(([k, v]) => response.headers.set(k, v))
+  response.headers.set('Content-Security-Policy', buildCsp())
+  return response
 }
 
 export const config = {

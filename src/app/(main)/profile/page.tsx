@@ -4,12 +4,16 @@ import Image from 'next/image'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons/Icon'
+import { PasswordUpdatePanel } from '@/components/auth/PasswordUpdatePanel'
+import { ensureUserProfile } from '@/lib/auth/profile'
 import { createClient } from '@/lib/supabase/server'
 
-export default async function ProfilePage() {
+export default async function ProfilePage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
+  const params = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
+  await ensureUserProfile(supabase, user)
 
   const [profileRes, uploadsRes, collectionsRes] = await Promise.all([
     supabase.from('hp_users').select('*').eq('id', user.id).single(),
@@ -56,6 +60,8 @@ export default async function ProfilePage() {
             <Icon name="add" size={16} /> 上传纹样
           </Link>
         </div>
+
+        {params.mode === 'password' && <PasswordUpdatePanel />}
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-12">

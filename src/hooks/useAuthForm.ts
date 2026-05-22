@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { ensureUserProfile } from '@/lib/auth/profile'
+import { AUTH_ROUTES } from '@/lib/auth/routes'
 import { useAuthStore } from '@/stores/useAuthStore'
 
 interface UseAuthFormOptions {
@@ -14,14 +16,16 @@ export function useAuthForm({ redirectAfterOAuth, onLoginSuccess }: UseAuthFormO
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [resetLoading, setResetLoading] = useState(false)
   const [isRegister, setIsRegister] = useState(false)
   const [emailSent, setEmailSent] = useState(false)
+  const [resetSent, setResetSent] = useState(false)
 
   async function handleOAuth() {
     const supabase = createClient()
     const callbackUrl = redirectAfterOAuth
       ? `/auth/callback?next=${encodeURIComponent(redirectAfterOAuth)}`
-      : '/auth/callback'
+      : AUTH_ROUTES.callback
 
     await supabase.auth.signInWithOAuth({
       provider: 'github',
@@ -40,7 +44,10 @@ export function useAuthForm({ redirectAfterOAuth, onLoginSuccess }: UseAuthFormO
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+        options: {
+          emailRedirectTo: `${window.location.origin}${AUTH_ROUTES.callback}`,
+          data: { full_name: email.split('@')[0] },
+        },
       })
       if (error) {
         setError(error.message)
@@ -54,17 +61,28 @@ export function useAuthForm({ redirectAfterOAuth, onLoginSuccess }: UseAuthFormO
         setError(error.message)
         setLoading(false)
       } else if (data.user) {
-        // 立即同步 user 到 store（不等 onAuthStateChange）
-        const { data: profile } = await supabase
-          .from('hp_users')
-          .select('id, email, nickname, avatar_url, role')
-          .eq('id', data.user.id)
-          .single()
+        const profile = await ensureUserProfile(supabase, data.user)
         if (profile) useAuthStore.getState().setUser(profile)
         setLoading(false)
         onLoginSuccess?.()
       }
     }
+  }
+
+  async function handlePasswordReset() {
+    if (!email) {
+      setError('请先填写邮箱')
+      return
+    }
+    setError(null)
+    setResetLoading(true)
+    const supabase = createClient()
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}${AUTH_ROUTES.callback}?next=${encodeURIComponent(AUTH_ROUTES.updatePassword)}`,
+    })
+    setResetLoading(false)
+    if (error) setError(error.message)
+    else setResetSent(true)
   }
 
   function resetForm() {
@@ -74,6 +92,7 @@ export function useAuthForm({ redirectAfterOAuth, onLoginSuccess }: UseAuthFormO
     setLoading(false)
     setIsRegister(false)
     setEmailSent(false)
+    setResetSent(false)
   }
 
   return {
@@ -81,10 +100,13 @@ export function useAuthForm({ redirectAfterOAuth, onLoginSuccess }: UseAuthFormO
     password, setPassword,
     error, setError,
     loading,
+    resetLoading,
     isRegister, setIsRegister,
     emailSent, setEmailSent,
+    resetSent, setResetSent,
     handleOAuth,
     handleSubmit,
+    handlePasswordReset,
     resetForm,
   }
 }

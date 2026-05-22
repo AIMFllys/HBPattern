@@ -16,26 +16,29 @@ export default function AuthForm({ redirectAfterOAuth, onLoginSuccess, message }
     password, setPassword,
     error, setError,
     loading,
+    resetLoading,
     isRegister, setIsRegister,
     emailSent, setEmailSent,
+    resetSent, setResetSent,
     handleOAuth,
+    handlePasswordReset,
     handleSubmit,
   } = useAuthForm({ redirectAfterOAuth, onLoginSuccess })
 
-  if (emailSent) {
+  if (emailSent || resetSent) {
     return (
       <div className="text-center space-y-5 py-4">
         <div className="w-14 h-14 mx-auto rounded-full bg-success/10 flex items-center justify-center">
           <Icon name="mail" size={28} className="text-success" />
         </div>
-        <h2 className="text-xl font-bold text-ink">验证邮件已发送</h2>
+        <h2 className="text-xl font-bold text-ink">{emailSent ? '验证邮件已发送' : '重置邮件已发送'}</h2>
         <p className="text-ink-light text-sm">
-          我们已向 <span className="font-bold text-ink">{email}</span> 发送了一封验证邮件。
-          <br />请查收并点击链接完成注册。
+          我们已向 <span className="font-bold text-ink">{email}</span> 发送了一封邮件。
+          <br />请查收并按邮件提示继续。
         </p>
         <p className="text-xs text-ink-faint">没有收到？请检查垃圾邮件文件夹</p>
         <button
-          onClick={() => { setEmailSent(false); setIsRegister(false) }}
+          onClick={() => { setEmailSent(false); setResetSent(false); setIsRegister(false) }}
           className="text-cinnabar font-bold text-sm hover:underline"
         >
           返回登录
@@ -101,7 +104,14 @@ export default function AuthForm({ redirectAfterOAuth, onLoginSuccess, message }
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-ink-medium uppercase tracking-wider" htmlFor="auth-password">密码</label>
               {!isRegister && (
-                <a href="#" className="text-xs text-cinnabar hover:underline font-medium">忘记密码?</a>
+                <button
+                  type="button"
+                  onClick={handlePasswordReset}
+                  disabled={resetLoading}
+                  className="text-xs text-cinnabar hover:underline font-medium disabled:opacity-50"
+                >
+                  {resetLoading ? '发送中...' : '忘记密码?'}
+                </button>
               )}
             </div>
             <div className="relative">
@@ -112,6 +122,7 @@ export default function AuthForm({ redirectAfterOAuth, onLoginSuccess, message }
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
+                minLength={8}
                 className="w-full pl-10 pr-4 py-2.5 bg-white border border-rice-deep rounded-lg text-sm focus:border-cinnabar focus:ring-1 focus:ring-cinnabar outline-none transition-all placeholder:text-ink-faint/50"
                 required
               />

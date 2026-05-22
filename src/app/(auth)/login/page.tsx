@@ -2,12 +2,15 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Icon } from '@/components/icons/Icon'
 import AuthForm from '@/components/auth/AuthForm'
+import { resolveSafeNextPath } from '@/lib/auth/routes'
 
 export default function LoginPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const nextPath = resolveSafeNextPath(searchParams.get('next'))
 
   return (
     <div className="min-h-screen w-full flex bg-rice">
@@ -46,8 +49,8 @@ export default function LoginPage() {
 
         <div className="w-full max-w-md">
           <AuthForm
-            redirectAfterOAuth="/"
-            onLoginSuccess={() => { router.push('/'); router.refresh() }}
+            redirectAfterOAuth={nextPath}
+            onLoginSuccess={() => { router.push(nextPath); router.refresh() }}
           />
         </div>
       </div>
