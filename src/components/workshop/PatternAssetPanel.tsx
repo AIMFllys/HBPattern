@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 import { Icon } from '@/components/icons/Icon'
 import { useWorkshopPatterns } from '@/hooks/queries/useWorkshopPatterns'
 import { useWorkshopStore } from '@/stores/useWorkshopStore'
@@ -192,33 +192,23 @@ function SelectedPatternInfo({ pattern }: { pattern: PatternListItem }) {
 }
 
 function PatternThumb({ pattern }: { pattern: PatternListItem }) {
-  const ref = useRef<HTMLDivElement>(null)
   const thumbUrl = pattern.media?.[0]?.thumbnail_url ?? pattern.media?.[0]?.url ?? null
+  const palette = pattern.color_palette ?? []
+  const fallbackStyle =
+    palette.length >= 2
+      ? { backgroundImage: `linear-gradient(135deg, ${palette.join(', ')})` }
+      : { backgroundColor: palette[0] ?? '#ede7d9' }
 
-  useEffect(() => {
-    const element = ref.current
-    if (!element) return
-
-    element.style.backgroundImage = ''
-    element.style.background = ''
-    if (thumbUrl) {
-      element.style.backgroundImage = `url("${thumbUrl}")`
-      element.style.backgroundSize = 'cover'
-      element.style.backgroundPosition = 'center'
-    } else {
-      element.style.backgroundColor = pattern.color_palette?.[0] ?? '#ede7d9'
-    }
-  }, [pattern.color_palette, thumbUrl])
-
-  return <div ref={ref} className="h-10 w-10 flex-shrink-0 rounded-lg border border-rice-deep bg-rice-warm" />
+  return (
+    <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-rice-deep bg-rice-warm" style={fallbackStyle}>
+      {thumbUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={thumbUrl} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+      )}
+    </div>
+  )
 }
 
 function ColorDot({ color }: { color: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-
-  useEffect(() => {
-    if (ref.current) ref.current.style.backgroundColor = color
-  }, [color])
-
-  return <span ref={ref} className="h-3.5 w-3.5 rounded-full border border-white shadow-sm" />
+  return <span className="h-3.5 w-3.5 rounded-full border border-white shadow-sm" style={{ backgroundColor: color }} />
 }

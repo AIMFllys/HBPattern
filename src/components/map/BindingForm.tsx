@@ -38,8 +38,9 @@ export function BindingForm({
   return (
     <div className="mt-4 space-y-4">
       <div>
-        <label className="mb-1 block text-[11px] font-bold text-ink-light">搜索画廊纹样</label>
+        <label htmlFor="map-pattern-search" className="mb-1 block text-[11px] font-bold text-ink-light">搜索画廊纹样</label>
         <input
+          id="map-pattern-search"
           value={patternQuery}
           onChange={(event) => setPatternQuery(event.target.value)}
           className="w-full border border-rice-deep bg-rice px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
@@ -95,8 +96,9 @@ export function BindingForm({
       </div>
 
       <div>
-        <label className="mb-1 block text-[11px] font-bold text-ink-light">绑定备注</label>
+        <label htmlFor="map-binding-note" className="mb-1 block text-[11px] font-bold text-ink-light">绑定备注</label>
         <textarea
+          id="map-binding-note"
           value={bindingNote}
           onChange={(event) => setBindingNote(event.target.value)}
           rows={2}

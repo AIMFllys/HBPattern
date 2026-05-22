@@ -40,6 +40,7 @@ export const LayerPanel = memo(function LayerPanel() {
               key={layer.id}
               role="button"
               tabIndex={0}
+              aria-label={`选择图层: ${layer.name}`}
               onClick={() => setActiveLayer(layer.id)}
               onKeyDown={event => {
                 if (event.key === 'Enter' || event.key === ' ') setActiveLayer(layer.id)
