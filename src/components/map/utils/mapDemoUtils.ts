@@ -1,7 +1,31 @@
+import { z } from 'zod'
 import { findHubeiPlace, findHubeiRegion } from '@/data/map/hubei'
 import type { DemoPatternDraft, MapPatternOption } from '@/types'
 import { DEFAULT_PALETTE, MAX_ZOOM, MIN_ZOOM } from '../mapDemoTypes'
 import type { DraftForm, MapDemoState } from '../mapDemoTypes'
+
+const mapBindingSchema = z.object({
+  id: z.string().min(1),
+  patternId: z.string().min(1),
+  patternSource: z.enum(['gallery', 'demo']),
+  regionId: z.string().min(1),
+  placeId: z.string().min(1),
+  note: z.string(),
+  createdAt: z.string(),
+})
+
+const patternDraftSchema = z.object({
+  id: z.string().min(1),
+  name: z.string(),
+  description: z.string(),
+  era: z.string(),
+  technique: z.string(),
+  regionId: z.string().min(1),
+  placeId: z.string().min(1),
+  imageDataUrl: z.string().nullable(),
+  colorPalette: z.array(z.string()),
+  createdAt: z.string(),
+})
 
 export function clampZoom(value: number) {
   return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, Number(value.toFixed(2))))
@@ -53,10 +77,12 @@ export function draftToPatternOption(draft: DemoPatternDraft): MapPatternOption 
 export function parseStoredState(value: string | null): MapDemoState {
   if (!value) return { bindings: [], drafts: [] }
   try {
-    const parsed = JSON.parse(value) as Partial<MapDemoState>
+    const parsed = JSON.parse(value) as Record<string, unknown>
+    const bindings = z.array(mapBindingSchema).safeParse(parsed.bindings)
+    const drafts = z.array(patternDraftSchema).safeParse(parsed.drafts)
     return {
-      bindings: Array.isArray(parsed.bindings) ? parsed.bindings : [],
-      drafts: Array.isArray(parsed.drafts) ? parsed.drafts : [],
+      bindings: bindings.success ? bindings.data : [],
+      drafts: drafts.success ? drafts.data : [],
     }
   } catch {
     return { bindings: [], drafts: [] }

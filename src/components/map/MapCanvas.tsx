@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import type { RefObject } from 'react'
 import {
   HUBEI_MAP_LABEL_THRESHOLDS,
@@ -37,6 +38,9 @@ export function MapCanvas({
   selectRegion: (regionId: string) => void
   selectPlace: (regionId: string, placeId: string) => void
 }) {
+  const rawClipIdPrefix = useId()
+  const clipIdPrefix = rawClipIdPrefix.replace(/[^a-zA-Z0-9_-]/g, '')
+
   return (
     <div
       ref={viewportRef}
@@ -192,6 +196,7 @@ export function MapCanvas({
             const projected = projectHubeiPoint(item.place.point)
             const offset = ((index % 3) - 1) * (1.6 / zoom)
             const size = zoom >= HUBEI_MAP_LABEL_THRESHOLDS.patternThumbnail ? 3.6 / zoom : 1.6 / zoom
+            const clipId = `thumb-${clipIdPrefix}-${item.binding.id}`
             return (
               <g key={item.binding.id}>
                 <g
@@ -213,7 +218,7 @@ export function MapCanvas({
                   />
                   {zoom >= HUBEI_MAP_LABEL_THRESHOLDS.patternThumbnail && item.pattern.imageUrl && (
                     <>
-                      <clipPath id={`thumb-${item.binding.id}`}>
+                      <clipPath id={clipId}>
                         <circle cx={projected.x + offset} cy={projected.y - 2.8 / zoom} r={size * 0.58} />
                       </clipPath>
                       <image
@@ -222,7 +227,7 @@ export function MapCanvas({
                         y={projected.y - 2.8 / zoom - size * 0.58}
                         width={size * 1.16}
                         height={size * 1.16}
-                        clipPath={`url(#thumb-${item.binding.id})`}
+                        clipPath={`url(#${clipId})`}
                         preserveAspectRatio="xMidYMid slice"
                       />
                     </>

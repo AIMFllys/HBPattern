@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useReducer, useRef } from 'react'
 import type { PointerEvent, WheelEvent } from 'react'
 import {
   HUBEI_MAP_LABEL_THRESHOLDS,
@@ -18,15 +18,13 @@ import { MapInfoPanel } from './MapInfoPanel'
 import { MapLegend } from './MapLegend'
 import { MapPlaceDetail } from './MapPlaceDetail'
 import { MapSidebar } from './MapSidebar'
-import { DEFAULT_VIEW } from './mapDemoTypes'
-import type { DemoMode, DisplayBinding, DraftForm, DragState } from './mapDemoTypes'
+import type { DisplayBinding, DraftForm, DragState } from './mapDemoTypes'
+import { createInitialMapDemoState, mapDemoReducer } from './useMapDemoState'
 import {
   clampZoom,
-  createEmptyDraft,
   createId,
   draftToPatternOption,
   ensurePlaceId,
-  getFirstPlaceId,
   parseStoredState,
 } from './utils/mapDemoUtils'
 import { readImageForDemo } from './utils/imageProcessing'
@@ -38,35 +36,43 @@ interface HubeiMapClientProps {
 export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps) {
   const viewportRef = useRef<HTMLDivElement>(null)
   const dragRef = useRef<DragState | null>(null)
-  const [zoom, setZoom] = useState(DEFAULT_VIEW.zoom)
-  const [pan, setPan] = useState(DEFAULT_VIEW.pan)
-  const [selectedRegionId, setSelectedRegionId] = useState('wuhan')
-  const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null)
-  const [mode, setMode] = useState<DemoMode>('bind')
-  const [patternQuery, setPatternQuery] = useState('')
-  const [selectedPatternId, setSelectedPatternId] = useState(initialPatterns[0]?.id ?? '')
-  const [bindingRegionId, setBindingRegionId] = useState('wuhan')
-  const [bindingPlaceId, setBindingPlaceId] = useState(getFirstPlaceId('wuhan'))
-  const [bindingNote, setBindingNote] = useState('')
-  const [bindings, setBindings] = useState<DemoMapBinding[]>([])
-  const [drafts, setDrafts] = useState<DemoPatternDraft[]>([])
-  const [draftForm, setDraftForm] = useState<DraftForm>(createEmptyDraft())
-  const [imageError, setImageError] = useState('')
-  const [storageReady, setStorageReady] = useState(false)
+  const [state, dispatch] = useReducer(
+    mapDemoReducer,
+    initialPatterns[0]?.id ?? '',
+    createInitialMapDemoState,
+  )
+  const {
+    zoom,
+    pan,
+    selectedRegionId,
+    selectedPlaceId,
+    mode,
+    patternQuery,
+    selectedPatternId,
+    bindingRegionId,
+    bindingPlaceId,
+    bindingNote,
+    bindings,
+    drafts,
+    draftForm,
+    imageError,
+    storageReady,
+  } = state
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const stored = parseStoredState(window.localStorage.getItem(HUBEI_MAP_STORAGE_KEY))
-      setBindings(stored.bindings)
-      setDrafts(stored.drafts)
-      setStorageReady(true)
+      dispatch({ type: 'hydrateStorage', stored })
     }, 0)
     return () => window.clearTimeout(timer)
   }, [])
 
   useEffect(() => {
     if (!storageReady) return
-    window.localStorage.setItem(HUBEI_MAP_STORAGE_KEY, JSON.stringify({ bindings, drafts }))
+    const timer = window.setTimeout(() => {
+      window.localStorage.setItem(HUBEI_MAP_STORAGE_KEY, JSON.stringify({ bindings, drafts }))
+    }, 350)
+    return () => window.clearTimeout(timer)
   }, [bindings, drafts, storageReady])
 
   const selectedRegion = findHubeiRegion(selectedRegionId) ?? hubeiRegions[0]
@@ -122,7 +128,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   )
 
   function updateZoom(nextZoom: number) {
-    setZoom(clampZoom(nextZoom))
+    dispatch({ type: 'setZoom', zoom: clampZoom(nextZoom) })
   }
 
   function handleWheel(event: WheelEvent<HTMLDivElement>) {
@@ -145,10 +151,13 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
     const dx = ((event.clientX - drag.x) / rect.width) * 100
     const dy = ((event.clientY - drag.y) / rect.height) * 100
     dragRef.current = { ...drag, x: event.clientX, y: event.clientY }
-    setPan(current => ({
-      x: current.x + dx / zoom,
-      y: current.y + dy / zoom,
-    }))
+    dispatch({
+      type: 'setPan',
+      pan: {
+        x: pan.x + dx / zoom,
+        y: pan.y + dy / zoom,
+      },
+    })
   }
 
   function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
@@ -159,21 +168,11 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   }
 
   function resetView() {
-    setZoom(DEFAULT_VIEW.zoom)
-    setPan(DEFAULT_VIEW.pan)
-    syncSelectedLocation('wuhan', null)
+    dispatch({ type: 'resetView' })
   }
 
   function syncSelectedLocation(regionId: string, placeId: string | null) {
-    setSelectedRegionId(regionId)
-    setSelectedPlaceId(placeId)
-    setBindingRegionId(regionId)
-    setBindingPlaceId(placeId ?? getFirstPlaceId(regionId))
-    setDraftForm(current => ({
-      ...current,
-      regionId,
-      placeId: placeId ?? getFirstPlaceId(regionId),
-    }))
+    dispatch({ type: 'syncSelectedLocation', regionId, placeId })
   }
 
   function selectRegion(regionId: string) {
@@ -189,31 +188,25 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
     if (!region) return
     const point = projectHubeiPoint(region.point)
     syncSelectedLocation(regionId, null)
-    setZoom(1.55)
-    setPan({ x: 50 - point.x, y: 50 - point.y })
+    dispatch({ type: 'setZoom', zoom: 1.55 })
+    dispatch({ type: 'setPan', pan: { x: 50 - point.x, y: 50 - point.y } })
   }
 
   function updateBindingRegion(regionId: string) {
-    const placeId = getFirstPlaceId(regionId)
-    setBindingRegionId(regionId)
-    setBindingPlaceId(placeId)
+    dispatch({ type: 'updateBindingRegion', regionId })
   }
 
   function updateDraftRegion(regionId: string) {
-    setDraftForm(current => ({
-      ...current,
-      regionId,
-      placeId: getFirstPlaceId(regionId),
-    }))
+    dispatch({ type: 'updateDraftRegion', regionId })
   }
 
   function updateDraftForm(patch: Partial<DraftForm>) {
-    setDraftForm(current => ({ ...current, ...patch }))
+    dispatch({ type: 'patchDraftForm', patch })
   }
 
   function createDraftFromQuery() {
-    setDraftForm(current => ({ ...current, name: patternQuery }))
-    setMode('create')
+    dispatch({ type: 'patchDraftForm', patch: { name: patternQuery } })
+    dispatch({ type: 'setMode', mode: 'create' })
   }
 
   function addBinding() {
@@ -228,10 +221,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
       note: bindingNote.trim(),
       createdAt: new Date().toISOString(),
     }
-    setBindings(current => [next, ...current])
-    setBindingNote('')
-    selectPlace(bindingRegionId, placeId)
-    setZoom(current => Math.max(current, 1.25))
+    dispatch({ type: 'addBinding', binding: next, minZoom: 1.25 })
   }
 
   function saveDraftAndBind() {
@@ -259,32 +249,25 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
       note: '由地图页本地 Demo 新建',
       createdAt: now,
     }
-    setDrafts(current => [draft, ...current])
-    setBindings(current => [binding, ...current])
-    setSelectedPatternId(id)
-    setPatternQuery('')
-    setDraftForm(createEmptyDraft(draft.regionId, draft.placeId))
-    setMode('bind')
-    selectPlace(draft.regionId, draft.placeId)
-    setZoom(current => Math.max(current, 1.45))
+    dispatch({ type: 'addDraftAndBinding', draft, binding, minZoom: 1.45 })
   }
 
   function removeBinding(bindingId: string) {
-    setBindings(current => current.filter(binding => binding.id !== bindingId))
+    dispatch({ type: 'removeBinding', bindingId })
   }
 
   async function handleDraftImage(file: File | undefined) {
     if (!file) return
     if (!file.type.startsWith('image/')) {
-      setImageError('请选择图片文件')
+      dispatch({ type: 'setImageError', message: '请选择图片文件' })
       return
     }
-    setImageError('')
+    dispatch({ type: 'setImageError', message: '' })
     try {
       const { dataUrl, palette } = await readImageForDemo(file)
       updateDraftForm({ imageDataUrl: dataUrl, colorPalette: palette })
     } catch {
-      setImageError('图片读取失败，请换一张图片重试')
+      dispatch({ type: 'setImageError', message: '图片读取失败，请换一张图片重试' })
     }
   }
 
@@ -310,13 +293,13 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         draftAnalysis={draftAnalysis}
         resetView={resetView}
         focusRegion={focusRegion}
-        setMode={setMode}
-        setPatternQuery={setPatternQuery}
-        setSelectedPatternId={setSelectedPatternId}
+        setMode={(nextMode) => dispatch({ type: 'setMode', mode: nextMode })}
+        setPatternQuery={(query) => dispatch({ type: 'setPatternQuery', query })}
+        setSelectedPatternId={(patternId) => dispatch({ type: 'setSelectedPatternId', patternId })}
         createDraftFromQuery={createDraftFromQuery}
         updateBindingRegion={updateBindingRegion}
-        setBindingPlaceId={setBindingPlaceId}
-        setBindingNote={setBindingNote}
+        setBindingPlaceId={(placeId) => dispatch({ type: 'setBindingPlaceId', placeId })}
+        setBindingNote={(note) => dispatch({ type: 'setBindingNote', note })}
         addBinding={addBinding}
         updateDraftRegion={updateDraftRegion}
         updateDraftForm={updateDraftForm}
