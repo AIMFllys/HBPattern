@@ -21,7 +21,7 @@ export const ToolBar = memo(function ToolBar() {
   const resetViewport = useWorkshopStore(state => state.resetViewport)
 
   return (
-    <aside className="hidden w-14 flex-col items-center gap-2 border-r border-rice-deep bg-rice py-4 md:flex">
+    <aside className="hidden w-14 flex-col items-center gap-2 border-r border-rice-deep bg-rice py-4 lg:flex">
       {TOOLS.map(tool => {
         const isActive = activeTool === tool.id
         return (

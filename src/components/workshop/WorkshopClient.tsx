@@ -27,6 +27,7 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
   const resetViewport = useWorkshopStore(state => state.resetViewport)
   const setActiveTool = useWorkshopStore(state => state.setActiveTool)
   const setIsExporting = useWorkshopStore(state => state.setIsExporting)
+  const addColorLayer = useWorkshopStore(state => state.addColorLayer)
   const activeLayerId = useWorkshopStore(state => state.activeLayerId)
   const removeLayer = useWorkshopStore(state => state.removeLayer)
   const zoom = useWorkshopStore(state => state.zoom)
@@ -85,7 +86,7 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
   }, [activeLayerId, removeLayer, resetViewport, setActiveTool, setIsExporting, setZoom, zoom])
 
   return (
-    <div className="relative flex h-screen w-full flex-col overflow-hidden bg-rice pb-14 md:pb-0">
+    <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-rice pb-14 lg:pb-0">
       <SiteHeader logoIcon="grid_view" siteName="纹样+ 跨界创作工坊" primaryColor="gold" />
 
       <main className="relative flex flex-1 overflow-hidden">
@@ -101,6 +102,7 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
             canRedo={history.canRedo}
             undo={history.undo}
             redo={history.redo}
+            addColorLayer={addColorLayer}
             openExport={() => setIsExporting(true)}
           />
 

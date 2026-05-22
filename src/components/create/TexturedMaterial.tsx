@@ -18,16 +18,17 @@ export function TexturedMaterial({
   const materialParams = useCreateStore(state => state.materialParams)
   const textureParams = useCreateStore(state => state.textureParams)
   const texture = usePatternTexture()
+  const showBaseSurface = materialParams.showBaseSurface
 
   return (
     <meshStandardMaterial
-      color={materialParams.baseColor}
+      color={showBaseSurface ? materialParams.baseColor : '#ffffff'}
       map={texture}
       metalness={(metalnessOverride ?? materialParams.metalness) / 100}
-      opacity={texture ? textureParams.opacity / 100 : 1}
+      opacity={showBaseSurface ? 1 : texture ? textureParams.opacity / 100 : 1}
       roughness={(roughnessOverride ?? materialParams.roughness) / 100}
       side={side}
-      transparent={Boolean(texture)}
+      transparent={Boolean(texture) && (!showBaseSurface || textureParams.opacity < 100)}
     />
   )
 }

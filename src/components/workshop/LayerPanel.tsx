@@ -2,6 +2,7 @@
 
 import { memo, useCallback } from 'react'
 import ParameterSlider from '@/components/ui/ParameterSlider'
+import { ColorPicker } from '@/components/ui/ColorPicker'
 import { Icon } from '@/components/icons/Icon'
 import { useWorkshopStore } from '@/stores/useWorkshopStore'
 import { BLEND_MODE_LABELS } from '@/types/workshop'
@@ -117,7 +118,7 @@ export const LayerPanel = memo(function LayerPanel() {
                 <Icon name="keyboard_arrow_down" size={16} />
               </button>
 
-              {layer.type !== 'color-fill' && (
+              {layer.id !== 'workshop-background' && (
                 <button
                   type="button"
                   onClick={event => {
@@ -161,6 +162,13 @@ function ActiveLayerControls() {
         onChange={value => updateLayer(activeLayerId, { opacity: value })}
         primaryColor="gold"
       />
+      {layer.type === 'color-fill' ? (
+        <ColorPicker
+          value={layer.fillColor ?? '#ffffff'}
+          onChange={color => updateLayer(activeLayerId, { fillColor: color })}
+          label="填充颜色"
+        />
+      ) : (
       <label className="flex items-center gap-2">
         <span className="text-xs font-bold uppercase tracking-tighter text-ink-faint">混合</span>
         <select
@@ -175,6 +183,7 @@ function ActiveLayerControls() {
           ))}
         </select>
       </label>
+      )}
     </div>
   )
 }

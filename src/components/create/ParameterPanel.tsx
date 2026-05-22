@@ -109,6 +109,15 @@ export const ParameterPanel = memo(function ParameterPanel() {
 
           <div className="min-w-[168px]">
             <ColorPicker value={materialParams.baseColor} onChange={handleBaseColorChange} label="底色 BASE" />
+            <label className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-rice-deep bg-rice-warm px-3 py-2 text-xs font-bold text-ink-light">
+              <span>纯色轮廓</span>
+              <input
+                type="checkbox"
+                checked={materialParams.showBaseSurface}
+                onChange={event => setMaterialParam('showBaseSurface', event.target.checked)}
+                className="h-4 w-4 accent-cinnabar"
+              />
+            </label>
           </div>
         </div>
       </div>

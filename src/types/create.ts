@@ -71,6 +71,7 @@ export interface TextureParams {
 
 export interface MaterialParams {
   baseColor: string
+  showBaseSurface: boolean
   roughness: number
   metalness: number
 }
@@ -94,6 +95,7 @@ export const DEFAULT_TEXTURE_PARAMS: TextureParams = {
 
 export const DEFAULT_MATERIAL_PARAMS: MaterialParams = {
   baseColor: '#f5f0e8',
+  showBaseSurface: true,
   roughness: 60,
   metalness: 0,
 }

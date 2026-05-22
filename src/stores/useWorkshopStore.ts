@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { createPatternPlaceholderDataUrl } from '@/lib/patternPlaceholder'
 import type { PatternListItem } from '@/types/pattern'
 import type {
   ColorAdjustParams,
@@ -28,6 +29,7 @@ interface WorkshopState {
   activeLayerId: string | null
   addLayer: (layer: Omit<WorkshopLayer, 'id' | 'createdAt'> & { id?: string }) => string
   addPatternLayer: (pattern: PatternListItem, options?: { activateOnly?: boolean }) => string | null
+  addColorLayer: (color?: string) => string
   removeLayer: (id: string) => void
   updateLayer: (id: string, updates: Partial<WorkshopLayer>) => void
   replaceLayers: (layers: SerializableLayer[], activeLayerId?: string | null) => void
@@ -85,7 +87,11 @@ function createBackgroundLayer(): WorkshopLayer {
 }
 
 function getPrimaryImageUrl(pattern: PatternListItem) {
-  return pattern.media?.[0]?.url ?? null
+  return pattern.media?.[0]?.url ?? createPatternPlaceholderDataUrl({
+    name: pattern.name,
+    subtitle: [pattern.era, pattern.region?.name].filter(Boolean).join(' · ') || '湖北纹样',
+    palette: pattern.color_palette,
+  })
 }
 
 function toRuntimeLayer(layer: SerializableLayer): WorkshopLayer {
@@ -119,7 +125,6 @@ export const useWorkshopStore = create<WorkshopState>((set, get) => ({
   },
   addPatternLayer: (pattern, options) => {
     const imageUrl = getPrimaryImageUrl(pattern)
-    if (!imageUrl) return null
 
     if (options?.activateOnly) {
       const existing = get().layers.find(layer => layer.sourcePatternId === pattern.id)
@@ -155,6 +160,25 @@ export const useWorkshopStore = create<WorkshopState>((set, get) => ({
       layers: [...state.layers, layer],
       activeLayerId: id,
     }))
+    return id
+  },
+  addColorLayer: (color = '#f5f0e8') => {
+    const id = createLayerId('color')
+    const layer: WorkshopLayer = {
+      id,
+      name: '纯色底纹',
+      type: 'color-fill',
+      visible: true,
+      locked: false,
+      opacity: 100,
+      blendMode: 'source-over',
+      fillColor: color,
+      transform: { ...DEFAULT_LAYER_TRANSFORM },
+      colorAdjust: { ...DEFAULT_COLOR_ADJUST },
+      loadStatus: 'loaded',
+      createdAt: Date.now(),
+    }
+    set(state => ({ layers: [...state.layers, layer], activeLayerId: id }))
     return id
   },
   removeLayer: id =>

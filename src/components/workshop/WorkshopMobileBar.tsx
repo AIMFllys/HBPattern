@@ -37,7 +37,7 @@ export function WorkshopMobileBar({ initialPatterns, initialTotal }: WorkshopMob
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-rice-deep bg-white px-3 py-2 shadow-modal md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-rice-deep bg-white px-3 py-2 shadow-modal lg:hidden">
         <MobileButton
           icon="auto_awesome"
           label="纹样"
@@ -71,7 +71,7 @@ export function WorkshopMobileBar({ initialPatterns, initialTotal }: WorkshopMob
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed bottom-14 left-0 right-0 z-30 max-h-[72vh] overflow-hidden rounded-t-2xl border-t border-rice-deep bg-white shadow-modal md:hidden"
+            className="fixed bottom-14 left-0 right-0 z-30 max-h-[72vh] overflow-hidden rounded-t-2xl border-t border-rice-deep bg-white shadow-modal lg:hidden"
           >
             <div className="flex items-center justify-between border-b border-rice-deep px-4 py-2">
               <span className="h-1 w-10 rounded-full bg-rice-deep" />

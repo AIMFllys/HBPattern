@@ -12,6 +12,7 @@ interface WorkshopTopBarProps {
   canRedo: boolean
   undo: () => void
   redo: () => void
+  addColorLayer: () => void
   openExport: () => void
 }
 
@@ -25,6 +26,7 @@ export function WorkshopTopBar({
   canRedo,
   undo,
   redo,
+  addColorLayer,
   openExport,
 }: WorkshopTopBarProps) {
   const activePreset =
@@ -73,6 +75,15 @@ export function WorkshopTopBar({
         <span className="hidden text-xs font-medium text-ink-faint md:inline">
           {canvasSize.width} × {canvasSize.height}
         </span>
+        <button
+          type="button"
+          onClick={addColorLayer}
+          className="flex h-8 w-8 items-center justify-center rounded border border-rice-deep bg-white text-ink-light transition-colors hover:border-gold/40 hover:text-gold"
+          title="添加纯色底纹"
+          aria-label="添加纯色底纹"
+        >
+          <Icon name="format_color_fill" size={15} />
+        </button>
         <select
           value={activePreset}
           onChange={event => {
