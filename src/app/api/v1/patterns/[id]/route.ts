@@ -5,6 +5,7 @@ import { withApi } from '@/lib/api/withApi'
 import { parseOrThrow } from '@/lib/validation/parse'
 import { PatternIdParam } from '@/lib/validation/schemas'
 import { handleOptions } from '@/lib/api/cors'
+import { rateLimit, clientIp } from '@/lib/rate-limit'
 
 /**
  * @api GET /api/v1/patterns/:id
@@ -12,7 +13,8 @@ import { handleOptions } from '@/lib/api/cors'
  * @tag Patterns
  */
 export const GET = withApi<object, { params: Promise<{ id: string }> }>(
-  async (_req, ctx) => {
+  async (req, ctx) => {
+    rateLimit('GET /api/v1/patterns/[id]', clientIp(req.headers))
     const { id } = parseOrThrow(PatternIdParam, await ctx.params)
     const pattern = await getPatternById(id)
     if (!pattern) throw new AppError('PATTERN_NOT_FOUND', '纹样不存在')

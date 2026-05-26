@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useRouter } from 'next/navigation'
 
@@ -16,6 +16,21 @@ export default function LikeButton({ patternId, initialLiked, initialCount }: Li
   const [animating, setAnimating] = useState(false)
   const user = useAuthStore((s) => s.user)
   const router = useRouter()
+
+  // 服务端渲染无法获知当前用户的点赞状态（页面以 initialLiked=false 占位），
+  // 登录用户挂载后向 GET 接口拉取真实状态，避免「已点赞却显示空心」。
+  // 未登录时保持占位的 false，不在 effect 中同步 setState。
+  useEffect(() => {
+    if (!user) return
+    const controller = new AbortController()
+    fetch(`/api/patterns/${patternId}/like`, { signal: controller.signal })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((res) => {
+        if (res?.data) setLiked(!!res.data.liked)
+      })
+      .catch(() => {})
+    return () => controller.abort()
+  }, [patternId, user])
 
   async function handleClick() {
     if (!user) { router.push('/login'); return }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { TexturedMaterial } from '../TexturedMaterial'
@@ -27,6 +27,9 @@ export default function TShirt() {
     shape.lineTo(-0.7, -1.2)
     return new THREE.ShapeGeometry(shape, 32)
   }, [])
+
+  // 手动 new 的几何体不会被 R3F 自动释放，卸载时显式 dispose 以回收 GPU 资源。
+  useEffect(() => () => tshirtGeometry.dispose(), [tshirtGeometry])
 
   useFrame(state => {
     if (!groupRef.current) return

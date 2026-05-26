@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "dev": "next dev -p 6427",
+        "prebuild": "tsx scripts/check-env.ts",
         "build": "next build",
         "start": "next start",
         "lint": "eslint . --max-warnings=0 && npm run lint:guards",

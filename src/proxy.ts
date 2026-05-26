@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from "next/server"
 import { resolveRequestId } from "@/lib/api/requestId"
 import { SECURITY_HEADERS } from "@/lib/security/headers"
 import { buildCsp } from "@/lib/security/csp"
+import { corsHeaders } from "@/lib/api/cors"
 import { AUTH_ROUTES, isProtectedPagePath, resolveSafeNextPath } from "@/lib/auth/routes"
 
 export async function proxy(request: NextRequest) {
@@ -63,11 +64,15 @@ export async function proxy(request: NextRequest) {
   // 注入安全 headers
   withSecurityHeaders(supabaseResponse)
 
-  // 为公开 API (v1) 注入 CORS headers
+  // 为公开 API (v1) 注入 CORS headers。
+  // 使用 corsHeaders() 作为单一真相源，使实际响应与 OPTIONS 预检
+  // (lib/api/cors.ts) 行为一致，并尊重 CORS_ALLOWED_ORIGINS 白名单
+  // （未配置时默认 '*'，适用于公开只读 API）。
   if (request.nextUrl.pathname.startsWith('/api/v1/')) {
-    supabaseResponse.headers.set('Access-Control-Allow-Origin', '*')
-    supabaseResponse.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS')
-    supabaseResponse.headers.set('Access-Control-Allow-Headers', 'Content-Type, X-API-Key, X-Request-Id')
+    const origin = request.headers.get('origin')
+    Object.entries(corsHeaders(origin)).forEach(([k, v]) =>
+      supabaseResponse.headers.set(k, v)
+    )
   }
 
   return supabaseResponse
@@ -76,6 +81,14 @@ export async function proxy(request: NextRequest) {
 function withSecurityHeaders(response: NextResponse) {
   Object.entries(SECURITY_HEADERS).forEach(([k, v]) => response.headers.set(k, v))
   response.headers.set('Content-Security-Policy', buildCsp())
+  // HSTS 仅在生产环境注入（HTTPS 部署）。浏览器仅在 HTTPS 响应上处理该头，
+  // 但开发环境（http）下显式跳过以避免本地自签名场景的副作用。
+  if (process.env.NODE_ENV === 'production') {
+    response.headers.set(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubDomains',
+    )
+  }
   return response
 }
 

@@ -14,8 +14,17 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || process.en
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 const BUCKET = 'pattern-images'
 
-// Replace this with the actual path to your AI generated images if needed
-const AI_IMAGES_DIR = 'C:\\Users\\Lenovo\\.gemini\\antigravity\\brain\\e4f74918-6a84-46ee-acec-ac83442c2b61'
+// Directory holding the AI-generated source images. Configure via env to avoid
+// committing machine-specific paths (see AGENTS.md). Example:
+//   AI_IMAGES_DIR=/path/to/ai-images npx tsx scripts/import-ai-patterns.ts
+const AI_IMAGES_DIR: string = (() => {
+  const dir = process.env.AI_IMAGES_DIR
+  if (!dir) {
+    console.error('❌ AI_IMAGES_DIR is not set. Point it at the directory of AI-generated images.')
+    process.exit(1)
+  }
+  return dir
+})()
 
 async function getAdminUser() {
   return '00000000-0000-0000-0009-000000000001'

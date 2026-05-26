@@ -28,7 +28,10 @@ export async function getPatterns(opts: {
   if (era) query = query.eq('era', era)
   if (region) query = query.eq('region_id', region)
   if (q) {
-    const sanitized = q.replace(/[%_]/g, '')
+    // 同时剥离 ILIKE 通配符 (%, _) 与 PostgREST `.or()` 过滤表达式的元字符
+    // (, ) , 和 * —— 否则攻击者可借公开搜索注入额外过滤子句
+    // （例如改写 status 条件以暴露 pending/rejected 记录）。
+    const sanitized = q.replace(/[%_,()*\\]/g, '').trim()
     if (sanitized) query = query.or(`name.ilike.%${sanitized}%,description.ilike.%${sanitized}%`)
   }
 

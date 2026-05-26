@@ -25,8 +25,17 @@ const imageMap: Record<string, string> = {
   'seed/ai-fengniao.webp': 'ai_fengniao',
 }
 
-// Directory where generated images are stored
-const IMAGES_DIR = String.raw`C:\Users\Lenovo\.gemini\antigravity\brain\92d124e6-0069-4a6b-965c-b531cd383849`
+// Directory where generated seed images are stored. Configure via env to avoid
+// committing machine-specific paths (see AGENTS.md). Example:
+//   SEED_IMAGES_DIR=/path/to/seed-images npx tsx scripts/upload-seed-images.ts
+const IMAGES_DIR: string = (() => {
+  const dir = process.env.SEED_IMAGES_DIR
+  if (!dir) {
+    console.error('❌ SEED_IMAGES_DIR is not set. Point it at the directory of generated seed images.')
+    process.exit(1)
+  }
+  return dir
+})()
 
 async function findImage(baseName: string): Promise<string | null> {
   const files = fs.readdirSync(IMAGES_DIR)
