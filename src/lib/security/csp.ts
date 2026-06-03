@@ -13,6 +13,9 @@ export function buildCsp(): string {
     'font-src': ["'self'"],
     'connect-src': ["'self'", '*.supabase.co', ...(isDev ? ['ws://localhost:*'] : [])],
     'frame-ancestors': ["'none'"],
+    // 防御性收紧：禁止 <object>/<embed> 插件与 <base> 标签劫持。
+    'object-src': ["'none'"],
+    'base-uri': ["'self'"],
   }
 
   return Object.entries(directives)

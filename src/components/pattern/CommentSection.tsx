@@ -19,9 +19,14 @@ export default function CommentSection({ patternId }: { patternId: string }) {
   const user = useAuthStore((s) => s.user)
 
   useEffect(() => {
-    fetch(`/api/patterns/${patternId}/comments`)
+    const controller = new AbortController()
+    fetch(`/api/patterns/${patternId}/comments`, { signal: controller.signal })
       .then((r) => r.json())
       .then((res) => setComments(res.data ?? []))
+      .catch((err) => {
+        if (err?.name !== 'AbortError') setComments([])
+      })
+    return () => controller.abort()
   }, [patternId])
 
   async function handleSubmit(e: React.FormEvent) {
@@ -55,7 +60,7 @@ export default function CommentSection({ patternId }: { patternId: string }) {
       {user ? (
         <form onSubmit={handleSubmit} className="mb-8 flex gap-3">
           <div className="w-9 h-9 rounded-full bg-cinnabar/10 flex items-center justify-center text-cinnabar text-sm font-bold shrink-0">
-            {user.nickname[0]}
+            {user.nickname?.[0] ?? '匿'}
           </div>
           <div className="flex-1">
             <textarea
@@ -91,11 +96,11 @@ export default function CommentSection({ patternId }: { patternId: string }) {
           {topLevel.map((comment) => (
             <div key={comment.id} className="flex gap-3">
               <div className="w-8 h-8 rounded-full bg-rice-warm flex items-center justify-center text-xs font-bold text-ink-medium shrink-0">
-                {comment.user.nickname[0]}
+                {comment.user?.nickname?.[0] ?? '匿'}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-ink">{comment.user.nickname}</span>
+                  <span className="text-sm font-bold text-ink">{comment.user?.nickname ?? '匿名用户'}</span>
                   <span className="text-xs text-ink-faint">{new Date(comment.created_at).toLocaleDateString('zh-CN')}</span>
                 </div>
                 <p className="text-sm text-ink-medium mt-1">{comment.content}</p>

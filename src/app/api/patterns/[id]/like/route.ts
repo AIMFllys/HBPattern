@@ -28,8 +28,21 @@ export const POST = withApi<{ liked: boolean; likeCount: number }, LikeCtx>(
     // 步骤 2：鉴权（未登录抛 UNAUTHORIZED → 401）
     await requireAuth()
 
-    // 步骤 3：调用 RPC 切换点赞状态
     const supabase = await createClient()
+
+    // 步骤 2b：确认纹样存在且可见，避免对不存在的纹样触发 RPC 的 FK 错误（500），
+    //          改为返回明确的 404。
+    const { data: target } = await supabase
+      .from('hp_patterns')
+      .select('id')
+      .eq('id', id)
+      .in('status', ['approved', 'featured'])
+      .maybeSingle()
+    if (!target) {
+      throw new AppError('PATTERN_NOT_FOUND', '纹样不存在')
+    }
+
+    // 步骤 3：调用 RPC 切换点赞状态
     const { data, error } = await supabase.rpc('hp_toggle_like', { p_pattern_id: id })
 
     if (error) {

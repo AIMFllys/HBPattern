@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { TexturedMaterial } from '../TexturedMaterial'
@@ -12,6 +12,9 @@ export default function Fan() {
     const theta = Math.PI * 0.72
     return new THREE.CircleGeometry(2, 64, -theta / 2 + Math.PI / 2, theta)
   }, [])
+
+  // 手动 new 的几何体不会被 R3F 自动释放，卸载时显式 dispose 以回收 GPU 资源。
+  useEffect(() => () => fanGeometry.dispose(), [fanGeometry])
 
   const boneAngles = useMemo(() => {
     const theta = Math.PI * 0.72

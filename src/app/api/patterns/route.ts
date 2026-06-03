@@ -47,13 +47,20 @@ export const POST = withApi(async (req: NextRequest) => {
     throw new AppError('INTERNAL_ERROR', '创建失败', { cause: error })
   }
 
-  // 步骤 5：回填 hp_pattern_media
-  await supabase.from('hp_pattern_media').insert({
+  // 步骤 5：回填 hp_pattern_media。
+  // PostgREST 无法跨语句事务，故媒体写入失败时手动删除刚创建的纹样，
+  // 避免留下无图的孤儿记录（画廊会渲染出缺图卡片）。
+  const { error: mediaError } = await supabase.from('hp_pattern_media').insert({
     pattern_id: pattern.id,
     media_type: 'image',
     url: body.imageUrl,
     sort_order: 0,
   })
+
+  if (mediaError) {
+    await supabase.from('hp_patterns').delete().eq('id', pattern.id)
+    throw new AppError('INTERNAL_ERROR', '创建失败', { cause: mediaError })
+  }
 
   return ok(pattern, { status: 201 })
 })

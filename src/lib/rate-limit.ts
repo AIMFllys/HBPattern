@@ -12,6 +12,11 @@ export const QUOTAS = {
   'POST /api/patterns': { windowSec: 60, max: 10 },
   'POST /api/upload': { windowSec: 60, max: 20 },
   'POST /api/patterns/[id]/comments': { windowSec: 60, max: 30 },
+  // 公开只读 API（v1）：按来源 IP 限流，防止匿名抓取 / DoS。
+  'GET /api/v1/patterns': { windowSec: 60, max: 120 },
+  'GET /api/v1/patterns/[id]': { windowSec: 60, max: 120 },
+  'GET /api/v1/regions': { windowSec: 60, max: 120 },
+  'GET /api/v1/stats': { windowSec: 60, max: 120 },
 } as const satisfies Record<string, RateLimitQuota>
 
 export type QuotaKey = keyof typeof QUOTAS
@@ -68,6 +73,19 @@ export function rateLimit(quota: QuotaKey, subjectId: string): void {
     const retryAfterSec = Math.ceil((entry.resetAt - now) / 1000)
     throw new RateLimitError(retryAfterSec)
   }
+}
+
+/**
+ * 从请求头解析客户端 IP，作为匿名（未登录）请求的限流主体。
+ * 取 `x-forwarded-for` 的首个 IP；回退到 `x-real-ip`；都缺失时返回 'anonymous'。
+ */
+export function clientIp(headers: Headers): string {
+  const xff = headers.get('x-forwarded-for')
+  if (xff) {
+    const first = xff.split(',')[0]?.trim()
+    if (first) return first
+  }
+  return headers.get('x-real-ip')?.trim() || 'anonymous'
 }
 
 /**

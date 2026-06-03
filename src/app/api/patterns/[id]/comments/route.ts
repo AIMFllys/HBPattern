@@ -29,6 +29,7 @@ export const GET = withApi<unknown, CommentCtx>(async (_req: NextRequest, ctx: C
     .eq('pattern_id', id)
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
+    .limit(200) // 防止热门纹样返回无上限的评论列表
 
   if (error) {
     throw new AppError('INTERNAL_ERROR', '获取评论失败', { cause: error })
@@ -52,6 +53,18 @@ export const POST = withApi<unknown, CommentCtx>(async (req: NextRequest, ctx: C
 
   // 步骤 5：写库
   const supabase = await createClient()
+
+  // 5a：确认目标纹样存在且对外可见，避免在 pending/rejected/不存在的纹样上
+  //     产生孤儿评论（GET 仅返回 approved，写入后将永不可见），并返回干净的 404。
+  const { data: target } = await supabase
+    .from('hp_patterns')
+    .select('id')
+    .eq('id', id)
+    .in('status', ['approved', 'featured'])
+    .maybeSingle()
+  if (!target) {
+    throw new AppError('PATTERN_NOT_FOUND', '纹样不存在')
+  }
 
   const { data, error } = await supabase
     .from('hp_comments')

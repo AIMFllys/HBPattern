@@ -86,19 +86,19 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
             <div className="flex gap-4 flex-wrap">
               {pattern.region && (
                 <div className="flex items-center gap-2 bg-gold/10 px-4 py-1 rounded-full border border-gold/20">
-                  <span className="material-symbols-outlined text-sm">location_on</span>
+                  <span aria-hidden="true" className="material-symbols-outlined text-sm">location_on</span>
                   <span className="text-sm font-medium">{pattern.region.name}</span>
                 </div>
               )}
               {pattern.technique && (
                 <div className="flex items-center gap-2 bg-gold/10 px-4 py-1 rounded-full border border-gold/20">
-                  <span className="material-symbols-outlined text-sm">brush</span>
+                  <span aria-hidden="true" className="material-symbols-outlined text-sm">brush</span>
                   <span className="text-sm font-medium">{pattern.technique.name}</span>
                 </div>
               )}
               {pattern.ich_record && (
                 <div className="flex items-center gap-2 bg-cinnabar/10 px-4 py-1 rounded-full border border-cinnabar/20">
-                  <span className="material-symbols-outlined text-sm">verified</span>
+                  <span aria-hidden="true" className="material-symbols-outlined text-sm">verified</span>
                   <span className="text-sm font-medium">{pattern.ich_record.name}（{pattern.ich_record.level === 'national' ? '国家级' : '省级'}非遗）</span>
                 </div>
               )}
@@ -153,7 +153,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-2xl font-bold tracking-widest">相关纹样</h3>
               <Link href="/gallery" className="text-sm text-gold font-bold flex items-center gap-1 hover:underline">
-                查看更多 <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                查看更多 <span aria-hidden="true" className="material-symbols-outlined text-sm">arrow_forward</span>
               </Link>
             </div>
 

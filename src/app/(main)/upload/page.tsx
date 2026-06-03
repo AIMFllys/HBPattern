@@ -26,11 +26,21 @@ export default function UploadPage() {
     supabase.from('hp_techniques').select('id, name').then(({ data }) => setTechniques(data ?? []))
   }, [])
 
+  // 组件卸载时释放仍持有的预览 blob URL，防止内存泄漏。
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview)
+    }
+  }, [preview])
+
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0]
     if (!f) return
     setFile(f)
-    setPreview(URL.createObjectURL(f))
+    setPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev) // 释放上一张预览
+      return URL.createObjectURL(f)
+    })
   }
 
   async function handleSubmit(e: React.FormEvent) {
