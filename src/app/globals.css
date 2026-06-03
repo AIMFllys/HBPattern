@@ -30,8 +30,15 @@
  */
 
 .masonry-grid {
-  column-count: 2;
-  column-gap: 1.5rem;
+  column-count: 1;
+  column-gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .masonry-grid {
+    column-count: 2;
+    column-gap: 1.5rem;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -391,6 +398,32 @@ a:hover { color: var(--color-cinnabar-deep); }
 :focus-visible {
   outline: 2px solid var(--color-cinnabar);
   outline-offset: 2px;
+}
+
+/* === Mobile touch targets === */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  [role="button"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .map-marker {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* === Safe area padding (notch / home indicator) === */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
 }
 
 @media (prefers-reduced-motion: reduce) {

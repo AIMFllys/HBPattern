@@ -29,7 +29,7 @@ export function MapInfoPanel({
   selectPlace: (regionId: string, placeId: string) => void
 }) {
   return (
-    <div className="absolute bottom-5 left-5 w-[min(26rem,calc(100%-2.5rem))] border border-rice-deep bg-white/92 p-5 shadow-2xl backdrop-blur">
+    <div className="absolute bottom-5 left-3 w-[min(22rem,calc(100%-4rem))] border border-rice-deep bg-white/92 p-3 shadow-2xl backdrop-blur sm:left-5 sm:w-[min(26rem,calc(100%-2.5rem))] sm:p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.22em] text-cinnabar">地区洞察</p>
@@ -43,7 +43,8 @@ export function MapInfoPanel({
         </span>
       </div>
 
-      <p className="mt-3 text-sm leading-6 text-ink-medium">{selectedRegion.culturalIntro}</p>
+      <p className="mt-3 hidden text-sm leading-6 text-ink-medium sm:block">{selectedRegion.culturalIntro}</p>
+      <p className="mt-2 text-xs leading-5 text-ink-medium sm:hidden">{selectedRegion.culturalIntro.slice(0, 60)}…</p>
 
       <div className="mt-4 flex flex-wrap gap-2">
         {selectedRegion.patternKeywords.map(keyword => (
@@ -60,7 +61,7 @@ export function MapInfoPanel({
         <MiniStat label="已绑定" value={displayBindings.filter(item => item.region.id === selectedRegion.id).length} />
       </div>
 
-      <div className="mt-4 space-y-2">
+      <div className="mt-4 hidden space-y-2 sm:block">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-black uppercase tracking-[0.18em] text-ink-faint">关键地点</h3>
           <span className="text-[11px] text-ink-faint">放大至 145% 可见地图标签</span>
