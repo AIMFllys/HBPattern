@@ -50,7 +50,7 @@ export default function SiteHeader({
             type="text"
           />
         </div>
-        <Link href="/dashboard" className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar hover:bg-cinnabar/10 transition-colors" title="管理后台">
+        <Link href="/dashboard" className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar hover:bg-cinnabar/10 transition-colors" aria-label="管理后台">
           <Icon name="dashboard" />
         </Link>
         <ThemeToggle />

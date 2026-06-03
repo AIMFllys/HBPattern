@@ -13,9 +13,29 @@ import { getPatternById, getRelatedPatterns } from '@/lib/queries'
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
   const pattern = await getPatternById(id)
+  if (!pattern) return { title: '纹样未找到' }
+
+  const imageUrl = pattern.media?.[0]?.url
+
   return {
-    title: pattern?.name ?? '纹样详情',
-    description: pattern?.description?.slice(0, 160) ?? '湖北传统纹样详情',
+    title: `${pattern.name} — 湖北纹案`,
+    description: pattern.description?.slice(0, 160) ?? '湖北传统纹样详情',
+    openGraph: {
+      title: `${pattern.name} — 湖北纹案`,
+      description: pattern.description?.slice(0, 160) ?? '湖北传统纹样详情',
+      ...(imageUrl ? { images: [{ url: imageUrl }] } : {}),
+    },
+    other: {
+      'application/ld+json': JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'VisualArtwork',
+        name: pattern.name,
+        description: pattern.description,
+        creator: pattern.technique?.name || '湖北纹案平台',
+        dateCreated: pattern.era,
+        ...(imageUrl ? { image: imageUrl } : {}),
+      }),
+    },
   }
 }
 
@@ -61,7 +81,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
         palette={palette}
       />
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
+      <main id="main-content" className="max-w-7xl mx-auto px-6 py-12">
         {/* Section 1: Info + Color Palette */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
           {/* Info */}

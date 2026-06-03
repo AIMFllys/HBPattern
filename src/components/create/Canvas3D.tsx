@@ -78,6 +78,8 @@ export default function Canvas3D() {
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
           shadows
+          role="img"
+          aria-label="3D 文创产品预览"
           dpr={[1, 2]}
           gl={{
             antialias: true,

@@ -203,7 +203,7 @@ function PatternThumb({ pattern }: { pattern: PatternListItem }) {
     <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-rice-deep bg-rice-warm" style={fallbackStyle}>
       {thumbUrl && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={thumbUrl} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+        <img src={thumbUrl} alt={pattern.name} className="h-full w-full object-cover" loading="lazy" decoding="async" />
       )}
     </div>
   )

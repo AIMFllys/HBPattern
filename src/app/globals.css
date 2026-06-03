@@ -127,7 +127,7 @@ input[type="range"]::-moz-range-thumb {
   --color-ink:            #1a1a14;   /* 浓墨 - 主标题文字 */
   --color-ink-medium:     #3d3d30;   /* 中墨 - 正文文字 */
   --color-ink-light:      #6b6b58;   /* 淡墨 - 辅助文字 */
-  --color-ink-faint:      #9e9e88;   /* 极淡墨 - 占位文字 */
+  --color-ink-faint:      #75745f;   /* 极淡墨 - 占位文字 (WCAG AA 对比度 ≥4.5:1) */
 
   /* --- Gold Accent --- */
   --color-gold:           #c9a84c;   /* 烫金 - 强调装饰 */

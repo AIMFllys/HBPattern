@@ -55,7 +55,7 @@ export const PatternAssetCard = memo(function PatternAssetCard({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={thumbnailUrl}
-              alt=""
+              alt={pattern.name}
               className="h-full w-full object-cover"
               loading="lazy"
               decoding="async"

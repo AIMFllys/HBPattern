@@ -21,7 +21,7 @@ export default function MobileDrawer({ navItems, primaryColor, logoIcon }: Mobil
   return (
     <>
       <div className="flex lg:hidden items-center gap-4">
-        <Link href="/login" className="text-ink-medium">
+        <Link href="/login" className="text-ink-medium" aria-label="登录">
           <Icon name="person" size={24} />
         </Link>
         <button

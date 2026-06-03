@@ -28,6 +28,12 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[400] btn-primary"
+        >
+          跳到主内容
+        </a>
         <QueryProvider>
           <AuthProvider>
             <AuthModal />

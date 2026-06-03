@@ -11,9 +11,11 @@ import { getFeaturedPatterns, getStats } from '@/lib/queries'
 export const metadata: Metadata = {
   title: '湖北纹案文化展示平台 — 千年纹饰之美',
   description: '探索湖北传统纹绣文化的数字化平台。浏览纹样画廊、3D文化地图、AI创作中心。',
+  keywords: ['湖北纹案', '传统纹绣', '荆楚文化', '非遗', '文化遗产', '数字化展示'],
   openGraph: {
     title: '湖北纹案文化展示平台',
     description: '探索湖北传统纹绣文化的数字化平台。浏览纹样画廊、3D文化地图、AI创作中心。',
+    images: ['/images/og-home.jpg'],
   },
 }
 
@@ -24,7 +26,7 @@ export default async function HomePage() {
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-rice">
       <SiteHeader logoIcon="filter_vintage" siteName="湖北传统纹样库" primaryColor="cinnabar" />
 
-      <main className="flex flex-col w-full">
+      <main id="main-content" className="flex flex-col w-full">
         {/* Hero Section */}
         <section className="relative w-full overflow-hidden py-20 lg:py-32">
           <HeroBackground

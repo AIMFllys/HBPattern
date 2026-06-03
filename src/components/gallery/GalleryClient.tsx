@@ -45,7 +45,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
   }
 
   return (
-    <main className="flex flex-1 w-full max-w-7xl mx-auto px-4 py-6 gap-10 sm:px-6 lg:px-10 lg:py-10">
+    <main id="main-content" className="flex flex-1 w-full max-w-7xl mx-auto px-4 py-6 gap-10 sm:px-6 lg:px-10 lg:py-10">
       {/* Sidebar Filters (desktop) */}
       <aside className="w-64 shrink-0 hidden lg:flex flex-col gap-8">
         <div className="flex flex-col gap-2">
@@ -159,6 +159,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
             <button
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1}
+              aria-label="上一页"
               className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-faint hover:text-cinnabar transition-colors disabled:opacity-30"
             >
               <Icon name="chevron_left" />
@@ -176,6 +177,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
             <button
               onClick={() => goToPage(page + 1)}
               disabled={page >= totalPages}
+              aria-label="下一页"
               className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar transition-colors disabled:opacity-30"
             >
               <Icon name="chevron_right" />
