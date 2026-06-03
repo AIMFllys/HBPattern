@@ -100,7 +100,15 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
                   key={pattern.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  whileHover={{ y: -4, boxShadow: 'var(--shadow-hover)' }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{
+                    delay: index * 0.05,
+                    duration: 0.3,
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 20,
+                  }}
                   className="masonry-item"
                 >
                   <Link href={`/gallery/${pattern.id}`} className="group cursor-pointer block">

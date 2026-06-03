@@ -26,10 +26,10 @@ export const staggerContainer: Variants = {
 export const pageTransition: Variants = {
   initial: { opacity: 0, y: 8 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 8 },
+  exit: { opacity: 0, y: -8 },
 }
 
 export const defaultTransition: Transition = {
-  duration: 0.2,
-  ease: 'easeOut',
+  duration: 0.3,
+  ease: [0.4, 0, 0.2, 1],
 }

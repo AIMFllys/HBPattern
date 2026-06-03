@@ -225,13 +225,11 @@ a:hover { color: var(--color-cinnabar-deep); }
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: background-color var(--duration-fast) var(--ease-default),
-              box-shadow var(--duration-fast) var(--ease-default),
-              transform var(--duration-fast) var(--ease-default);
+              box-shadow var(--duration-fast) var(--ease-default);
 }
 .btn-primary:hover {
   background-color: var(--color-cinnabar-deep);
   box-shadow: 0 4px 16px rgba(184, 74, 57, 0.35);
-  transform: translateY(-1px);
 }
 
 .btn-ghost {
@@ -258,12 +256,10 @@ a:hover { color: var(--color-cinnabar-deep); }
   border: 1px solid var(--color-rice-deep);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  transition: box-shadow var(--duration-normal) var(--ease-default),
-              transform var(--duration-normal) var(--ease-default);
+  transition: box-shadow var(--duration-normal) var(--ease-default);
 }
 .card:hover {
   box-shadow: var(--shadow-hover);
-  transform: translateY(-3px);
 }
 
 /* === Scroll bar customization === */
