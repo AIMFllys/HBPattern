@@ -4,6 +4,8 @@ import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons/Icon'
 import { FeaturedPatterns } from '@/components/home/FeaturedPatterns'
+import { HeroBackground } from '@/components/home/HeroBackground'
+import { HeroContent } from '@/components/home/HeroContent'
 import { getFeaturedPatterns, getStats } from '@/lib/queries'
 
 export const metadata: Metadata = {
@@ -24,49 +26,34 @@ export default async function HomePage() {
 
       <main className="flex flex-col w-full">
         {/* Hero Section */}
-        <section className="relative w-full max-w-7xl mx-auto px-6 lg:px-10 py-20 lg:py-32 flex flex-col lg:flex-row items-center gap-16">
-          <div className="flex-1 flex flex-col gap-8 z-10">
-            <div className="flex gap-3">
-              <div className="seal-tag writing-vertical text-xs font-bold px-1 border-cinnabar/40 text-cinnabar">数字新生</div>
-              <div className="seal-tag writing-vertical text-xs font-bold px-1 border-cinnabar/40 text-cinnabar">荆楚遗韵</div>
-            </div>
-            <h1 className="text-5xl lg:text-7xl font-black text-ink font-serif leading-tight">
-              探索千年<br />
-              <span className="text-cinnabar">传统纹样</span>之美
-            </h1>
-            <p className="text-lg text-ink-light max-w-xl leading-relaxed">
-              致力于通过数字技术保存和复兴荆楚大地数千年的文化遗产，为设计师、学者提供精准的传统美学资源与 AI 创作工具。
-            </p>
-            <div className="flex flex-wrap gap-4 mt-4">
-              <Link href="/gallery" className="btn-primary text-base px-8 py-3">
-                探索纹样库
-                <Icon name="arrow_forward" size={16} />
-              </Link>
-              <Link href="/create" className="btn-ghost text-base px-8 py-3">
-                开启 AI 创作
-              </Link>
-            </div>
-          </div>
+        <section className="relative w-full overflow-hidden py-20 lg:py-32">
+          <HeroBackground
+            imageUrl={featured[0]?.media?.[0]?.url}
+            imageAlt={featured[0]?.name ?? '湖北传统纹案'}
+          />
+          <div className="relative max-w-7xl mx-auto px-6 lg:px-10 flex flex-col lg:flex-row items-center gap-16">
+            <HeroContent />
 
-          <div className="flex-1 relative w-full max-w-md lg:max-w-none">
-            <div className="absolute inset-0 bg-gradient-radial from-cinnabar/20 to-transparent rounded-full blur-3xl opacity-50"></div>
-            <div className="museum-frame bg-white overflow-hidden rounded-lg relative z-10 transform rotate-2 hover:rotate-0 transition-transform duration-700">
-              <div
-                className="w-full aspect-[4/5] bg-cover bg-center"
-                style={{ backgroundColor: '#2a1f0e', backgroundImage: featured[0]?.media?.[0]?.url ? `url("${featured[0].media[0].url}")` : undefined }}
-              />
-            </div>
-            {featured[0] && (
-              <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border border-rice-deep z-20 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-full bg-cinnabar/10 flex items-center justify-center text-cinnabar">
-                  <Icon name="auto_awesome" />
-                </div>
-                <div>
-                  <p className="text-xs text-ink-faint font-bold uppercase">最新收录</p>
-                  <p className="text-sm font-bold text-ink">{featured[0].name}</p>
-                </div>
+            <div className="flex-1 relative w-full max-w-md lg:max-w-none">
+              <div className="absolute inset-0 bg-gradient-radial from-cinnabar/20 to-transparent rounded-full blur-3xl opacity-50"></div>
+              <div className="museum-frame bg-white overflow-hidden rounded-lg relative z-10 transform rotate-2 hover:rotate-0 transition-transform duration-700">
+                <div
+                  className="w-full aspect-[4/5] bg-cover bg-center"
+                  style={{ backgroundColor: '#2a1f0e', backgroundImage: featured[0]?.media?.[0]?.url ? `url("${featured[0].media[0].url}")` : undefined }}
+                />
               </div>
-            )}
+              {featured[0] && (
+                <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border border-rice-deep z-20 flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full bg-cinnabar/10 flex items-center justify-center text-cinnabar">
+                    <Icon name="auto_awesome" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-ink-faint font-bold uppercase">最新收录</p>
+                    <p className="text-sm font-bold text-ink">{featured[0].name}</p>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </section>
 

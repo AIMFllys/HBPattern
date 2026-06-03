@@ -5,6 +5,9 @@ import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import LikeButton from '@/components/pattern/LikeButton'
 import CommentSection from '@/components/pattern/CommentSection'
+import { PatternHeroImage } from '@/components/pattern/PatternHeroImage'
+import { ColorPalette } from '@/components/pattern/ColorPalette'
+import { AnimatedTimeline } from '@/components/pattern/AnimatedTimeline'
 import { getPatternById, getRelatedPatterns } from '@/lib/queries'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -50,30 +53,22 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
     <div className="layout-container flex h-full grow flex-col bg-[#f8f8f6]">
       <SiteHeader logoIcon="landscape" siteName="纹样大观" primaryColor="gold" />
 
-      <main className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-          {/* Image */}
-          <div className="relative group">
-            <div className="museum-frame bg-white overflow-hidden rounded-lg">
-              <div
-                className="w-full aspect-[4/5] hover:scale-105 transition-transform duration-700 bg-cover bg-center"
-                role="img"
-                aria-label={pattern.name}
-                style={{ backgroundColor: palette[0] ?? '#2a1f0e', backgroundImage: mainImage ? `url("${mainImage}")` : undefined }}
-              />
-            </div>
-            {pattern.is_ai_generated && (
-              <div className="absolute top-4 right-4 bg-cinnabar text-white px-3 py-1 rounded text-xs font-bold">
-                AI 生成
-              </div>
-            )}
-          </div>
+      {/* Peak Experience: Full-bleed hero image */}
+      <PatternHeroImage
+        imageUrl={mainImage}
+        patternName={pattern.name}
+        isAiGenerated={pattern.is_ai_generated}
+        palette={palette}
+      />
 
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        {/* Section 1: Info + Color Palette */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-16 items-start">
           {/* Info */}
-          <div className="flex flex-col gap-8 py-4">
+          <div className="lg:col-span-2 flex flex-col gap-8 py-4">
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-2">
-                <h1 className="text-5xl font-black text-ink leading-tight">{pattern.name}</h1>
+                <h1 className="text-4xl lg:text-5xl font-black text-ink leading-tight">{pattern.name}</h1>
                 {pattern.era && (
                   <p className="text-gold text-xl italic font-serif">{pattern.era}</p>
                 )}
@@ -112,15 +107,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
               </div>
             )}
 
-            <div className="grid grid-cols-3 gap-6 pt-8 border-t border-gold/20">
-              <div>
-                <span className="text-xs text-gold uppercase tracking-widest block mb-1">主色调</span>
-                <div className="flex gap-2">
-                  {palette.map((color, i) => (
-                    <div key={i} className="w-6 h-6 rounded-full shadow-sm" style={{ backgroundColor: color }} />
-                  ))}
-                </div>
-              </div>
+            <div className="flex gap-8 pt-8 border-t border-gold/20">
               <div>
                 <span className="text-xs text-gold uppercase tracking-widest block mb-1">浏览量</span>
                 <span className="font-bold">{pattern.view_count}</span>
@@ -142,7 +129,19 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
               </div>
             )}
           </div>
+
+          {/* Color Palette sidebar */}
+          <div className="lg:col-span-1 py-4">
+            <div className="sticky top-24 bg-white rounded-2xl border border-rice-deep p-6 shadow-card">
+              <ColorPalette colors={palette} />
+            </div>
+          </div>
         </div>
+
+        {/* Section 2: Animated Timeline */}
+        <section className="mt-20 py-12 border-t border-rice-deep/50">
+          <AnimatedTimeline />
+        </section>
 
         {/* Comments */}
         <CommentSection patternId={pattern.id} />

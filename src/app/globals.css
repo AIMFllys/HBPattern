@@ -157,12 +157,41 @@ input[type="range"]::-moz-range-thumb {
   --duration-normal: 250ms;
   --duration-slow:   400ms;
   --ease-default:    cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* --- Dark Mode Tokens --- */
+  --color-ink-night:     #f5f0e8;   /* 深色模式文字（米色） */
+  --color-rice-night:    #12110d;   /* 深色模式背景（深墨） */
+  --color-cinnabar-glow: rgba(184, 74, 57, 0.4);
+
+  /* --- Z-Index Scale --- */
+  --z-base:    0;
+  --z-content: 10;
+  --z-sticky:  100;
+  --z-overlay: 200;
+  --z-modal:   300;
+  --z-toast:   400;
 }
 
 /* === Base Reset & Global Styles === */
 :root {
   --background: var(--color-rice);
   --foreground: var(--color-ink);
+}
+
+/* --- Dark Mode: system preference --- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --background: var(--color-rice-night);
+    --foreground: var(--color-ink-night);
+    color-scheme: dark;
+  }
+}
+
+/* --- Dark Mode: manual toggle --- */
+[data-theme="dark"] {
+  --background: var(--color-rice-night);
+  --foreground: var(--color-ink-night);
+  color-scheme: dark;
 }
 
 *, *::before, *::after {
@@ -176,11 +205,56 @@ html {
 }
 
 body {
-  background-color: var(--color-rice);
+  background-color: var(--background, var(--color-rice));
   color: var(--color-ink-medium);
   font-family: var(--font-sans);
   line-height: 1.7;
   min-height: 100vh;
+}
+
+/* --- Dark Mode Body --- */
+[data-theme="dark"] body,
+:root:not([data-theme="light"]):has(body) {
+  /* handled by CSS variables above */
+}
+
+[data-theme="dark"] body {
+  background-color: var(--color-rice-night);
+  color: var(--color-ink-night);
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6 {
+  color: var(--color-ink-night);
+}
+
+[data-theme="dark"] .card {
+  background-color: #1a1915;
+  border-color: #2a2920;
+}
+
+[data-theme="dark"] .glass-panel {
+  background: rgba(18, 17, 13, 0.6);
+  border-color: rgba(245, 240, 232, 0.08);
+}
+
+[data-theme="dark"] .museum-frame {
+  border-color: #2a2920;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.3), 0 20px 25px -5px rgba(0,0,0,0.4);
+}
+
+[data-theme="dark"] header {
+  background-color: rgba(18, 17, 13, 0.85);
+  border-color: rgba(42, 41, 32, 0.5);
+}
+
+[data-theme="dark"] .seal-tag {
+  border-color: var(--color-cinnabar-glow);
+  color: var(--color-cinnabar-light);
 }
 
 /* === Typography === */

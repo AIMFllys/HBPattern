@@ -3,6 +3,7 @@ import { Icon } from '@/components/icons/Icon'
 import NavLinks from './NavLinks'
 import MobileDrawer from './MobileDrawer'
 import UserMenu from './UserMenu'
+import { ThemeToggle } from './ThemeToggle'
 
 interface SiteHeaderProps {
   logoIcon?: string
@@ -52,6 +53,7 @@ export default function SiteHeader({
         <Link href="/dashboard" className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar hover:bg-cinnabar/10 transition-colors" title="管理后台">
           <Icon name="dashboard" />
         </Link>
+        <ThemeToggle />
         <UserMenu />
       </div>
 
