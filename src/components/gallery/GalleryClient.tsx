@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'motion/react'
 import { Icon } from '@/components/icons/Icon'
 import { BottomSheet } from '@/components/ui/BottomSheet'
+import { ColorSearch } from '@/components/search/ColorSearch'
 import type { PatternListItem } from '@/types/pattern'
 
 interface GalleryClientProps {
@@ -29,10 +30,20 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
   const searchParams = useSearchParams()
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
+  const currentColors = searchParams.get('colors')?.split(',').filter(Boolean) ?? []
+
   function updateFilter(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString())
     if (value) params.set(key, value)
     else params.delete(key)
+    params.delete('page')
+    router.push(`/gallery?${params.toString()}`)
+  }
+
+  function handleColorSearch(colors: string[]) {
+    const params = new URLSearchParams(searchParams.toString())
+    if (colors.length > 0) params.set('colors', colors.join(','))
+    else params.delete('colors')
     params.delete('page')
     router.push(`/gallery?${params.toString()}`)
   }
@@ -65,6 +76,8 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
               ))}
             </div>
           </div>
+
+          <ColorSearch onSearch={handleColorSearch} selectedColors={currentColors} />
         </div>
       </aside>
 
@@ -84,9 +97,9 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
             >
               <Icon name="filter_list" size={16} />
               筛选
-              {currentEra && (
+              {(currentEra || currentColors.length > 0) && (
                 <span className="ml-1 rounded-full bg-cinnabar/10 px-1.5 py-0.5 text-[10px] font-bold text-cinnabar">
-                  {currentEra}
+                  {currentEra ?? ''}{currentEra && currentColors.length > 0 ? ' ' : ''}{currentColors.length > 0 ? `${currentColors.length}色` : ''}
                 </span>
               )}
             </button>
@@ -214,6 +227,8 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
               ))}
             </div>
           </div>
+
+          <ColorSearch onSearch={handleColorSearch} selectedColors={currentColors} />
 
           {currentEra && (
             <button

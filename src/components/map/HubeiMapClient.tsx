@@ -189,6 +189,12 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
 
   function selectRegion(regionId: string) {
     syncSelectedLocation(regionId, null)
+    const region = findHubeiRegion(regionId)
+    if (region) {
+      const point = projectHubeiPoint(region.point)
+      dispatch({ type: 'setZoom', zoom: 1.55 })
+      dispatch({ type: 'setPan', pan: { x: 50 - point.x, y: 50 - point.y } })
+    }
   }
 
   function selectPlace(regionId: string, placeId: string) {

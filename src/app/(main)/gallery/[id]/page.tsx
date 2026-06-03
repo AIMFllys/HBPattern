@@ -8,6 +8,8 @@ import CommentSection from '@/components/pattern/CommentSection'
 import { PatternHeroImage } from '@/components/pattern/PatternHeroImage'
 import { ColorPalette } from '@/components/pattern/ColorPalette'
 import { AnimatedTimeline } from '@/components/pattern/AnimatedTimeline'
+import { KnowledgeGraph } from '@/components/pattern/KnowledgeGraph'
+import type { GraphNode, GraphLink } from '@/components/pattern/KnowledgeGraph'
 import { getPatternById, getRelatedPatterns } from '@/lib/queries'
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
@@ -161,6 +163,26 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
         {/* Section 2: Animated Timeline */}
         <section className="mt-20 py-12 border-t border-rice-deep/50">
           <AnimatedTimeline />
+        </section>
+
+        {/* Section 3: Knowledge Graph */}
+        <section className="mt-20">
+          {(() => {
+            const graphNodes: GraphNode[] = [
+              { id: pattern.id, name: pattern.name, imageUrl: mainImage, isCurrent: true },
+              ...related.map((p) => ({
+                id: p.id,
+                name: p.name,
+                imageUrl: p.media?.[0]?.url ?? null,
+              })),
+            ]
+            const graphLinks: GraphLink[] = related.map((p) => ({
+              source: pattern.id,
+              target: p.id,
+              type: 'variant_of' as const,
+            }))
+            return <KnowledgeGraph nodes={graphNodes} links={graphLinks} />
+          })()}
         </section>
 
         {/* Comments */}
