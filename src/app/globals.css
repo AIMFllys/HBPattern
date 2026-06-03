@@ -55,8 +55,8 @@
 }
 
 .seal-tag {
-  border: 1px solid #a63d33;
-  color: #a63d33;
+  border: 1px solid var(--color-cinnabar);
+  color: var(--color-cinnabar);
   padding: 0.25rem;
 }
 
@@ -85,8 +85,17 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 16px;
   height: 16px;
-  background: #b84a39;
+  background: var(--color-cinnabar);
   cursor: pointer;
+  border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--color-cinnabar);
+  cursor: pointer;
+  border: none;
   border-radius: 50%;
 }
 
