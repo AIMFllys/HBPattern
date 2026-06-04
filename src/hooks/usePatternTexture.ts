@@ -17,6 +17,8 @@ export function usePatternTexture(): THREE.Texture | null {
     const nextTexture = cachedTexture.clone()
     nextTexture.image = cachedTexture.image
     nextTexture.colorSpace = THREE.SRGBColorSpace
+    nextTexture.minFilter = THREE.LinearFilter
+    nextTexture.anisotropy = 4
     configureTexture(nextTexture, deferredTextureParams)
     nextTexture.needsUpdate = true
     return nextTexture

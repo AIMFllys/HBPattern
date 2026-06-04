@@ -1,6 +1,8 @@
 'use client'
 
 import { memo, useEffect, useState } from 'react'
+import Image from 'next/image'
+import { generateBlurDataURL } from '@/lib/image-placeholder'
 import type { PatternListItem } from '@/types/pattern'
 
 interface PatternAssetCardProps {
@@ -52,13 +54,15 @@ export const PatternAssetCard = memo(function PatternAssetCard({
           style={fallbackStyle}
         >
           {thumbnailUrl && !imageError && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={thumbnailUrl}
               alt={pattern.name}
-              className="h-full w-full object-cover"
+              fill
+              sizes="160px"
+              className="object-cover"
               loading="lazy"
-              decoding="async"
+              placeholder="blur"
+              blurDataURL={generateBlurDataURL(palette[0] ?? '#ede7d9')}
               onLoad={() => setImageLoaded(true)}
               onError={() => {
                 setImageError(true)

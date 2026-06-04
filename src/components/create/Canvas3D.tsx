@@ -81,11 +81,13 @@ export default function Canvas3D() {
           role="img"
           aria-label="3D 文创产品预览"
           dpr={[1, 2]}
+          performance={{ min: 0.5, max: 1, debounce: 200 }}
           gl={{
             antialias: true,
             preserveDrawingBuffer: true,
             toneMapping: THREE.ACESFilmicToneMapping,
             toneMappingExposure: 1,
+            powerPreference: 'high-performance',
           }}
         >
           <Scene />
