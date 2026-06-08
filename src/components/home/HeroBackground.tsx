@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'motion/react'
+import { isPlaceholderMediaUrl } from '@/lib/patternMedia'
 
 interface HeroBackgroundProps {
   imageUrl?: string
@@ -9,10 +10,11 @@ interface HeroBackgroundProps {
 }
 
 export function HeroBackground({ imageUrl, imageAlt = '湖北传统纹案' }: HeroBackgroundProps) {
+  const showImage = imageUrl && !isPlaceholderMediaUrl(imageUrl)
+
   return (
     <div className="absolute inset-0 overflow-hidden">
-      {/* Slow-zoom background image */}
-      {imageUrl ? (
+      {showImage ? (
         <motion.div
           initial={{ scale: 1 }}
           animate={{ scale: 1.1 }}
@@ -25,7 +27,7 @@ export function HeroBackground({ imageUrl, imageAlt = '湖北传统纹案' }: He
             fill
             priority
             className="object-cover"
-            quality={85}
+            quality={75}
             sizes="100vw"
           />
         </motion.div>
@@ -33,7 +35,6 @@ export function HeroBackground({ imageUrl, imageAlt = '湖北传统纹案' }: He
         <div className="absolute inset-0 bg-gradient-to-br from-ink/5 via-rice to-cinnabar/5" />
       )}
 
-      {/* Bottom gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-rice via-rice/30 to-transparent" />
     </div>
   )

@@ -4,9 +4,9 @@ import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons/Icon'
 import { FeaturedPatterns } from '@/components/home/FeaturedPatterns'
-import { HeroBackground } from '@/components/home/HeroBackground'
 import { HeroContent } from '@/components/home/HeroContent'
 import { getFeaturedPatterns, getStats } from '@/lib/queries'
+import { resolveFeaturedFrameImageUrl } from '@/lib/patternMedia'
 
 export const metadata: Metadata = {
   title: '湖北纹案文化展示平台 — 千年纹饰之美',
@@ -21,41 +21,36 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const [stats, featured] = await Promise.all([getStats(), getFeaturedPatterns(4)])
+  const featuredFrameImage = resolveFeaturedFrameImageUrl(featured[0]?.media?.[0]?.url)
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-rice">
       <SiteHeader logoIcon="filter_vintage" siteName="湖北传统纹样库" primaryColor="cinnabar" />
 
       <main id="main-content" className="flex flex-col w-full">
-        {/* Hero Section */}
-        <section className="relative w-full overflow-hidden py-20 lg:py-32">
-          <HeroBackground
-            imageUrl={featured[0]?.media?.[0]?.url}
-            imageAlt={featured[0]?.name ?? '湖北传统纹案'}
-          />
-          <div className="relative max-w-7xl mx-auto px-6 lg:px-10 flex flex-col lg:flex-row items-center gap-16">
-            <HeroContent />
+        {/* Hero Section — clean rice background; frame image only in museum card (see 01dbf8c) */}
+        <section className="relative w-full max-w-7xl mx-auto px-6 lg:px-10 py-20 lg:py-32 flex flex-col lg:flex-row items-center gap-16">
+          <HeroContent />
 
-            <div className="flex-1 relative w-full max-w-md lg:max-w-none">
-              <div className="absolute inset-0 bg-gradient-radial from-cinnabar/20 to-transparent rounded-full blur-3xl opacity-50"></div>
-              <div className="museum-frame bg-white overflow-hidden rounded-lg relative z-10 transform rotate-2 hover:rotate-0 transition-transform duration-700">
-                <div
-                  className="w-full aspect-[4/5] bg-cover bg-center"
-                  style={{ backgroundColor: '#2a1f0e', backgroundImage: featured[0]?.media?.[0]?.url ? `url("${featured[0].media[0].url}")` : undefined }}
-                />
-              </div>
-              {featured[0] && (
-                <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border border-rice-deep z-20 flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-cinnabar/10 flex items-center justify-center text-cinnabar">
-                    <Icon name="auto_awesome" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-ink-faint font-bold uppercase">最新收录</p>
-                    <p className="text-sm font-bold text-ink">{featured[0].name}</p>
-                  </div>
-                </div>
-              )}
+          <div className="flex-1 relative w-full max-w-md lg:max-w-none">
+            <div className="absolute inset-0 bg-gradient-radial from-cinnabar/20 to-transparent rounded-full blur-3xl opacity-50"></div>
+            <div className="museum-frame bg-white overflow-hidden rounded-lg relative z-10 transform rotate-2 hover:rotate-0 transition-transform duration-700">
+              <div
+                className="w-full aspect-[4/5] bg-cover bg-center"
+                style={{ backgroundColor: '#2a1f0e', backgroundImage: `url("${featuredFrameImage}")` }}
+              />
             </div>
+            {featured[0] && (
+              <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-xl border border-rice-deep z-20 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-cinnabar/10 flex items-center justify-center text-cinnabar">
+                  <Icon name="auto_awesome" />
+                </div>
+                <div>
+                  <p className="text-xs text-ink-faint font-bold uppercase">最新收录</p>
+                  <p className="text-sm font-bold text-ink">{featured[0].name}</p>
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
