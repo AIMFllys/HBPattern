@@ -74,7 +74,10 @@ export function MapCanvas({
           </linearGradient>
         </defs>
 
-        <g transform={`translate(${pan.x} ${pan.y}) scale(${zoom})`}>
+        <g
+          transform={`translate(${pan.x} ${pan.y}) scale(${zoom})`}
+          className="transition-transform duration-700 ease-out"
+        >
           <path
             d={HUBEI_OUTLINE_PATH}
             fill="url(#provinceFill)"

@@ -1,6 +1,8 @@
 'use client'
 
 import { useCallback } from 'react'
+import Image from 'next/image'
+import { generateBlurDataURL } from '@/lib/image-placeholder'
 import { Icon } from '@/components/icons/Icon'
 import { useWorkshopPatterns } from '@/hooks/queries/useWorkshopPatterns'
 import { useWorkshopStore } from '@/stores/useWorkshopStore'
@@ -200,10 +202,18 @@ function PatternThumb({ pattern }: { pattern: PatternListItem }) {
       : { backgroundColor: palette[0] ?? '#ede7d9' }
 
   return (
-    <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-rice-deep bg-rice-warm" style={fallbackStyle}>
+    <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-rice-deep bg-rice-warm" style={fallbackStyle}>
       {thumbUrl && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={thumbUrl} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+        <Image
+          src={thumbUrl}
+          alt={pattern.name}
+          fill
+          sizes="40px"
+          className="object-cover"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL={generateBlurDataURL(palette[0] ?? '#ede7d9')}
+        />
       )}
     </div>
   )

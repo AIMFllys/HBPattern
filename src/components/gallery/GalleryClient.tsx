@@ -1,9 +1,12 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'motion/react'
 import { Icon } from '@/components/icons/Icon'
+import { BottomSheet } from '@/components/ui/BottomSheet'
+import { ColorSearch } from '@/components/search/ColorSearch'
 import type { PatternListItem } from '@/types/pattern'
 
 interface GalleryClientProps {
@@ -25,11 +28,22 @@ const sortOptions = [
 export default function GalleryClient({ patterns, total, page, totalPages, currentEra, currentSort = 'newest' }: GalleryClientProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+
+  const currentColors = searchParams.get('colors')?.split(',').filter(Boolean) ?? []
 
   function updateFilter(key: string, value: string | null) {
     const params = new URLSearchParams(searchParams.toString())
     if (value) params.set(key, value)
     else params.delete(key)
+    params.delete('page')
+    router.push(`/gallery?${params.toString()}`)
+  }
+
+  function handleColorSearch(colors: string[]) {
+    const params = new URLSearchParams(searchParams.toString())
+    if (colors.length > 0) params.set('colors', colors.join(','))
+    else params.delete('colors')
     params.delete('page')
     router.push(`/gallery?${params.toString()}`)
   }
@@ -42,8 +56,8 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
   }
 
   return (
-    <main className="flex flex-1 w-full max-w-7xl mx-auto px-6 lg:px-10 py-10 gap-10">
-      {/* Sidebar Filters */}
+    <main id="main-content" className="flex flex-1 w-full max-w-7xl mx-auto px-4 py-6 gap-10 sm:px-6 lg:px-10 lg:py-10">
+      {/* Sidebar Filters (desktop) */}
       <aside className="w-64 shrink-0 hidden lg:flex flex-col gap-8">
         <div className="flex flex-col gap-2">
           <h2 className="text-lg font-bold border-l-4 border-cinnabar pl-3 mb-4">筛选检索</h2>
@@ -62,17 +76,33 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
               ))}
             </div>
           </div>
+
+          <ColorSearch onSearch={handleColorSearch} selectedColors={currentColors} />
         </div>
       </aside>
 
       {/* Main Content */}
-      <section className="flex-1">
-        <div className="flex items-baseline justify-between mb-8">
+      <section className="flex-1 min-w-0">
+        <div className="flex flex-col gap-4 mb-8 sm:flex-row sm:items-baseline sm:justify-between">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl font-bold font-serif">纹样画廊</h2>
             <span className="text-sm text-ink-faint">共 {total} 件作品</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Mobile filter toggle */}
+            <button
+              type="button"
+              onClick={() => setIsFilterOpen(true)}
+              className="flex items-center gap-1.5 rounded-lg border border-rice-deep bg-rice-warm px-3 py-1.5 text-sm text-ink-medium transition-colors hover:border-cinnabar hover:text-cinnabar lg:hidden"
+            >
+              <Icon name="filter_list" size={16} />
+              筛选
+              {(currentEra || currentColors.length > 0) && (
+                <span className="ml-1 rounded-full bg-cinnabar/10 px-1.5 py-0.5 text-[10px] font-bold text-cinnabar">
+                  {currentEra ?? ''}{currentEra && currentColors.length > 0 ? ' ' : ''}{currentColors.length > 0 ? `${currentColors.length}色` : ''}
+                </span>
+              )}
+            </button>
             {sortOptions.map((opt) => (
               <button
                 key={opt.value}
@@ -100,7 +130,15 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
                   key={pattern.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  whileHover={{ y: -4, boxShadow: 'var(--shadow-hover)' }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{
+                    delay: index * 0.05,
+                    duration: 0.3,
+                    type: 'spring',
+                    stiffness: 300,
+                    damping: 20,
+                  }}
                   className="masonry-item"
                 >
                   <Link href={`/gallery/${pattern.id}`} className="group cursor-pointer block">
@@ -134,6 +172,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
             <button
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1}
+              aria-label="上一页"
               className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-faint hover:text-cinnabar transition-colors disabled:opacity-30"
             >
               <Icon name="chevron_left" />
@@ -151,6 +190,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
             <button
               onClick={() => goToPage(page + 1)}
               disabled={page >= totalPages}
+              aria-label="下一页"
               className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar transition-colors disabled:opacity-30"
             >
               <Icon name="chevron_right" />
@@ -158,6 +198,52 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
           </div>
         )}
       </section>
+
+      {/* Mobile filter BottomSheet */}
+      <BottomSheet
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        title="筛选检索"
+      >
+        <div className="space-y-6 pb-4">
+          <div>
+            <h3 className="text-xs font-semibold text-ink-faint uppercase tracking-wider mb-3">年代分类</h3>
+            <div className="grid grid-cols-2 gap-2">
+              {eraOptions.map((era) => (
+                <button
+                  key={era}
+                  onClick={() => {
+                    updateFilter('era', currentEra === era ? null : era)
+                    setIsFilterOpen(false)
+                  }}
+                  className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                    currentEra === era
+                      ? 'bg-cinnabar/10 text-cinnabar font-bold border border-cinnabar/30'
+                      : 'border border-rice-deep bg-rice-warm text-ink-medium hover:border-cinnabar hover:text-cinnabar'
+                  }`}
+                >
+                  {era}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <ColorSearch onSearch={handleColorSearch} selectedColors={currentColors} />
+
+          {currentEra && (
+            <button
+              type="button"
+              onClick={() => {
+                updateFilter('era', null)
+                setIsFilterOpen(false)
+              }}
+              className="w-full rounded-lg border border-rice-deep bg-rice-warm py-2.5 text-sm text-ink-medium transition-colors hover:border-cinnabar hover:text-cinnabar"
+            >
+              清除筛选
+            </button>
+          )}
+        </div>
+      </BottomSheet>
     </main>
   )
 }

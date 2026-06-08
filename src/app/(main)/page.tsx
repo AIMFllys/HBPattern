@@ -3,56 +3,41 @@ import type { Metadata } from 'next'
 import SiteHeader from '@/components/layout/SiteHeader'
 import SiteFooter from '@/components/layout/SiteFooter'
 import { Icon } from '@/components/icons/Icon'
+import { FeaturedPatterns } from '@/components/home/FeaturedPatterns'
+import { HeroContent } from '@/components/home/HeroContent'
 import { getFeaturedPatterns, getStats } from '@/lib/queries'
+import { resolveFeaturedFrameImageUrl } from '@/lib/patternMedia'
 
 export const metadata: Metadata = {
   title: '湖北纹案文化展示平台 — 千年纹饰之美',
   description: '探索湖北传统纹绣文化的数字化平台。浏览纹样画廊、3D文化地图、AI创作中心。',
+  keywords: ['湖北纹案', '传统纹绣', '荆楚文化', '非遗', '文化遗产', '数字化展示'],
   openGraph: {
     title: '湖北纹案文化展示平台',
     description: '探索湖北传统纹绣文化的数字化平台。浏览纹样画廊、3D文化地图、AI创作中心。',
+    images: ['/images/og-home.jpg'],
   },
 }
 
 export default async function HomePage() {
   const [stats, featured] = await Promise.all([getStats(), getFeaturedPatterns(4)])
+  const featuredFrameImage = resolveFeaturedFrameImageUrl(featured[0]?.media?.[0]?.url)
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-rice">
       <SiteHeader logoIcon="filter_vintage" siteName="湖北传统纹样库" primaryColor="cinnabar" />
 
-      <main className="flex flex-col w-full">
-        {/* Hero Section */}
+      <main id="main-content" className="flex flex-col w-full">
+        {/* Hero Section — clean rice background; frame image only in museum card (see 01dbf8c) */}
         <section className="relative w-full max-w-7xl mx-auto px-6 lg:px-10 py-20 lg:py-32 flex flex-col lg:flex-row items-center gap-16">
-          <div className="flex-1 flex flex-col gap-8 z-10">
-            <div className="flex gap-3">
-              <div className="seal-tag writing-vertical text-xs font-bold px-1 border-cinnabar/40 text-cinnabar">数字新生</div>
-              <div className="seal-tag writing-vertical text-xs font-bold px-1 border-cinnabar/40 text-cinnabar">荆楚遗韵</div>
-            </div>
-            <h1 className="text-5xl lg:text-7xl font-black text-ink font-serif leading-tight">
-              探索千年<br />
-              <span className="text-cinnabar">传统纹样</span>之美
-            </h1>
-            <p className="text-lg text-ink-light max-w-xl leading-relaxed">
-              致力于通过数字技术保存和复兴荆楚大地数千年的文化遗产，为设计师、学者提供精准的传统美学资源与 AI 创作工具。
-            </p>
-            <div className="flex flex-wrap gap-4 mt-4">
-              <Link href="/gallery" className="btn-primary text-base px-8 py-3">
-                探索纹样库
-                <Icon name="arrow_forward" size={16} />
-              </Link>
-              <Link href="/create" className="btn-ghost text-base px-8 py-3">
-                开启 AI 创作
-              </Link>
-            </div>
-          </div>
+          <HeroContent />
 
           <div className="flex-1 relative w-full max-w-md lg:max-w-none">
             <div className="absolute inset-0 bg-gradient-radial from-cinnabar/20 to-transparent rounded-full blur-3xl opacity-50"></div>
             <div className="museum-frame bg-white overflow-hidden rounded-lg relative z-10 transform rotate-2 hover:rotate-0 transition-transform duration-700">
               <div
                 className="w-full aspect-[4/5] bg-cover bg-center"
-                style={{ backgroundColor: '#2a1f0e', backgroundImage: featured[0]?.media?.[0]?.url ? `url("${featured[0].media[0].url}")` : undefined }}
+                style={{ backgroundColor: '#2a1f0e', backgroundImage: `url("${featuredFrameImage}")` }}
               />
             </div>
             {featured[0] && (
@@ -156,40 +141,7 @@ export default async function HomePage() {
         </section>
 
         {/* Featured Patterns */}
-        <section className="w-full bg-ink py-24 text-white">
-          <div className="max-w-7xl mx-auto px-6 lg:px-10">
-            <div className="flex items-center justify-between mb-12">
-              <h2 className="text-3xl font-bold font-serif">精选珍品</h2>
-              <Link href="/gallery" className="text-sm text-gold font-bold flex items-center gap-1 hover:underline">
-                浏览全部 <Icon name="arrow_forward" size={16} />
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featured.map((p) => {
-                const palette = (p.color_palette as string[] | null) ?? []
-                return (
-                  <Link key={p.id} href={`/gallery/${p.id}`} className="flex flex-col gap-4 group">
-                    <div className="aspect-[4/5] bg-white/5 rounded-xl overflow-hidden border border-white/10 relative">
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      <div
-                        className="w-full h-full group-hover:scale-110 transition-transform duration-700 bg-cover bg-center"
-                        style={{ backgroundColor: palette[0] ?? '#2a1f0e', backgroundImage: p.media?.[0]?.url ? `url("${p.media[0].url}")` : undefined }}
-                      />
-                      <div className="absolute bottom-4 left-4 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                        <span className="text-xs font-bold bg-cinnabar text-white px-2 py-1 rounded">查看详情</span>
-                      </div>
-                    </div>
-                    <div>
-                      <h5 className="font-bold text-lg group-hover:text-gold transition-colors">{p.name}</h5>
-                      <span className="text-sm text-white/60">{p.era}</span>
-                    </div>
-                  </Link>
-                )
-              })}
-            </div>
-          </div>
-        </section>
+        <FeaturedPatterns patterns={featured} />
       </main>
 
       <SiteFooter variant="light" />

@@ -46,7 +46,7 @@ export default async function ProfilePage({ searchParams }: { searchParams: Prom
         <div className="flex items-center gap-6 mb-12">
           <div className="w-20 h-20 rounded-full overflow-hidden bg-cinnabar/10 flex items-center justify-center text-cinnabar text-2xl font-bold">
             {profile?.avatar_url ? (
-              <Image src={profile.avatar_url} alt="" width={80} height={80} className="w-full h-full object-cover" />
+              <Image src={profile.avatar_url} alt={`${profile.nickname}的头像`} width={80} height={80} className="w-full h-full object-cover" />
             ) : (
               profile?.nickname?.[0] ?? '?'
             )}

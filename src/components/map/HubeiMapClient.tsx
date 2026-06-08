@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useReducer, useRef } from 'react'
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import type { PointerEvent, WheelEvent } from 'react'
 import {
   HUBEI_MAP_LABEL_THRESHOLDS,
@@ -28,6 +28,8 @@ import {
   parseStoredState,
 } from './utils/mapDemoUtils'
 import { readImageForDemo } from './utils/imageProcessing'
+import { Icon } from '@/components/icons/Icon'
+import { BottomSheet } from '@/components/ui/BottomSheet'
 import { createGalleryMapBindings } from '@/lib/map/patternGeo'
 
 interface HubeiMapClientProps {
@@ -59,6 +61,8 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
     imageError,
     storageReady,
   } = state
+
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -185,6 +189,12 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
 
   function selectRegion(regionId: string) {
     syncSelectedLocation(regionId, null)
+    const region = findHubeiRegion(regionId)
+    if (region) {
+      const point = projectHubeiPoint(region.point)
+      dispatch({ type: 'setZoom', zoom: 1.55 })
+      dispatch({ type: 'setPan', pan: { x: 50 - point.x, y: 50 - point.y } })
+    }
   }
 
   function selectPlace(regionId: string, placeId: string) {
@@ -281,42 +291,45 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
 
   return (
     <main className="flex min-h-[calc(100vh-73px)] flex-col overflow-hidden bg-[#f8f4eb] lg:flex-row">
-      <MapSidebar
-        selectedRegion={selectedRegion}
-        totalPlaces={totalPlaces}
-        bindingCount={displayBindings.length}
-        mode={mode}
-        patternQuery={patternQuery}
-        filteredPatterns={filteredPatterns}
-        selectedPattern={selectedPattern}
-        bindingRegionId={bindingRegionId}
-        bindingPlaceId={bindingPlaceId}
-        bindingRegion={bindingRegion}
-        bindingNote={bindingNote}
-        draftForm={draftForm}
-        draftRegion={draftRegion}
-        imageError={imageError}
-        storageReady={storageReady}
-        displayBindings={displayBindings}
-        draftAnalysis={draftAnalysis}
-        resetView={resetView}
-        focusRegion={focusRegion}
-        setMode={(nextMode) => dispatch({ type: 'setMode', mode: nextMode })}
-        setPatternQuery={(query) => dispatch({ type: 'setPatternQuery', query })}
-        setSelectedPatternId={(patternId) => dispatch({ type: 'setSelectedPatternId', patternId })}
-        createDraftFromQuery={createDraftFromQuery}
-        updateBindingRegion={updateBindingRegion}
-        setBindingPlaceId={(placeId) => dispatch({ type: 'setBindingPlaceId', placeId })}
-        setBindingNote={(note) => dispatch({ type: 'setBindingNote', note })}
-        addBinding={addBinding}
-        updateDraftRegion={updateDraftRegion}
-        updateDraftForm={updateDraftForm}
-        handleDraftImage={(file) => void handleDraftImage(file)}
-        saveDraftAndBind={saveDraftAndBind}
-        removeBinding={removeBinding}
-      />
+      {/* Desktop sidebar */}
+      <div className="hidden lg:flex">
+        <MapSidebar
+          selectedRegion={selectedRegion}
+          totalPlaces={totalPlaces}
+          bindingCount={displayBindings.length}
+          mode={mode}
+          patternQuery={patternQuery}
+          filteredPatterns={filteredPatterns}
+          selectedPattern={selectedPattern}
+          bindingRegionId={bindingRegionId}
+          bindingPlaceId={bindingPlaceId}
+          bindingRegion={bindingRegion}
+          bindingNote={bindingNote}
+          draftForm={draftForm}
+          draftRegion={draftRegion}
+          imageError={imageError}
+          storageReady={storageReady}
+          displayBindings={displayBindings}
+          draftAnalysis={draftAnalysis}
+          resetView={resetView}
+          focusRegion={focusRegion}
+          setMode={(nextMode) => dispatch({ type: 'setMode', mode: nextMode })}
+          setPatternQuery={(query) => dispatch({ type: 'setPatternQuery', query })}
+          setSelectedPatternId={(patternId) => dispatch({ type: 'setSelectedPatternId', patternId })}
+          createDraftFromQuery={createDraftFromQuery}
+          updateBindingRegion={updateBindingRegion}
+          setBindingPlaceId={(placeId) => dispatch({ type: 'setBindingPlaceId', placeId })}
+          setBindingNote={(note) => dispatch({ type: 'setBindingNote', note })}
+          addBinding={addBinding}
+          updateDraftRegion={updateDraftRegion}
+          updateDraftForm={updateDraftForm}
+          handleDraftImage={(file) => void handleDraftImage(file)}
+          saveDraftAndBind={saveDraftAndBind}
+          removeBinding={removeBinding}
+        />
+      </div>
 
-      <section className="relative min-h-[760px] flex-1 overflow-hidden bg-[#fdf9ee]">
+      <section className="relative min-h-[50vh] flex-1 overflow-hidden bg-[#fdf9ee] lg:min-h-[760px]">
         <MapCanvas
           viewportRef={viewportRef}
           zoom={zoom}
@@ -333,11 +346,11 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
           selectPlace={selectPlace}
         />
 
-        <div className="pointer-events-none absolute left-5 top-5 max-w-[22rem]">
-          <div className="pointer-events-auto border-l-4 border-gold bg-white/88 p-4 shadow-xl backdrop-blur">
+        <div className="pointer-events-none absolute left-3 top-3 max-w-[14rem] sm:left-5 sm:top-5 sm:max-w-[22rem] lg:max-w-[22rem]">
+          <div className="pointer-events-auto border-l-4 border-gold bg-white/88 p-3 shadow-xl backdrop-blur sm:p-4">
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-gold">当前视图</p>
-            <h2 className="mt-1 font-serif text-xl font-black text-ink">湖北省行政区域 Demo</h2>
-            <p className="mt-1 text-xs leading-5 text-ink-light">
+            <h2 className="mt-1 font-serif text-base font-black text-ink sm:text-xl">湖北省行政区域 Demo</h2>
+            <p className="mt-1 hidden text-xs leading-5 text-ink-light sm:block">
               城市标签在 {Math.round(HUBEI_MAP_LABEL_THRESHOLDS.city * 100)}% 后显示，地点标签在 {Math.round(HUBEI_MAP_LABEL_THRESHOLDS.place * 100)}% 后显示。
             </p>
           </div>
@@ -352,7 +365,62 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         />
         <MapPlaceDetail selectedPlace={selectedPlace} />
         <MapLegend />
+
+        {/* Mobile sidebar toggle */}
+        <button
+          type="button"
+          onClick={() => setIsMobileSidebarOpen(true)}
+          className="absolute bottom-5 right-5 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-ink text-rice shadow-modal transition-transform hover:scale-105 lg:hidden"
+          aria-label="打开区域面板"
+        >
+          <Icon name="menu" size={22} />
+        </button>
       </section>
+
+      {/* Mobile sidebar BottomSheet */}
+      <BottomSheet
+        isOpen={isMobileSidebarOpen}
+        onClose={() => setIsMobileSidebarOpen(false)}
+        maxHeight="85vh"
+        title="湖北纹样地理溯源"
+      >
+        <div className="pb-4">
+          <MapSidebar
+            selectedRegion={selectedRegion}
+            totalPlaces={totalPlaces}
+            bindingCount={displayBindings.length}
+            mode={mode}
+            patternQuery={patternQuery}
+            filteredPatterns={filteredPatterns}
+            selectedPattern={selectedPattern}
+            bindingRegionId={bindingRegionId}
+            bindingPlaceId={bindingPlaceId}
+            bindingRegion={bindingRegion}
+            bindingNote={bindingNote}
+            draftForm={draftForm}
+            draftRegion={draftRegion}
+            imageError={imageError}
+            storageReady={storageReady}
+            displayBindings={displayBindings}
+            draftAnalysis={draftAnalysis}
+            resetView={resetView}
+            focusRegion={focusRegion}
+            setMode={(nextMode) => dispatch({ type: 'setMode', mode: nextMode })}
+            setPatternQuery={(query) => dispatch({ type: 'setPatternQuery', query })}
+            setSelectedPatternId={(patternId) => dispatch({ type: 'setSelectedPatternId', patternId })}
+            createDraftFromQuery={createDraftFromQuery}
+            updateBindingRegion={updateBindingRegion}
+            setBindingPlaceId={(placeId) => dispatch({ type: 'setBindingPlaceId', placeId })}
+            setBindingNote={(note) => dispatch({ type: 'setBindingNote', note })}
+            addBinding={addBinding}
+            updateDraftRegion={updateDraftRegion}
+            updateDraftForm={updateDraftForm}
+            handleDraftImage={(file) => void handleDraftImage(file)}
+            saveDraftAndBind={saveDraftAndBind}
+            removeBinding={removeBinding}
+          />
+        </div>
+      </BottomSheet>
     </main>
   )
 }

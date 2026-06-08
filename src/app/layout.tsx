@@ -3,6 +3,7 @@ import "./globals.css"
 import AuthProvider from '@/components/providers/AuthProvider'
 import QueryProvider from '@/components/providers/QueryProvider'
 import AuthModal from '@/components/auth/AuthModal'
+import { ServiceWorkerRegistration } from '@/components/providers/ServiceWorkerRegistration'
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -20,6 +21,12 @@ export const metadata: Metadata = {
     locale: "zh_CN",
     siteName: "湖北纹案文化展示平台",
   },
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: '湖北纹案',
+  },
 }
 
 export default function RootLayout({
@@ -28,6 +35,13 @@ export default function RootLayout({
   return (
     <html lang="zh-CN">
       <body>
+        <ServiceWorkerRegistration />
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[400] btn-primary"
+        >
+          跳到主内容
+        </a>
         <QueryProvider>
           <AuthProvider>
             <AuthModal />
