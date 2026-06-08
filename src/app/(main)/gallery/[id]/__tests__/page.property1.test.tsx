@@ -26,6 +26,9 @@ vi.mock('next/navigation', () => ({
       throw err
     }
   },
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn(), back: vi.fn(), forward: vi.fn(), refresh: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(),
+  usePathname: () => '/',
 }))
 
 // Mock next/link as a simple anchor
@@ -52,6 +55,11 @@ vi.mock('@/components/pattern/LikeButton', () => ({
 // Mock CommentSection — client component, not needed for this property
 vi.mock('@/components/pattern/CommentSection', () => ({
   default: () => React.createElement('section', { 'data-testid': 'comment-section' }),
+}))
+
+// Mock KnowledgeGraph — client component with d3/router, not needed for h1 property
+vi.mock('@/components/pattern/KnowledgeGraph', () => ({
+  KnowledgeGraph: () => React.createElement('div', { 'data-testid': 'knowledge-graph' }),
 }))
 
 // Mock getRelatedPatterns — returns empty array (not under test here)
