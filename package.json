@@ -3,10 +3,10 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
-        "dev": "next dev -p 6427",
+        "dev": "next dev -p 6207",
         "prebuild": "tsx scripts/check-env.ts",
         "build": "next build",
-        "start": "next start",
+        "start": "next start -p 6207",
         "lint": "eslint . --max-warnings=0 && npm run lint:guards",
         "lint:guards": "node scripts/lint-guards.mjs",
         "test": "vitest run",
