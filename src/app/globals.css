@@ -325,7 +325,8 @@ a:hover { color: var(--color-cinnabar-deep); }
   border: 1.5px solid var(--color-cinnabar);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all var(--duration-fast) var(--ease-default);
+  transition: background-color var(--duration-fast) var(--ease-default),
+              color var(--duration-fast) var(--ease-default);
 }
 .btn-ghost:hover {
   background-color: var(--color-cinnabar);
