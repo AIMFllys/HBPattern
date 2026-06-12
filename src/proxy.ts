@@ -20,6 +20,10 @@ export async function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-request-id', requestId)
 
+  // 生成 per-request nonce，供 Next.js 16 自动注入到框架生成的内联 script 标签
+  const nonce = crypto.randomUUID().replace(/-/g, '')
+  requestHeaders.set('x-nonce', nonce)
+
   // 用携带新 header 的 request 初始化 supabaseResponse，
   // NextResponse.next({ request: { headers } }) 会将修改后的 headers 透传给下游。
   let supabaseResponse = NextResponse.next({
@@ -53,16 +57,16 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone()
     url.pathname = AUTH_ROUTES.login
     url.searchParams.set('next', `${pathname}${request.nextUrl.search}`)
-    return withSecurityHeaders(NextResponse.redirect(url))
+    return withSecurityHeaders(NextResponse.redirect(url), nonce)
   }
 
   if (pathname === AUTH_ROUTES.login && user) {
     const nextPath = resolveSafeNextPath(request.nextUrl.searchParams.get('next'))
-    return withSecurityHeaders(NextResponse.redirect(new URL(nextPath, request.nextUrl.origin)))
+    return withSecurityHeaders(NextResponse.redirect(new URL(nextPath, request.nextUrl.origin)), nonce)
   }
 
   // 注入安全 headers
-  withSecurityHeaders(supabaseResponse)
+  withSecurityHeaders(supabaseResponse, nonce)
 
   // 为公开 API (v1) 注入 CORS headers。
   // 使用 corsHeaders() 作为单一真相源，使实际响应与 OPTIONS 预检
@@ -78,9 +82,9 @@ export async function proxy(request: NextRequest) {
   return supabaseResponse
 }
 
-function withSecurityHeaders(response: NextResponse) {
+function withSecurityHeaders(response: NextResponse, nonce: string) {
   Object.entries(SECURITY_HEADERS).forEach(([k, v]) => response.headers.set(k, v))
-  response.headers.set('Content-Security-Policy', buildCsp())
+  response.headers.set('Content-Security-Policy', buildCsp(nonce))
   // HSTS 仅在生产环境注入（HTTPS 部署）。浏览器仅在 HTTPS 响应上处理该头，
   // 但开发环境（http）下显式跳过以避免本地自签名场景的副作用。
   if (process.env.NODE_ENV === 'production') {

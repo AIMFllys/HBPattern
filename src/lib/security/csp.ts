@@ -1,13 +1,18 @@
 /**
  * Content Security Policy 生成器。
  * 开发环境允许 eval（Next.js HMR 需要），生产环境严格限制。
+ * 生产环境下通过 nonce + strict-dynamic 允许框架生成的内联脚本执行。
  */
-export function buildCsp(): string {
+export function buildCsp(nonce?: string): string {
   const isDev = process.env.NODE_ENV !== 'production'
 
   const directives: Record<string, string[]> = {
     'default-src': ["'self'"],
-    'script-src': ["'self'", ...(isDev ? ["'unsafe-eval'", "'unsafe-inline'"] : [])],
+    'script-src': [
+      "'self'",
+      ...(nonce ? [`'nonce-${nonce}'`, "'strict-dynamic'"] : []),
+      ...(isDev ? ["'unsafe-eval'", "'unsafe-inline'"] : []),
+    ],
     'style-src': ["'self'", "'unsafe-inline'"],
     'img-src': ["'self'", 'data:', 'blob:', '*.supabase.co', 'lh3.googleusercontent.com'],
     'font-src': ["'self'"],
