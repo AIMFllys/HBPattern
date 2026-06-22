@@ -53,7 +53,7 @@ if (!supabaseUrl || !supabaseKey) throw new Error('Supabase URL/key is required'
 const supabase = createClient(supabaseUrl, supabaseKey, {
   auth: { persistSession: false },
 })
-const researchData = JSON.parse(readFileSync('scripts/hubei-patterns-data.json', 'utf8')) as ResearchData
+const researchData = JSON.parse(readFileSync(new URL('./hubei-patterns-data.json', import.meta.url), 'utf8')) as ResearchData
 const systemUserId = '00000000-0000-0000-0009-000000000001'
 
 const techniqueInfo: Record<TechniqueKey, { name: string; category: TechniqueKey; description: string }> = {
