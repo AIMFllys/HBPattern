@@ -24,7 +24,7 @@ export default function NavLinks({ items, primaryColor }: NavLinksProps) {
           <Link
             key={item.path}
             href={item.path}
-            className={`text-sm font-medium transition-colors py-1 ${
+            className={`text-sm font-medium transition-colors py-0.5 ${
               isActive
                 ? `${colorClass} border-b-2 ${borderClass}`
                 : 'text-text-secondary hover:text-cinnabar'

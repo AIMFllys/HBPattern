@@ -199,18 +199,13 @@ export function createInkStyle(): StyleSpecification {
             'case',
             ['==', ['get', 'selected'], true],
             0.18,
-            0.08,
+            [
+              'case',
+              ['boolean', ['feature-state', 'hover'], false],
+              0.20,
+              0.08,
+            ],
           ],
-        },
-      },
-      {
-        id: 'hubei-region-fill-hover',
-        type: 'fill',
-        source: 'hubei-regions',
-        filter: ['==', ['id'], ['feature-state', 'hover']],
-        paint: {
-          'fill-color': INK_STYLE_COLORS.goldLight,
-          'fill-opacity': 0.22,
         },
       },
       {
