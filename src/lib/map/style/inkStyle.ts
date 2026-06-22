@@ -15,9 +15,9 @@ import type { StyleSpecification } from 'maplibre-gl'
  * 配色：宣纸底 + 淡墨青水域 + 朱砂省界 + 金色省面淡晕 + 棕辅色地市界
  */
 
-const OPENFREEMAP_TILES = 'https://tiles.openfreemap.org/planet'
-const OPENFREEMAP_GLYPHS = 'https://tiles.openfreemap.org/glyphs/{fontstack}/{range}.pbf'
-const OPENFREEMAP_SPRITE = 'https://tiles.openfreemap.org/sprites/openmaptiles'
+const OPENFREEMAP_TILES = 'https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf'
+const OPENFREEMAP_GLYPHS = 'https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf'
+const OPENFREEMAP_SPRITE = 'https://tiles.openfreemap.org/sprites/ofm_f384/ofm'
 
 const TERRAIN_TILES = 'https://elevation-tiles-prod.s3.amazonaws.com/terrarium/{z}/{x}/{y}.png'
 
