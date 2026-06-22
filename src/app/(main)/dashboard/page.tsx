@@ -22,7 +22,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-surface transition-colors">
-      <SiteHeader logoIcon="account_balance" siteName="管理后台" primaryColor="cinnabar" />
+      <SiteHeader siteName="管理后台" primaryColor="cinnabar" />
       <main className="max-w-6xl mx-auto px-6 py-10">
         <h1 className="text-2xl font-bold mb-8">数据概览</h1>
 

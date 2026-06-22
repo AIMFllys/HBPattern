@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Icon } from '@/components/icons/Icon'
+import { Logo } from '@/components/icons/Logo'
 
 interface SiteFooterProps {
   className?: string
@@ -19,8 +20,8 @@ export default function SiteFooter({ className = '', variant }: SiteFooterProps)
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-10">
         <div className="max-w-xs">
           <div className="flex items-center gap-3 mb-6">
-            <div className="text-cinnabar">
-              <Icon name="filter_vintage" size={24} />
+            <div className="flex items-center justify-center w-6 h-6">
+              <Logo size={24} />
             </div>
             <h2 className="text-lg font-bold font-serif text-text">湖北传统纹样库</h2>
           </div>

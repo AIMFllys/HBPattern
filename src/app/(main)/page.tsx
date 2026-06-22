@@ -25,7 +25,7 @@ export default async function HomePage() {
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-surface transition-colors">
-      <SiteHeader logoIcon="filter_vintage" siteName="湖北传统纹样库" primaryColor="cinnabar" />
+      <SiteHeader siteName="湖北传统纹样库" primaryColor="cinnabar" />
 
       <main id="main-content" className="flex flex-col w-full">
         {/* Hero Section — clean rice background; frame image only in museum card (see 01dbf8c) */}

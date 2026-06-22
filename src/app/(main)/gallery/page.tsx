@@ -26,7 +26,7 @@ export default async function GalleryPage({ searchParams }: { searchParams: Prom
 
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
-      <SiteHeader logoIcon="filter_vintage" siteName="湖北传统纹样库" primaryColor="cinnabar" />
+      <SiteHeader siteName="湖北传统纹样库" primaryColor="cinnabar" />
       <GalleryClient
         patterns={patterns}
         total={total}

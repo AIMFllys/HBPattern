@@ -73,7 +73,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
 
   return (
     <div className="layout-container flex h-full grow flex-col bg-surface transition-colors">
-      <SiteHeader logoIcon="landscape" siteName="纹样大观" primaryColor="gold" />
+      <SiteHeader siteName="纹样大观" primaryColor="gold" />
 
       {/* Peak Experience: Full-bleed hero image */}
       <PatternHeroImage

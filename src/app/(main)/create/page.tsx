@@ -28,7 +28,7 @@ export default function CreatePage() {
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-surface pb-16 lg:pb-0 transition-colors">
-      <SiteHeader logoIcon="storm" siteName="AI 创意中心" primaryColor="cinnabar" />
+      <SiteHeader siteName="AI 创意中心" primaryColor="cinnabar" />
       <ProductSelector />
       <main className="flex flex-1 overflow-hidden">
         <section className="relative flex flex-1 flex-col">

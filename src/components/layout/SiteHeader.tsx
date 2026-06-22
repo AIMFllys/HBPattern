@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { Icon } from '@/components/icons/Icon'
+import { Logo } from '@/components/icons/Logo'
 import NavLinks from './NavLinks'
 import MobileDrawer from './MobileDrawer'
 import UserMenu from './UserMenu'
 import { ThemeToggle } from './ThemeToggle'
 
 interface SiteHeaderProps {
-  logoIcon?: string
   siteName?: string
   primaryColor?: 'cinnabar' | 'gold'
 }
@@ -20,18 +20,15 @@ const navItems = [
 ]
 
 export default function SiteHeader({
-  logoIcon = 'filter_vintage',
   siteName = '湖北传统纹样库',
   primaryColor = 'cinnabar',
 }: SiteHeaderProps) {
-  const colorClass = primaryColor === 'cinnabar' ? 'text-cinnabar' : 'text-gold'
-
   return (
     <header className="sticky top-0 z-40 w-full border-b border-header-border bg-header-bg backdrop-blur-md px-6 lg:px-10 py-2 flex items-center justify-between transition-colors">
       <div className="flex items-center gap-10">
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className={`${colorClass} transition-transform group-hover:scale-110`}>
-            <Icon name={logoIcon} size={24} />
+          <div className="flex items-center justify-center w-6 h-6 transition-transform group-hover:scale-110">
+            <Logo size={24} />
           </div>
           <span className="text-lg font-bold tracking-tight text-text group-hover:text-cinnabar transition-colors">
             {siteName}
@@ -58,7 +55,7 @@ export default function SiteHeader({
       </div>
 
       {/* Mobile */}
-      <MobileDrawer navItems={navItems} primaryColor={primaryColor} logoIcon={logoIcon} />
+      <MobileDrawer navItems={navItems} primaryColor={primaryColor} />
     </header>
   )
 }

@@ -87,7 +87,7 @@ export default function WorkshopClient({ initialPatterns, initialTotal }: Worksh
 
   return (
     <div className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-surface pb-14 lg:pb-0 transition-colors">
-      <SiteHeader logoIcon="grid_view" siteName="纹样+ 跨界创作工坊" primaryColor="gold" />
+      <SiteHeader siteName="纹样+ 跨界创作工坊" primaryColor="gold" />
 
       <main className="relative flex flex-1 overflow-hidden">
         <ToolBar />

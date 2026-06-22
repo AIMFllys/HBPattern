@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" role="img" aria-label="湖北传统纹样库">
+  <rect width="48" height="48" rx="12" fill="#b84a39"/>
+  <g stroke="#f5f0e8" stroke-width="3" stroke-linecap="round" fill="none">
+    <circle cx="24" cy="24" r="13"/>
+    <circle cx="24" cy="24" r="8"/>
+    <path d="M24 11 L24 37 M11 24 L37 24" stroke-width="2.5"/>
+    <path d="M14.8 14.8 L33.2 33.2 M33.2 14.8 L14.8 33.2" stroke-width="2.5"/>
+  </g>
+  <circle cx="24" cy="24" r="4" fill="#f5f0e8"/>
+</svg>

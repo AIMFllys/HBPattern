@@ -5,14 +5,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'motion/react'
 import { Icon } from '@/components/icons/Icon'
+import { Logo } from '@/components/icons/Logo'
 
 interface MobileDrawerProps {
   navItems: { name: string; path: string }[]
   primaryColor: 'cinnabar' | 'gold'
-  logoIcon: string
 }
 
-export default function MobileDrawer({ navItems, primaryColor, logoIcon }: MobileDrawerProps) {
+export default function MobileDrawer({ navItems, primaryColor }: MobileDrawerProps) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const colorClass = primaryColor === 'cinnabar' ? 'text-cinnabar' : 'text-gold'
@@ -54,8 +54,8 @@ export default function MobileDrawer({ navItems, primaryColor, logoIcon }: Mobil
             >
               <div className="p-6 border-b border-border flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={colorClass}>
-                    <Icon name={logoIcon} size={28} />
+                  <div className="flex items-center justify-center w-7 h-7">
+                    <Logo size={28} />
                   </div>
                   <span className="font-bold font-serif text-text tracking-widest">导航菜单</span>
                 </div>

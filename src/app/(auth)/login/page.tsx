@@ -3,7 +3,7 @@
 
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Icon } from '@/components/icons/Icon'
+import { Logo } from '@/components/icons/Logo'
 import AuthForm from '@/components/auth/AuthForm'
 import { resolveSafeNextPath } from '@/lib/auth/routes'
 
@@ -20,8 +20,8 @@ export default function LoginPage() {
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-transparent to-ink/50"></div>
 
         <Link href="/" className="relative z-10 flex items-center gap-3 text-white group w-fit">
-          <div className="text-cinnabar group-hover:scale-110 transition-transform">
-            <Icon name="filter_vintage" size={32} />
+          <div className="flex items-center justify-center w-8 h-8 transition-transform group-hover:scale-110">
+            <Logo size={32} />
           </div>
           <span className="text-xl font-bold tracking-widest font-serif">湖北传统纹样库</span>
         </Link>
@@ -42,7 +42,9 @@ export default function LoginPage() {
       <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-24 relative">
         <div className="absolute top-8 left-8 lg:hidden">
           <Link href="/" className="flex items-center gap-2 text-text">
-            <Icon name="filter_vintage" className="text-cinnabar" />
+            <div className="flex items-center justify-center w-6 h-6">
+              <Logo size={24} />
+            </div>
             <span className="font-bold font-serif">湖北传统纹样库</span>
           </Link>
         </div>
