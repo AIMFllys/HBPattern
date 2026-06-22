@@ -228,6 +228,61 @@ export function createInkStyle(): StyleSpecification {
         },
       },
 
+      // ─── 地市名标签（立体浮起效果，基于 hubei-regions GeoJSON） ──
+      // 双层 halo（外晕 + 内晕）+ pitch-scaling 实现 3D 立体文字
+      {
+        id: 'hubei-region-label-halo-outer',
+        type: 'symbol',
+        source: 'hubei-regions',
+        minzoom: 5,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Noto Sans CJK SC Bold'],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 5, 13, 9, 18, 14, 24],
+          'text-anchor': 'center',
+          'text-allow-overlap': true,
+          'text-pitch-alignment': 'map',
+          'text-rotation-alignment': 'map',
+          'text-pitch-scaling': 'map',
+        },
+        paint: {
+          'text-color': INK_STYLE_COLORS.paper,
+          'text-halo-color': INK_STYLE_COLORS.inkDeep,
+          'text-halo-width': 3.5,
+          'text-halo-blur': 1.5,
+          'text-opacity': 0.35,
+          'text-translate': [0, 0],
+        },
+      },
+      {
+        id: 'hubei-region-label',
+        type: 'symbol',
+        source: 'hubei-regions',
+        minzoom: 5,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-font': ['Noto Sans CJK SC Bold'],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 5, 13, 9, 18, 14, 24],
+          'text-anchor': 'center',
+          'text-allow-overlap': true,
+          'text-pitch-alignment': 'map',
+          'text-rotation-alignment': 'map',
+          'text-pitch-scaling': 'map',
+        },
+        paint: {
+          'text-color': [
+            'case',
+            ['==', ['get', 'selected'], true],
+            INK_STYLE_COLORS.cinnabar,
+            INK_STYLE_COLORS.inkDeep,
+          ],
+          'text-halo-color': INK_STYLE_COLORS.paper,
+          'text-halo-width': 2,
+          'text-halo-blur': 0.8,
+          'text-opacity': 0.95,
+        },
+      },
+
       // ─── 县级边界（zoom 8+ 显示，OpenMapTiles admin_level=6） ─
       {
         id: 'county-border',

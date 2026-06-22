@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import type { Map as MaplibreMapInstance } from 'maplibre-gl'
 import {
   findHubeiPlace,
@@ -33,7 +33,9 @@ import {
 } from './utils/mapDemoUtils'
 import { readImageForDemo } from './utils/imageProcessing'
 
-const MapLibreMap = dynamic(() => import('./MapLibreMap'), { ssr: false })
+const MapLibreMap = dynamic(() => import('./MapLibreMap'), { ssr: false }) as React.ComponentType<
+  React.ComponentProps<typeof import('./MapLibreMap')['default']>
+>
 
 interface HubeiMapClientProps {
   initialPatterns: MapPatternOption[]
@@ -135,25 +137,25 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
     [bindings, draftForm],
   )
 
-  function handleMapReady(map: MaplibreMapInstance) {
+  const handleMapReady = useCallback((map: MaplibreMapInstance) => {
     setMapInstance(map)
-  }
+  }, [])
 
-  function syncSelectedLocation(regionId: string, placeId: string | null) {
+  const syncSelectedLocation = useCallback((regionId: string, placeId: string | null) => {
     dispatch({ type: 'syncSelectedLocation', regionId, placeId })
-  }
+  }, [])
 
-  function selectRegion(regionId: string) {
+  const selectRegion = useCallback((regionId: string) => {
     syncSelectedLocation(regionId, null)
     const region = findHubeiRegion(regionId)
     if (region) {
       flyToRegion([region.point.lng, region.point.lat], 9)
     }
-  }
+  }, [flyToRegion, syncSelectedLocation])
 
-  function selectPlace(regionId: string, placeId: string) {
+  const selectPlace = useCallback((regionId: string, placeId: string) => {
     syncSelectedLocation(regionId, placeId)
-  }
+  }, [syncSelectedLocation])
 
   function focusRegion(regionId: string) {
     const region = findHubeiRegion(regionId)
