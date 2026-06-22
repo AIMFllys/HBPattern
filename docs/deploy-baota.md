@@ -1,5 +1,7 @@
 # 宝塔部署指南（HBPattern，零基础版）
 
+> **推荐部署方式为腾讯云 EdgeOne Pages**，见 `deploy-edgeone.md`。本指南作为自建服务器备选方案。
+
 > 现状：当前只需部署**一个 Next.js 网站**。Python/AI 后端还没实现（路线图 Phase 3），
 > 所以 `deployment-runbook.md` 里的 FastAPI/Gunicorn 部分**现在不用管**。
 
