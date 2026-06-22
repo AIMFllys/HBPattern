@@ -229,7 +229,7 @@ export function createInkStyle(): StyleSpecification {
       },
 
       // ─── 地市名标签（立体浮起效果，基于 hubei-regions GeoJSON） ──
-      // 双层 halo（外晕 + 内晕）+ pitch-scaling 实现 3D 立体文字
+      // 双层 halo（外晕 + 内晕）+ pitch-alignment 实现 3D 立体文字
       {
         id: 'hubei-region-label-halo-outer',
         type: 'symbol',
@@ -243,7 +243,6 @@ export function createInkStyle(): StyleSpecification {
           'text-allow-overlap': true,
           'text-pitch-alignment': 'map',
           'text-rotation-alignment': 'map',
-          'text-pitch-scaling': 'map',
         },
         paint: {
           'text-color': INK_STYLE_COLORS.paper,
@@ -251,7 +250,6 @@ export function createInkStyle(): StyleSpecification {
           'text-halo-width': 3.5,
           'text-halo-blur': 1.5,
           'text-opacity': 0.35,
-          'text-translate': [0, 0],
         },
       },
       {
@@ -267,7 +265,6 @@ export function createInkStyle(): StyleSpecification {
           'text-allow-overlap': true,
           'text-pitch-alignment': 'map',
           'text-rotation-alignment': 'map',
-          'text-pitch-scaling': 'map',
         },
         paint: {
           'text-color': [
