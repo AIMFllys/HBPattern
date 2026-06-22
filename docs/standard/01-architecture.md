@@ -9,7 +9,7 @@
 | 语言 | TypeScript | 5.x |
 | 样式 | Tailwind CSS | v4 |
 | 数据库 | Supabase PostgreSQL | 17 (PostGIS + pgvector) |
-| ORM/Migration | Prisma | 7.8 |
+| Schema/Migration | supabase/migrations/*.sql | 0000_init.sql 为 schema 真相源 |
 | 认证 | Supabase Auth | @supabase/ssr |
 | 存储 | Supabase Storage | pattern-images bucket |
 | 状态(客户端) | Zustand | 5.x |
