@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { BaseSurfaceMaterial } from '../BaseSurfaceMaterial'
 import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function TeaCup() {
@@ -52,7 +53,13 @@ export default function TeaCup() {
   return (
     <group ref={groupRef} position={[0, 0.08, 0]}>
       <mesh geometry={cupGeometry}>
+        <BaseSurfaceMaterial side={THREE.BackSide} />
+      </mesh>
+      <mesh geometry={cupGeometry}>
         <TexturedMaterial roughnessOverride={32} metalnessOverride={5} side={THREE.DoubleSide} />
+      </mesh>
+      <mesh geometry={baseGeometry}>
+        <BaseSurfaceMaterial side={THREE.BackSide} />
       </mesh>
       <mesh geometry={baseGeometry}>
         <TexturedMaterial roughnessOverride={35} metalnessOverride={5} side={THREE.DoubleSide} />

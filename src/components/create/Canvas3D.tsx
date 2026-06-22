@@ -1,7 +1,7 @@
 'use client'
 
 import { Suspense, useEffect, useRef } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useThree } from '@react-three/fiber'
 import {
   ContactShadows,
   OrbitControls,
@@ -24,6 +24,13 @@ function Scene() {
   const controlsRef = useRef<OrbitControlsImpl>(null)
   const cameraPreset = useCreateStore(state => state.cameraPreset)
   const selectedProduct = useCreateStore(state => state.selectedProduct)
+  const setThreeScene = useCreateStore(state => state.setThreeScene)
+  const scene = useThree(state => state.scene)
+
+  useEffect(() => {
+    setThreeScene(scene)
+    return () => setThreeScene(null)
+  }, [scene, setThreeScene])
 
   useEffect(() => {
     const controls = controlsRef.current

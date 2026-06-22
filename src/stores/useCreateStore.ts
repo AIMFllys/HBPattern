@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import * as THREE from 'three'
 import {
   DEFAULT_MATERIAL_PARAMS,
   DEFAULT_TEXTURE_PARAMS,
@@ -39,6 +40,9 @@ interface CreateState {
 
   isExporting: boolean
   setIsExporting: (value: boolean) => void
+
+  threeScene: THREE.Scene | null
+  setThreeScene: (scene: THREE.Scene | null) => void
 }
 
 const defaultPattern = PATTERN_PRESETS[0] ?? null
@@ -56,19 +60,16 @@ export const useCreateStore = create<CreateState>((set) => ({
       textureParams: DEFAULT_TEXTURE_PARAMS,
       materialParams: {
         ...DEFAULT_MATERIAL_PARAMS,
-        baseColor: state.selectedPattern?.suggestedBaseColor ?? initialMaterialParams.baseColor,
+        baseColor: state.materialParams.baseColor,
       },
       cameraPreset: 'front',
     })),
 
   selectedPattern: defaultPattern,
   setPattern: pattern =>
-    set(state => ({
+    set({
       selectedPattern: pattern,
-      materialParams: pattern
-        ? { ...state.materialParams, baseColor: pattern.suggestedBaseColor }
-        : state.materialParams,
-    })),
+    }),
 
   textureParams: DEFAULT_TEXTURE_PARAMS,
   setTextureParam: (key, value) =>
@@ -83,12 +84,9 @@ export const useCreateStore = create<CreateState>((set) => ({
       materialParams: { ...state.materialParams, [key]: value },
     })),
   resetMaterialParams: () =>
-    set(state => ({
-      materialParams: {
-        ...DEFAULT_MATERIAL_PARAMS,
-        baseColor: state.selectedPattern?.suggestedBaseColor ?? initialMaterialParams.baseColor,
-      },
-    })),
+    set({
+      materialParams: { ...DEFAULT_MATERIAL_PARAMS },
+    }),
 
   cameraPreset: 'front',
   setCameraPreset: preset => set({ cameraPreset: preset }),
@@ -98,4 +96,7 @@ export const useCreateStore = create<CreateState>((set) => ({
 
   isExporting: false,
   setIsExporting: value => set({ isExporting: value }),
+
+  threeScene: null,
+  setThreeScene: scene => set({ threeScene: scene }),
 }))

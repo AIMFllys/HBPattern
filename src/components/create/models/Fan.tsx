@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { BaseSurfaceMaterial } from '../BaseSurfaceMaterial'
 import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function Fan() {
@@ -31,6 +32,9 @@ export default function Fan() {
 
   return (
     <group ref={groupRef} position={[0, -0.45, 0]}>
+      <mesh geometry={fanGeometry} position={[0, 0, -0.02]}>
+        <BaseSurfaceMaterial side={THREE.DoubleSide} />
+      </mesh>
       <mesh geometry={fanGeometry}>
         <TexturedMaterial roughnessOverride={72} side={THREE.DoubleSide} />
       </mesh>

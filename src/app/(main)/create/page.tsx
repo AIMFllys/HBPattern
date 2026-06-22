@@ -4,6 +4,7 @@ import { useState } from 'react'
 import dynamic from 'next/dynamic'
 import SiteHeader from '@/components/layout/SiteHeader'
 import { MobileToolbar, type MobileCreateTab } from '@/components/create/MobileToolbar'
+import { DownloadMenu } from '@/components/create/DownloadMenu'
 import { ModelInfo } from '@/components/create/ModelInfo'
 import { ParameterPanel } from '@/components/create/ParameterPanel'
 import { PatternPanel } from '@/components/create/PatternPanel'
@@ -34,6 +35,7 @@ export default function CreatePage() {
           <div className="relative flex-1 bg-rice-warm">
             <Canvas3D />
             <ModelInfo />
+            <DownloadMenu />
             <ViewportToolbar />
           </div>
           <div className="hidden lg:block">

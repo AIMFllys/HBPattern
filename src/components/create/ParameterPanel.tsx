@@ -6,7 +6,7 @@ import { ColorPicker } from '@/components/ui/ColorPicker'
 import { Icon } from '@/components/icons/Icon'
 import { useCreateStore } from '@/stores/useCreateStore'
 import type { CameraPreset, TilingMode } from '@/types/create'
-import { ExportButton, SaveCreationButton } from './ExportButton'
+import { SaveCreationButton } from './ExportButton'
 import { OffsetPad } from './OffsetPad'
 
 const TILING_OPTIONS: { value: TilingMode; label: string; icon: string }[] = [
@@ -41,7 +41,6 @@ export const ParameterPanel = memo(function ParameterPanel() {
     resetTextureParams()
     resetMaterialParams()
   }, [resetTextureParams, resetMaterialParams])
-
   return (
     <div className="border-t border-rice-deep bg-white">
       <div className="p-4">
@@ -110,7 +109,7 @@ export const ParameterPanel = memo(function ParameterPanel() {
           <div className="min-w-[168px]">
             <ColorPicker value={materialParams.baseColor} onChange={handleBaseColorChange} label="底色 BASE" />
             <label className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-rice-deep bg-rice-warm px-3 py-2 text-xs font-bold text-ink-light">
-              <span>纯色轮廓</span>
+              <span>显示底色背板</span>
               <input
                 type="checkbox"
                 checked={materialParams.showBaseSurface}
@@ -137,7 +136,6 @@ export const ParameterPanel = memo(function ParameterPanel() {
         </div>
         <div className="flex items-center gap-2">
           <SaveCreationButton />
-          <ExportButton />
         </div>
       </div>
     </div>
