@@ -47,6 +47,12 @@ export const HUBEI_MAP_INITIAL = {
   maxZoom: 14,
 } as const
 
+const HUBEI_REGION_NAMES = [
+  '武汉市', '黄石市', '十堰市', '宜昌市', '襄阳市', '鄂州市',
+  '荆门市', '孝感市', '荆州市', '黄冈市', '咸宁市', '随州市',
+  '恩施土家族苗族自治州', '仙桃市', '潜江市', '天门市', '神农架林区',
+]
+
 export function createInkStyle(): StyleSpecification {
   return {
     version: 8,
@@ -95,9 +101,9 @@ export function createInkStyle(): StyleSpecification {
           'hillshade-shadow-color': INK_STYLE_COLORS.inkDeep,
           'hillshade-highlight-color': INK_STYLE_COLORS.paperWarm,
           'hillshade-accent-color': INK_STYLE_COLORS.gold,
-          'hillshade-exaggeration': 0.65,
+          'hillshade-exaggeration': 0.45,
           'hillshade-illumination-direction': 315,
-          'hillshade-illumination-anchor': 'map',
+          'hillshade-illumination-anchor': 'viewport',
         },
         layout: { visibility: 'visible' },
       },
@@ -191,13 +197,13 @@ export function createInkStyle(): StyleSpecification {
         paint: {
           'fill-color': [
             'case',
-            ['==', ['get', 'selected'], true],
+            ['boolean', ['feature-state', 'selected'], false],
             INK_STYLE_COLORS.cinnabar,
             INK_STYLE_COLORS.gold,
           ],
           'fill-opacity': [
             'case',
-            ['==', ['get', 'selected'], true],
+            ['boolean', ['feature-state', 'selected'], false],
             0.18,
             [
               'case',
@@ -215,43 +221,20 @@ export function createInkStyle(): StyleSpecification {
         paint: {
           'line-color': [
             'case',
-            ['==', ['get', 'selected'], true],
+            ['boolean', ['feature-state', 'selected'], false],
             INK_STYLE_COLORS.cinnabarDeep,
             INK_STYLE_COLORS.brown,
           ],
           'line-width': [
             'case',
-            ['==', ['get', 'selected'], true],
+            ['boolean', ['feature-state', 'selected'], false],
             1.8,
             0.6,
           ],
         },
       },
 
-      // ─── 地市名标签（立体浮起效果，基于 hubei-regions GeoJSON） ──
-      // 双层 halo（外晕 + 内晕）+ pitch-alignment 实现 3D 立体文字
-      {
-        id: 'hubei-region-label-halo-outer',
-        type: 'symbol',
-        source: 'hubei-regions',
-        minzoom: 5,
-        layout: {
-          'text-field': ['get', 'name'],
-          'text-font': ['Noto Sans CJK SC Bold'],
-          'text-size': ['interpolate', ['linear'], ['zoom'], 5, 13, 9, 18, 14, 24],
-          'text-anchor': 'center',
-          'text-allow-overlap': true,
-          'text-pitch-alignment': 'map',
-          'text-rotation-alignment': 'map',
-        },
-        paint: {
-          'text-color': INK_STYLE_COLORS.paper,
-          'text-halo-color': INK_STYLE_COLORS.inkDeep,
-          'text-halo-width': 3.5,
-          'text-halo-blur': 1.5,
-          'text-opacity': 0.35,
-        },
-      },
+      // ─── 地市名标签（单层 halo，避免双层叠印导致文字折叠） ──
       {
         id: 'hubei-region-label',
         type: 'symbol',
@@ -263,19 +246,19 @@ export function createInkStyle(): StyleSpecification {
           'text-size': ['interpolate', ['linear'], ['zoom'], 5, 13, 9, 18, 14, 24],
           'text-anchor': 'center',
           'text-allow-overlap': true,
-          'text-pitch-alignment': 'map',
-          'text-rotation-alignment': 'map',
+          'text-pitch-alignment': 'viewport',
+          'text-rotation-alignment': 'viewport',
         },
         paint: {
           'text-color': [
             'case',
-            ['==', ['get', 'selected'], true],
+            ['boolean', ['feature-state', 'selected'], false],
             INK_STYLE_COLORS.cinnabar,
             INK_STYLE_COLORS.inkDeep,
           ],
           'text-halo-color': INK_STYLE_COLORS.paper,
-          'text-halo-width': 2,
-          'text-halo-blur': 0.8,
+          'text-halo-width': 2.5,
+          'text-halo-blur': 0.6,
           'text-opacity': 0.95,
         },
       },
@@ -391,13 +374,17 @@ export function createInkStyle(): StyleSpecification {
         },
       },
 
-      // ─── 城市标签（OpenMapTiles place） ─────────────────────
+      // ─── 城市标签（OpenMapTiles place，排除与 hubei-regions 同名避免重复） ──
       {
         id: 'place-city-label',
         type: 'symbol',
         source: 'openfreemap',
         'source-layer': 'place',
-        filter: ['==', ['get', 'class'], 'city'],
+        filter: [
+          'all',
+          ['==', ['get', 'class'], 'city'],
+          ['!', ['in', ['get', 'name'], ['literal', HUBEI_REGION_NAMES]]],
+        ],
         minzoom: 6,
         layout: {
           'text-field': ['get', 'name'],

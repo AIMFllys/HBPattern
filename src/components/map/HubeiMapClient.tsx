@@ -249,7 +249,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-73px)] flex-col overflow-hidden bg-surface lg:flex-row transition-colors">
+    <main id="main-content" className="flex min-h-[calc(100vh-73px)] flex-col overflow-hidden bg-surface lg:flex-row transition-colors">
       {/* Desktop sidebar */}
       <div className="hidden lg:flex">
         <MapSidebar

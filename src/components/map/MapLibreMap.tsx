@@ -48,6 +48,9 @@ export default function MapLibreMap({ mapRef, selectedRegionId, onMapReady, onRe
       attributionControl: { compact: true },
       dragRotate: false,
       touchZoomRotate: false,
+      fadeDuration: 350,
+      maxTileCacheSize: 4096,
+      refreshExpiredTiles: false,
     })
     mapRef.current = map
 

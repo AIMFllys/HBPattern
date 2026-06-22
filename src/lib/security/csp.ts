@@ -25,6 +25,7 @@ export function buildCsp(): string {
       'tiles.openfreemap.org',
       'elevation-tiles-prod.s3.amazonaws.com',
       'geo.datav.aliyun.com',
+      'lh3.googleusercontent.com',
       ...(isDev ? ['ws://localhost:*'] : []),
     ],
     'worker-src': ["'self'", 'blob:'],

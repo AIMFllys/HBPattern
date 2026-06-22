@@ -384,6 +384,11 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.map-page,
+.map-page * {
+  scroll-behavior: auto !important;
+}
+
 body {
   background-color: var(--color-surface);
   color: var(--color-text-secondary);

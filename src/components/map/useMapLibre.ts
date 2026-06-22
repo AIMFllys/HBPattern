@@ -14,9 +14,11 @@ export function useMapLibre() {
   const flyToRegion = useCallback((center: [number, number], zoom = 9) => {
     const map = mapRef.current
     if (!map) return
+    const currentZoom = map.getZoom()
     map.flyTo({
       center,
       zoom,
+      curve: Math.abs(zoom - currentZoom) > 2 ? 1.8 : 1.42,
       duration: 1200,
       essential: true,
     })

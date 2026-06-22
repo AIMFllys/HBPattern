@@ -25,8 +25,8 @@ export default function SiteHeader({
 }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-header-border bg-header-bg backdrop-blur-md px-6 lg:px-10 py-2 flex items-center justify-between transition-colors">
-      <div className="flex items-center gap-10">
-        <Link href="/" className="flex items-center gap-2.5 group">
+      <div className="flex items-center gap-10 shrink-0">
+        <Link href="/" className="flex items-center gap-2.5 group shrink-0">
           <div className="flex items-center justify-center w-6 h-6 transition-transform group-hover:scale-110">
             <Logo size={24} />
           </div>
