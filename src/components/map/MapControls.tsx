@@ -1,21 +1,21 @@
 import { Icon } from '@/components/icons/Icon'
 
 export function MapControls({
-  zoom,
-  updateZoom,
+  zoomIn,
+  zoomOut,
   resetView,
 }: {
-  zoom: number
-  updateZoom: (zoom: number) => void
+  zoomIn: () => void
+  zoomOut: () => void
   resetView: () => void
 }) {
   return (
-    <div className="absolute right-5 top-5 flex flex-col overflow-hidden border border-border bg-surface-inset shadow-lg">
-      <button type="button" onClick={() => updateZoom(zoom + 0.16)} className="p-2 text-text transition hover:bg-gold/15" aria-label="放大地图">
+    <div className="absolute right-5 top-5 z-10 flex flex-col overflow-hidden border border-border bg-surface-inset shadow-lg">
+      <button type="button" onClick={zoomIn} className="p-2 text-text transition hover:bg-gold/15" aria-label="放大地图">
         <Icon name="add" size={20} />
       </button>
       <div className="h-px bg-border" />
-      <button type="button" onClick={() => updateZoom(zoom - 0.16)} className="p-2 text-text transition hover:bg-gold/15" aria-label="缩小地图">
+      <button type="button" onClick={zoomOut} className="p-2 text-text transition hover:bg-gold/15" aria-label="缩小地图">
         <Icon name="remove" size={20} />
       </button>
       <div className="h-px bg-border" />

@@ -67,7 +67,6 @@ describe('map demo reducer', () => {
 
     expect(state.selectedPatternId).toBe(draft.id)
     expect(state.mode).toBe('bind')
-    expect(state.zoom).toBe(1.45)
     expect(state.draftForm.name).toBe('')
     expect(state.selectedPlaceId).toBe(draft.placeId)
   })

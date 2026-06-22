@@ -26,3 +26,4 @@ export type DisplayBinding = {
   region: HubeiRegion
   place: HubeiKeyPlace
 }
+
