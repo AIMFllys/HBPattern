@@ -50,3 +50,6 @@ next-env.d.ts
 # AI Agent Configs
 AGENTS.md
 CLAUDE.md
+
+# Documentation drafts
+docs/CODE_REVIEW_AND_ARCHITECTURE_PLAN.md
