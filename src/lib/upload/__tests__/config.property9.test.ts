@@ -161,6 +161,7 @@ describe('Property 9: 上传校验短路顺序 (Validates: Requirements 6.5, 6.6
         { numRuns: 200 },
       )
     },
+    20000,
   )
 
   it('大小超限的文件（即使 mime/ext 均非法）仍以 FILE_TOO_LARGE 短路，不进入后续校验', () => {

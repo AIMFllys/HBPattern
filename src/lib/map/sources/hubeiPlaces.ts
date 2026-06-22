@@ -32,7 +32,7 @@ export function buildHubeiPlacesGeoJSON(
         regionId: region.id,
         name: place.name,
         category: place.category,
-        selected: region.id === selectedRegion.id && place.id === null,
+        selected: false,
       },
     })),
   )

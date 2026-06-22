@@ -52,9 +52,9 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     const stored = getStoredTheme()
-    setThemeState(stored)
     currentResolved = resolveTheme(stored)
     applyTheme(currentResolved)
+    for (const listener of listeners) listener()
   }, [])
 
   useEffect(() => {

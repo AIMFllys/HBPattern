@@ -271,21 +271,23 @@ export function createInkStyle(): StyleSpecification {
         },
       },
 
-      // ─── 关键地点（square marker） ──────────────────────────
+      // ─── 关键地点（circle marker，墨色） ───────────────────
       {
         id: 'hubei-places-square',
-        type: 'symbol',
+        type: 'circle',
         source: 'hubei-places',
         minzoom: 8,
-        layout: {
-          'icon-image': 'place-square',
-          'icon-size': ['interpolate', ['linear'], ['zoom'], 8, 0.6, 12, 1.0],
-          'icon-allow-overlap': true,
-        },
         paint: {
-          'icon-color': INK_STYLE_COLORS.inkDeep,
-          'icon-halo-color': INK_STYLE_COLORS.paper,
-          'icon-halo-width': 1,
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 8, 3, 12, 5],
+          'circle-color': [
+            'case',
+            ['==', ['get', 'selected'], true],
+            INK_STYLE_COLORS.cinnabar,
+            INK_STYLE_COLORS.inkDeep,
+          ],
+          'circle-stroke-color': INK_STYLE_COLORS.paper,
+          'circle-stroke-width': 1.5,
+          'circle-opacity': 0.9,
         },
       },
       {
