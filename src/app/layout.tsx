@@ -4,6 +4,8 @@ import AuthProvider from '@/components/providers/AuthProvider'
 import QueryProvider from '@/components/providers/QueryProvider'
 import AuthModal from '@/components/auth/AuthModal'
 import { ServiceWorkerRegistration } from '@/components/providers/ServiceWorkerRegistration'
+import ThemeProvider from '@/components/providers/ThemeProvider'
+import { createThemeScript } from '@/lib/theme'
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -33,9 +35,16 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: createThemeScript() }}
+          suppressHydrationWarning
+        />
+      </head>
       <body>
-        <ServiceWorkerRegistration />
+        <ThemeProvider>
+          <ServiceWorkerRegistration />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[400] btn-primary"
@@ -48,6 +57,7 @@ export default function RootLayout({
             {children}
           </AuthProvider>
         </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

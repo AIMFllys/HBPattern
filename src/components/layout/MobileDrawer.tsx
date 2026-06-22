@@ -21,11 +21,11 @@ export default function MobileDrawer({ navItems, primaryColor, logoIcon }: Mobil
   return (
     <>
       <div className="flex lg:hidden items-center gap-4">
-        <Link href="/login" className="text-ink-medium" aria-label="登录">
+        <Link href="/login" className="text-text-secondary" aria-label="登录">
           <Icon name="person" size={24} />
         </Link>
         <button
-          className="w-10 h-10 rounded-full flex items-center justify-center bg-rice-warm text-ink"
+          className="w-10 h-10 rounded-full flex items-center justify-center bg-surface-elevated text-text"
           onClick={() => setIsOpen(true)}
           aria-label="打开导航菜单"
           aria-expanded={isOpen}
@@ -42,7 +42,7 @@ export default function MobileDrawer({ navItems, primaryColor, logoIcon }: Mobil
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed inset-0 bg-ink/60 backdrop-blur-sm z-50 lg:hidden"
+              className="fixed inset-0 bg-backdrop backdrop-blur-sm z-50 lg:hidden"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
@@ -50,18 +50,18 @@ export default function MobileDrawer({ navItems, primaryColor, logoIcon }: Mobil
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 left-0 bottom-0 w-[80%] max-w-sm bg-rice shadow-2xl z-50 flex flex-col lg:hidden"
+              className="fixed top-0 left-0 bottom-0 w-[80%] max-w-sm bg-surface shadow-2xl z-50 flex flex-col lg:hidden"
             >
-              <div className="p-6 border-b border-rice-deep flex items-center justify-between">
+              <div className="p-6 border-b border-border flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className={colorClass}>
                     <Icon name={logoIcon} size={28} />
                   </div>
-                  <span className="font-bold font-serif text-ink tracking-widest">导航菜单</span>
+                  <span className="font-bold font-serif text-text tracking-widest">导航菜单</span>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center bg-rice-warm text-ink-medium hover:bg-rice-deep"
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-surface-elevated text-text-secondary hover:bg-border"
                   aria-label="关闭导航菜单"
                 >
                   <Icon name="close" size={20} />
@@ -80,7 +80,7 @@ export default function MobileDrawer({ navItems, primaryColor, logoIcon }: Mobil
                       href={item.path}
                       onClick={() => setIsOpen(false)}
                       className={`px-4 py-3 rounded-lg text-sm font-bold flex items-center gap-3 ${
-                        isActive ? `${bgMutedClass} ${colorClass}` : 'text-ink-medium hover:bg-rice-warm'
+                        isActive ? `${bgMutedClass} ${colorClass}` : 'text-text-secondary hover:bg-surface-elevated'
                       }`}
                     >
                       {item.name}
@@ -89,11 +89,11 @@ export default function MobileDrawer({ navItems, primaryColor, logoIcon }: Mobil
                 })}
               </div>
 
-              <div className="p-6 border-t border-rice-deep bg-rice-warm/50">
+              <div className="p-6 border-t border-border bg-surface-elevated/50">
                 <Link
                   href="/dashboard"
                   onClick={() => setIsOpen(false)}
-                  className="w-full flex items-center justify-center gap-2 py-3 bg-white border border-rice-deep rounded-lg text-ink font-bold shadow-sm"
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-surface-inset border border-border rounded-lg text-text font-bold shadow-sm"
                 >
                   <Icon name="dashboard" size={18} />
                   管理后台

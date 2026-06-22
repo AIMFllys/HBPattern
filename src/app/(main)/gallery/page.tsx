@@ -35,7 +35,7 @@ export default async function GalleryPage({ searchParams }: { searchParams: Prom
         currentEra={era}
         currentSort={sort}
       />
-      <SiteFooter variant="light" />
+      <SiteFooter />
     </div>
   )
 }

@@ -55,18 +55,18 @@ export default function LikeButton({ patternId, initialLiked, initialCount }: Li
       onClick={handleClick}
       className="flex items-center gap-2 px-4 py-2 rounded-full border transition-all hover:shadow-sm active:scale-95"
       style={{
-        borderColor: liked ? 'var(--color-cinnabar)' : 'var(--color-rice-deep)',
+        borderColor: liked ? 'var(--color-cinnabar)' : 'var(--color-border)',
         backgroundColor: liked ? 'rgba(184,74,57,0.08)' : 'transparent',
       }}
       aria-label={liked ? '取消点赞' : '点赞'}
     >
       <span
         className={`text-xl transition-transform ${animating ? 'scale-130' : 'scale-100'}`}
-        style={{ color: liked ? 'var(--color-cinnabar)' : 'var(--color-ink-faint)', display: 'inline-block', transform: animating ? 'scale(1.3)' : 'scale(1)', transition: 'transform 200ms ease-out' }}
+        style={{ color: liked ? 'var(--color-cinnabar)' : 'var(--color-text-faint)', display: 'inline-block', transform: animating ? 'scale(1.3)' : 'scale(1)', transition: 'transform 200ms ease-out' }}
       >
         {liked ? '❤️' : '🤍'}
       </span>
-      <span className={`text-sm font-bold ${liked ? 'text-cinnabar' : 'text-ink-faint'}`}>
+      <span className={`text-sm font-bold ${liked ? 'text-cinnabar' : 'text-text-faint'}`}>
         {count}
       </span>
     </button>

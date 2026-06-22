@@ -26,11 +26,11 @@ export default function ParameterSlider({
   return (
     <div className={`space-y-2 ${className}`}>
       <div className="flex justify-between">
-        <label className="text-xs font-bold text-ink-faint uppercase tracking-tighter">{label}</label>
+        <label className="text-xs font-bold text-text-faint uppercase tracking-tighter">{label}</label>
         <span className={`text-xs font-medium ${colorClass}`}>{value}{unit}</span>
       </div>
       <input 
-        className="w-full h-1 bg-rice-deep rounded-lg appearance-none cursor-pointer accent-cinnabar" 
+        className="w-full h-1 bg-border rounded-lg appearance-none cursor-pointer accent-cinnabar" 
         type="range"
         min={min}
         max={max}

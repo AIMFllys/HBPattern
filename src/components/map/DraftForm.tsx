@@ -26,15 +26,15 @@ export function DraftForm({
 }) {
   return (
     <div className="mt-4 space-y-4">
-      <label className="flex min-h-32 cursor-pointer flex-col items-center justify-center border border-dashed border-rice-deep bg-rice text-center transition hover:border-cinnabar">
+      <label className="flex min-h-32 cursor-pointer flex-col items-center justify-center border border-dashed border-border bg-surface text-center transition hover:border-cinnabar">
         {draftForm.imageDataUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={draftForm.imageDataUrl} alt="Demo 纹样预览" className="h-32 w-full object-cover" />
         ) : (
           <>
-            <Icon name="upload_file" size={34} className="text-ink-faint" />
-            <span className="mt-2 text-xs font-bold text-ink-light">上传本地 Demo 图片</span>
-            <span className="text-[10px] text-ink-faint">自动压缩预览并提取主色</span>
+            <Icon name="upload_file" size={34} className="text-text-faint" />
+            <span className="mt-2 text-xs font-bold text-text-muted">上传本地 Demo 图片</span>
+            <span className="text-[10px] text-text-faint">自动压缩预览并提取主色</span>
           </>
         )}
         <input
@@ -51,7 +51,7 @@ export function DraftForm({
           value={draftForm.name}
           onChange={(event) => updateDraftForm({ name: event.target.value })}
           maxLength={80}
-          className="w-full border border-rice-deep bg-rice px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
+          className="w-full border border-border bg-surface px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
           placeholder="如：汉绣凤穿牡丹"
         />
       </Field>
@@ -61,7 +61,7 @@ export function DraftForm({
             value={draftForm.era}
             onChange={(event) => updateDraftForm({ era: event.target.value })}
             maxLength={40}
-            className="w-full border border-rice-deep bg-rice px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
+            className="w-full border border-border bg-surface px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
             placeholder="清代"
           />
         </Field>
@@ -70,7 +70,7 @@ export function DraftForm({
             value={draftForm.technique}
             onChange={(event) => updateDraftForm({ technique: event.target.value })}
             maxLength={40}
-            className="w-full border border-rice-deep bg-rice px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
+            className="w-full border border-border bg-surface px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
             placeholder="刺绣"
           />
         </Field>
@@ -89,7 +89,7 @@ export function DraftForm({
           onChange={(event) => updateDraftForm({ description: event.target.value })}
           rows={3}
           maxLength={500}
-          className="w-full resize-none border border-rice-deep bg-rice px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
+          className="w-full resize-none border border-border bg-surface px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
           placeholder="纹样的来源、寓意、采样地点或工艺特征..."
         />
       </Field>
@@ -100,7 +100,7 @@ export function DraftForm({
         type="button"
         onClick={saveDraftAndBind}
         disabled={!draftForm.name.trim()}
-        className="flex w-full items-center justify-center gap-2 bg-ink px-4 py-2.5 text-sm font-black text-rice transition hover:bg-cinnabar disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-center gap-2 bg-surface-elevated px-4 py-2.5 text-sm font-black text-text transition hover:bg-cinnabar hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
       >
         <Icon name="save" size={18} />
         保存草稿并绑定地点

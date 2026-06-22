@@ -21,7 +21,7 @@ export const ToolBar = memo(function ToolBar() {
   const resetViewport = useWorkshopStore(state => state.resetViewport)
 
   return (
-    <aside className="hidden w-14 flex-col items-center gap-2 border-r border-rice-deep bg-rice py-4 lg:flex">
+    <aside className="hidden w-14 flex-col items-center gap-2 border-r border-border bg-surface py-4 lg:flex">
       {TOOLS.map(tool => {
         const isActive = activeTool === tool.id
         return (
@@ -32,7 +32,7 @@ export const ToolBar = memo(function ToolBar() {
             className={`flex h-10 w-10 items-center justify-center rounded-lg transition-all ${
               isActive
                 ? 'bg-gold text-white shadow-sm'
-                : 'text-ink-light hover:bg-rice-warm hover:text-ink-medium'
+                : 'text-text-muted hover:bg-surface-elevated hover:text-text'
             }`}
             title={tool.label}
             aria-label={tool.label}
@@ -47,7 +47,7 @@ export const ToolBar = memo(function ToolBar() {
       <button
         type="button"
         onClick={() => setZoom(zoom + 0.1)}
-        className="flex h-8 w-8 items-center justify-center rounded text-ink-faint transition-colors hover:bg-rice-warm hover:text-ink-medium"
+        className="flex h-8 w-8 items-center justify-center rounded text-text-faint transition-colors hover:bg-surface-elevated hover:text-text"
         title="放大"
         aria-label="放大"
       >
@@ -56,7 +56,7 @@ export const ToolBar = memo(function ToolBar() {
       <button
         type="button"
         onClick={resetViewport}
-        className="rounded px-1 py-0.5 text-[10px] font-bold text-ink-faint transition-colors hover:bg-rice-warm hover:text-ink-medium"
+        className="rounded px-1 py-0.5 text-[10px] font-bold text-text-faint transition-colors hover:bg-surface-elevated hover:text-text"
         title="重置视口"
       >
         {Math.round(zoom * 100)}%
@@ -64,7 +64,7 @@ export const ToolBar = memo(function ToolBar() {
       <button
         type="button"
         onClick={() => setZoom(zoom - 0.1)}
-        className="flex h-8 w-8 items-center justify-center rounded text-ink-faint transition-colors hover:bg-rice-warm hover:text-ink-medium"
+        className="flex h-8 w-8 items-center justify-center rounded text-text-faint transition-colors hover:bg-surface-elevated hover:text-text"
         title="缩小"
         aria-label="缩小"
       >

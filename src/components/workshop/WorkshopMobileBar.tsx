@@ -37,7 +37,7 @@ export function WorkshopMobileBar({ initialPatterns, initialTotal }: WorkshopMob
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-rice-deep bg-white px-3 py-2 shadow-modal lg:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-border bg-surface-inset px-3 py-2 shadow-modal lg:hidden">
         <MobileButton
           icon="auto_awesome"
           label="纹样"
@@ -71,14 +71,14 @@ export function WorkshopMobileBar({ initialPatterns, initialTotal }: WorkshopMob
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="fixed bottom-14 left-0 right-0 z-30 max-h-[72vh] overflow-hidden rounded-t-2xl border-t border-rice-deep bg-white shadow-modal lg:hidden"
+            className="fixed bottom-14 left-0 right-0 z-30 max-h-[72vh] overflow-hidden rounded-t-2xl border-t border-border bg-surface-inset shadow-modal lg:hidden"
           >
-            <div className="flex items-center justify-between border-b border-rice-deep px-4 py-2">
-              <span className="h-1 w-10 rounded-full bg-rice-deep" />
+            <div className="flex items-center justify-between border-b border-border px-4 py-2">
+              <span className="h-1 w-10 rounded-full bg-border" />
               <button
                 type="button"
                 onClick={() => setActiveSheet(null)}
-                className="text-ink-faint"
+                className="text-text-faint"
                 aria-label="关闭面板"
               >
                 <Icon name="close" size={20} />
@@ -96,7 +96,7 @@ export function WorkshopMobileBar({ initialPatterns, initialTotal }: WorkshopMob
 
             {activeSheet === 'tools' && (
               <div className="custom-scrollbar max-h-[calc(72vh-45px)] overflow-y-auto">
-                <div className="grid grid-cols-5 gap-2 border-b border-rice-deep p-3">
+                <div className="grid grid-cols-5 gap-2 border-b border-border p-3">
                   {TOOL_OPTIONS.map(tool => (
                     <button
                       key={tool.id}
@@ -105,7 +105,7 @@ export function WorkshopMobileBar({ initialPatterns, initialTotal }: WorkshopMob
                       className={`flex flex-col items-center gap-1 rounded-lg px-2 py-2 text-xs font-bold transition-colors ${
                         activeTool === tool.id
                           ? 'bg-gold text-white'
-                          : 'bg-rice-warm text-ink-light'
+                          : 'bg-surface-elevated text-text-muted'
                       }`}
                     >
                       <Icon name={tool.icon} size={18} />
@@ -145,7 +145,7 @@ function MobileButton({
       type="button"
       onClick={onClick}
       className={`flex min-w-16 flex-col items-center gap-0.5 rounded-lg px-3 py-1 transition-colors ${
-        active ? 'text-gold' : 'text-ink-faint'
+        active ? 'text-gold' : 'text-text-faint'
       }`}
     >
       <Icon name={icon} size={20} />

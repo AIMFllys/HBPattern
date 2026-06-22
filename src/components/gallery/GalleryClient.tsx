@@ -63,13 +63,13 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
           <h2 className="text-lg font-bold border-l-4 border-cinnabar pl-3 mb-4">筛选检索</h2>
 
           <div className="mb-6">
-            <h3 className="text-xs font-semibold text-ink-faint uppercase tracking-wider mb-3">年代分类</h3>
+            <h3 className="text-xs font-semibold text-text-faint uppercase tracking-wider mb-3">年代分类</h3>
             <div className="flex flex-col gap-1">
               {eraOptions.map((era) => (
                 <button
                   key={era}
                   onClick={() => updateFilter('era', currentEra === era ? null : era)}
-                  className={`text-left px-2 py-1.5 rounded text-sm ${currentEra === era ? 'bg-cinnabar/10 text-cinnabar font-bold' : 'text-ink-medium hover:bg-rice-warm hover:text-cinnabar'}`}
+                  className={`text-left px-2 py-1.5 rounded text-sm ${currentEra === era ? 'bg-cinnabar/10 text-cinnabar font-bold' : 'text-text-secondary hover:bg-surface-elevated hover:text-cinnabar'}`}
                 >
                   {era}
                 </button>
@@ -86,14 +86,14 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
         <div className="flex flex-col gap-4 mb-8 sm:flex-row sm:items-baseline sm:justify-between">
           <div className="flex items-center gap-4">
             <h2 className="text-2xl font-bold font-serif">纹样画廊</h2>
-            <span className="text-sm text-ink-faint">共 {total} 件作品</span>
+            <span className="text-sm text-text-faint">共 {total} 件作品</span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             {/* Mobile filter toggle */}
             <button
               type="button"
               onClick={() => setIsFilterOpen(true)}
-              className="flex items-center gap-1.5 rounded-lg border border-rice-deep bg-rice-warm px-3 py-1.5 text-sm text-ink-medium transition-colors hover:border-cinnabar hover:text-cinnabar lg:hidden"
+              className="flex items-center gap-1.5 rounded-lg border border-border bg-surface-elevated px-3 py-1.5 text-sm text-text-secondary transition-colors hover:border-cinnabar hover:text-cinnabar lg:hidden"
             >
               <Icon name="filter_list" size={16} />
               筛选
@@ -107,7 +107,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
               <button
                 key={opt.value}
                 onClick={() => updateFilter('sort', opt.value === 'newest' ? null : opt.value)}
-                className={`px-3 py-1.5 rounded-lg text-sm ${currentSort === opt.value ? 'bg-cinnabar/10 text-cinnabar font-bold' : 'bg-rice-warm text-ink-medium hover:text-cinnabar'}`}
+                className={`px-3 py-1.5 rounded-lg text-sm ${currentSort === opt.value ? 'bg-cinnabar/10 text-cinnabar font-bold' : 'bg-surface-elevated text-text-secondary hover:text-cinnabar'}`}
               >
                 {opt.label}
               </button>
@@ -116,7 +116,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
         </div>
 
         {patterns.length === 0 ? (
-          <div className="text-center py-20 text-ink-faint">
+          <div className="text-center py-20 text-text-faint">
             <Icon name="search_off" size={48} className="mx-auto mb-4 opacity-50" />
             <p>暂无符合条件的纹样</p>
           </div>
@@ -142,20 +142,20 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
                   className="masonry-item"
                 >
                   <Link href={`/gallery/${pattern.id}`} className="group cursor-pointer block">
-                    <div className="relative overflow-hidden rounded-xl bg-rice-warm aspect-[4/5]">
+                    <div className="relative overflow-hidden rounded-xl bg-surface-elevated aspect-[4/5]">
                       <div
                         className="w-full h-full transition-transform duration-500 group-hover:scale-105 bg-cover bg-center"
                         style={{ backgroundColor: palette[0] ?? '#3d3d30', backgroundImage: imageUrl ? `url("${imageUrl}")` : undefined }}
                       />
                       {pattern.is_ai_generated && (
-                        <div className="absolute top-3 right-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-cinnabar uppercase tracking-tight">
+                        <div className="absolute top-3 right-3 bg-surface-overlay backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-cinnabar uppercase tracking-tight">
                           AI 生成
                         </div>
                       )}
                     </div>
                     <div className="mt-4 px-1">
-                      <h3 className="text-base font-bold text-ink group-hover:text-cinnabar transition-colors">{pattern.name}</h3>
-                      <p className="text-sm text-ink-light font-serif italic">
+                      <h3 className="text-base font-bold text-text group-hover:text-cinnabar transition-colors">{pattern.name}</h3>
+                      <p className="text-sm text-text-muted font-serif italic">
                         {pattern.region?.name ?? ''} · {pattern.technique?.name ?? ''}
                       </p>
                     </div>
@@ -173,7 +173,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
               onClick={() => goToPage(page - 1)}
               disabled={page <= 1}
               aria-label="上一页"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-faint hover:text-cinnabar transition-colors disabled:opacity-30"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-elevated text-text-faint hover:text-cinnabar transition-colors disabled:opacity-30"
             >
               <Icon name="chevron_left" />
             </button>
@@ -181,17 +181,17 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
               <button
                 key={p}
                 onClick={() => goToPage(p)}
-                className={`w-10 h-10 rounded-full text-sm font-medium ${p === page ? 'bg-cinnabar text-white font-bold' : 'hover:bg-rice-warm text-ink-medium'}`}
+                className={`w-10 h-10 rounded-full text-sm font-medium ${p === page ? 'bg-cinnabar text-white font-bold' : 'hover:bg-surface-elevated text-text-secondary'}`}
               >
                 {p}
               </button>
             ))}
-            {totalPages > 5 && <span className="px-2 text-ink-faint">...</span>}
+            {totalPages > 5 && <span className="px-2 text-text-faint">...</span>}
             <button
               onClick={() => goToPage(page + 1)}
               disabled={page >= totalPages}
               aria-label="下一页"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar transition-colors disabled:opacity-30"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-elevated text-text-secondary hover:text-cinnabar transition-colors disabled:opacity-30"
             >
               <Icon name="chevron_right" />
             </button>
@@ -207,7 +207,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
       >
         <div className="space-y-6 pb-4">
           <div>
-            <h3 className="text-xs font-semibold text-ink-faint uppercase tracking-wider mb-3">年代分类</h3>
+            <h3 className="text-xs font-semibold text-text-faint uppercase tracking-wider mb-3">年代分类</h3>
             <div className="grid grid-cols-2 gap-2">
               {eraOptions.map((era) => (
                 <button
@@ -219,7 +219,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
                   className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                     currentEra === era
                       ? 'bg-cinnabar/10 text-cinnabar font-bold border border-cinnabar/30'
-                      : 'border border-rice-deep bg-rice-warm text-ink-medium hover:border-cinnabar hover:text-cinnabar'
+                      : 'border border-border bg-surface-elevated text-text-secondary hover:border-cinnabar hover:text-cinnabar'
                   }`}
                 >
                   {era}
@@ -237,7 +237,7 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
                 updateFilter('era', null)
                 setIsFilterOpen(false)
               }}
-              className="w-full rounded-lg border border-rice-deep bg-rice-warm py-2.5 text-sm text-ink-medium transition-colors hover:border-cinnabar hover:text-cinnabar"
+              className="w-full rounded-lg border border-border bg-surface-elevated py-2.5 text-sm text-text-secondary transition-colors hover:border-cinnabar hover:text-cinnabar"
             >
               清除筛选
             </button>

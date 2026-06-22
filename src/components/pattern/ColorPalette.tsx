@@ -26,7 +26,7 @@ export function ColorPalette({ colors }: ColorPaletteProps) {
               className="w-16 h-16 rounded-xl shadow-card border border-black/5"
               style={{ backgroundColor: color }}
             />
-            <span className="text-xs text-ink-faint font-mono">{color}</span>
+            <span className="text-xs text-text-faint font-mono">{color}</span>
           </motion.div>
         ))}
       </div>

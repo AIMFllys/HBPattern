@@ -121,7 +121,7 @@ export function WorkshopCanvas() {
 
   return (
     <div
-      className={`relative flex flex-1 items-center justify-center overflow-hidden bg-rice-warm ${
+      className={`relative flex flex-1 items-center justify-center overflow-hidden bg-surface-elevated ${
         isPanning ? 'cursor-grabbing' : activeTool === 'pan' ? 'cursor-grab' : 'cursor-default'
       }`}
       onWheel={handleWheel}
@@ -134,17 +134,17 @@ export function WorkshopCanvas() {
 
       <CanvasShell ref={canvasRef} zoom={zoom} panX={panOffset.x} panY={panOffset.y} />
 
-      <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-lg bg-white/85 px-3 py-1.5 text-xs font-bold text-ink-light shadow-card backdrop-blur">
+      <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-lg bg-surface-overlay px-3 py-1.5 text-xs font-bold text-text-muted shadow-card backdrop-blur">
         <Icon name="zoom_in" size={14} className="text-gold" />
         {Math.round(zoom * 100)}%
       </div>
 
-      <div className="absolute bottom-4 right-4 rounded-lg bg-white/85 px-3 py-1.5 text-xs font-bold text-ink-light shadow-card backdrop-blur">
+      <div className="absolute bottom-4 right-4 rounded-lg bg-surface-overlay px-3 py-1.5 text-xs font-bold text-text-muted shadow-card backdrop-blur">
         {canvasSize.width} × {canvasSize.height}
       </div>
 
       {(loadingCount > 0 || errorCount > 0) && (
-        <div className="absolute top-4 right-4 rounded-lg bg-white/90 px-3 py-2 text-xs font-bold text-ink-light shadow-card backdrop-blur">
+        <div className="absolute top-4 right-4 rounded-lg bg-surface-overlay px-3 py-2 text-xs font-bold text-text-muted shadow-card backdrop-blur">
           {loadingCount > 0 && <span>{loadingCount} 个图层加载中</span>}
           {errorCount > 0 && <span className="text-cinnabar">{errorCount} 个图层加载失败</span>}
         </div>
@@ -173,7 +173,7 @@ const CanvasShell = forwardRef<HTMLCanvasElement, CanvasShellProps>(function Can
 
   return (
     <div ref={shellRef} className="relative origin-center transition-transform duration-75">
-      <canvas ref={ref} className="workshop-canvas block rounded-sm bg-white shadow-hover" />
+      <canvas ref={ref} className="workshop-canvas block rounded-sm bg-surface-inset shadow-hover" />
     </div>
   )
 })

@@ -38,12 +38,12 @@ export function BindingForm({
   return (
     <div className="mt-4 space-y-4">
       <div>
-        <label htmlFor="map-pattern-search" className="mb-1 block text-[11px] font-bold text-ink-light">搜索画廊纹样</label>
+        <label htmlFor="map-pattern-search" className="mb-1 block text-[11px] font-bold text-text-muted">搜索画廊纹样</label>
         <input
           id="map-pattern-search"
           value={patternQuery}
           onChange={(event) => setPatternQuery(event.target.value)}
-          className="w-full border border-rice-deep bg-rice px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
+          className="w-full border border-border bg-surface px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
           placeholder="输入纹样名、地区、工艺..."
         />
       </div>
@@ -57,23 +57,23 @@ export function BindingForm({
               type="button"
               onClick={() => setSelectedPatternId(pattern.id)}
               className={`flex w-full items-center gap-3 border p-2 text-left transition ${
-                isSelected ? 'border-cinnabar bg-cinnabar/8' : 'border-rice-deep bg-rice-warm hover:border-gold'
+                isSelected ? 'border-cinnabar bg-cinnabar/8' : 'border-border bg-surface-elevated hover:border-gold'
               }`}
             >
               <PatternThumb pattern={pattern} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm font-black text-ink">{pattern.name}</span>
-                <span className="mt-0.5 block truncate text-[11px] text-ink-light">
+                <span className="block truncate text-sm font-black text-text">{pattern.name}</span>
+                <span className="mt-0.5 block truncate text-[11px] text-text-muted">
                   {pattern.regionName ?? '未标注地区'} · {pattern.techniqueName ?? '未标注工艺'}
                 </span>
               </span>
-              <span className="text-[10px] font-bold uppercase text-ink-faint">{pattern.source === 'demo' ? 'Demo' : 'Gallery'}</span>
+              <span className="text-[10px] font-bold uppercase text-text-faint">{pattern.source === 'demo' ? 'Demo' : 'Gallery'}</span>
             </button>
           )
         })}
         {filteredPatterns.length === 0 && (
-          <div className="border border-dashed border-rice-deep bg-rice px-3 py-4 text-center">
-            <p className="text-sm font-bold text-ink">没有匹配的纹样</p>
+          <div className="border border-dashed border-border bg-surface px-3 py-4 text-center">
+            <p className="text-sm font-bold text-text">没有匹配的纹样</p>
             <button
               type="button"
               onClick={createDraftFromQuery}
@@ -96,14 +96,14 @@ export function BindingForm({
       </div>
 
       <div>
-        <label htmlFor="map-binding-note" className="mb-1 block text-[11px] font-bold text-ink-light">绑定备注</label>
+        <label htmlFor="map-binding-note" className="mb-1 block text-[11px] font-bold text-text-muted">绑定备注</label>
         <textarea
           id="map-binding-note"
           value={bindingNote}
           onChange={(event) => setBindingNote(event.target.value)}
           rows={2}
           maxLength={160}
-          className="w-full resize-none border border-rice-deep bg-rice px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
+          className="w-full resize-none border border-border bg-surface px-3 py-2 text-sm outline-none transition focus:border-cinnabar"
           placeholder="如：来自汉绣传习点的凤鸟纹样线索"
         />
       </div>

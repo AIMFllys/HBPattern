@@ -7,7 +7,7 @@ export function PatternThumb({ pattern, small = false }: { pattern: MapPatternOp
 
   return (
     <span
-      className={`block shrink-0 overflow-hidden border border-rice-deep bg-cover bg-center ${sizeClass}`}
+      className={`block shrink-0 overflow-hidden border border-border bg-cover bg-center ${sizeClass}`}
       style={{
         backgroundColor: palette[0],
         backgroundImage: pattern.imageUrl ? `url("${pattern.imageUrl}")` : `linear-gradient(135deg, ${palette.join(', ')})`,

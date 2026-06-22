@@ -22,7 +22,7 @@ export function ColorSearch({ onSearch, selectedColors = [] }: ColorSearchProps)
 
   return (
     <div>
-      <h3 className="text-xs font-semibold text-ink-faint uppercase tracking-wider mb-3">按颜色搜索</h3>
+      <h3 className="text-xs font-semibold text-text-faint uppercase tracking-wider mb-3">按颜色搜索</h3>
       <div className="grid grid-cols-6 gap-2">
         {TRADITIONAL_COLORS.map((color) => {
           const isSelected = selected.includes(color.hex)
@@ -53,7 +53,7 @@ export function ColorSearch({ onSearch, selectedColors = [] }: ColorSearchProps)
                   <span className="text-white text-[8px] font-bold" aria-hidden="true">&#10003;</span>
                 </motion.div>
               )}
-              <span className="text-[10px] text-ink-medium leading-tight">{color.name}</span>
+              <span className="text-[10px] text-text-secondary leading-tight">{color.name}</span>
             </motion.button>
           )
         })}

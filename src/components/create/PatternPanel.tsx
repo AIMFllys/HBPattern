@@ -35,10 +35,10 @@ export function PatternPanel({ className = '' }: { className?: string }) {
   )
 
   return (
-    <aside className={`flex w-80 flex-col border-l border-rice-deep bg-rice ${className}`}>
-      <div className="border-b border-rice-deep p-5">
+    <aside className={`flex w-80 flex-col border-l border-border bg-surface ${className}`}>
+      <div className="border-b border-border p-5">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="flex items-center gap-2 text-base font-bold text-ink">
+          <h3 className="flex items-center gap-2 text-base font-bold text-text">
             <Icon name="palette" className="text-cinnabar" />
             纹样素材库
           </h3>
@@ -51,12 +51,12 @@ export function PatternPanel({ className = '' }: { className?: string }) {
           <Icon
             name="search"
             size={16}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-faint"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-faint"
           />
           <input
             id="pattern-search"
             type="text"
-            className="w-full rounded-lg border border-rice-deep bg-rice-warm py-2 pl-9 pr-4 text-sm outline-none transition-all placeholder:text-ink-faint focus:border-cinnabar/40 focus:ring-1 focus:ring-cinnabar/30"
+            className="w-full rounded-lg border border-border bg-surface-elevated py-2 pl-9 pr-4 text-sm outline-none transition-all placeholder:text-text-faint focus:border-cinnabar/40 focus:ring-1 focus:ring-cinnabar/30"
             placeholder="搜索纹样名称..."
             value={searchQuery}
             onChange={event => setSearchQuery(event.target.value)}
@@ -64,7 +64,7 @@ export function PatternPanel({ className = '' }: { className?: string }) {
         </div>
       </div>
 
-      <div className="custom-scrollbar flex gap-1.5 overflow-x-auto border-b border-rice-deep px-4 py-3">
+      <div className="custom-scrollbar flex gap-1.5 overflow-x-auto border-b border-border px-4 py-3">
         {PATTERN_CATEGORIES.map(category => (
           <button
             key={category}
@@ -74,7 +74,7 @@ export function PatternPanel({ className = '' }: { className?: string }) {
             className={`whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
               activeCategory === category
                 ? 'bg-cinnabar text-white shadow-sm'
-                : 'bg-rice-warm text-ink-light hover:bg-rice-deep/70 hover:text-ink-medium'
+                : 'bg-surface-elevated text-text-muted hover:bg-border hover:text-text'
             }`}
           >
             {category}
@@ -84,7 +84,7 @@ export function PatternPanel({ className = '' }: { className?: string }) {
 
       <div className="custom-scrollbar flex-1 overflow-y-auto p-4">
         {filteredPatterns.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-12 text-ink-faint">
+          <div className="flex flex-col items-center justify-center py-12 text-text-faint">
             <Icon name="search_off" size={32} className="mb-2" />
             <p className="text-sm">未找到匹配的纹样</p>
           </div>
@@ -102,18 +102,18 @@ export function PatternPanel({ className = '' }: { className?: string }) {
         )}
       </div>
 
-      <div className="border-t border-rice-deep bg-rice-warm/30 p-4">
+      <div className="border-t border-border bg-surface-elevated/30 p-4">
         {selectedPattern ? (
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-rice-deep">
+            <div className="h-10 w-10 flex-shrink-0 overflow-hidden rounded-lg border border-border">
               <PatternThumbnail
                 config={selectedPattern.generatorConfig}
                 bgColor={selectedPattern.suggestedBaseColor}
               />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-bold text-ink">{selectedPattern.name}</p>
-              <p className="text-xs text-ink-faint">{selectedPattern.category}</p>
+              <p className="truncate text-sm font-bold text-text">{selectedPattern.name}</p>
+              <p className="text-xs text-text-faint">{selectedPattern.category}</p>
             </div>
             <div className="flex gap-1">
               {selectedPattern.palette.map(color => (
@@ -122,7 +122,7 @@ export function PatternPanel({ className = '' }: { className?: string }) {
             </div>
           </div>
         ) : (
-          <p className="text-center text-sm text-ink-faint">请选择一个纹样</p>
+          <p className="text-center text-sm text-text-faint">请选择一个纹样</p>
         )}
       </div>
     </aside>
@@ -151,7 +151,7 @@ const PatternCard = memo(function PatternCard({
         className={`aspect-square overflow-hidden rounded-xl border-2 transition-all ${
           isSelected
             ? 'border-cinnabar shadow-md shadow-cinnabar/20'
-            : 'border-transparent hover:border-rice-deep'
+            : 'border-transparent hover:border-border'
         }`}
       >
         <PatternThumbnail
@@ -162,7 +162,7 @@ const PatternCard = memo(function PatternCard({
       </div>
       <p
         className={`mt-1.5 truncate text-center text-xs font-bold ${
-          isSelected ? 'text-cinnabar' : 'text-ink-light group-hover:text-ink-medium'
+          isSelected ? 'text-cinnabar' : 'text-text-muted group-hover:text-text'
         }`}
       >
         {pattern.name}

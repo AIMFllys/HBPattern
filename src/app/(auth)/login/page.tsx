@@ -13,7 +13,7 @@ export default function LoginPage() {
   const nextPath = resolveSafeNextPath(searchParams.get('next'))
 
   return (
-    <div className="min-h-screen w-full flex bg-rice">
+    <div className="min-h-screen w-full flex bg-surface transition-colors">
       {/* Left side: Image / Brand */}
       <div className="hidden lg:flex flex-1 relative flex-col justify-between p-12 bg-ink overflow-hidden">
         <div className="absolute inset-0 opacity-40 mix-blend-overlay" style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAsNXdBQSzIk8lxkjO_09UAZEGl79AJKULYueXNcqoCPTfBYGPNoLJzHJ_sX4UnAEAbexD1L_TM-cqEgtIkYVe2OkZq0LiMrPFnr66BPMNBnxGt0DYyYaH0W-9iOI5P2YKWzGYc2N75wvmaMkUYQR7jq2-NQ0n9nMuy7jW9OmvvVpVAst36tFCNLlDdNv7w2rcySF9exdhQylitge3g7k_xMdsYt8MnQquNOpDAiPBwpsicZoJJaGIqIydCEZ32LumBEgl_DjiJfg")', backgroundSize: 'cover', backgroundPosition: 'center' }}></div>
@@ -41,7 +41,7 @@ export default function LoginPage() {
       {/* Right side: Login Form */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-24 relative">
         <div className="absolute top-8 left-8 lg:hidden">
-          <Link href="/" className="flex items-center gap-2 text-ink">
+          <Link href="/" className="flex items-center gap-2 text-text">
             <Icon name="filter_vintage" className="text-cinnabar" />
             <span className="font-bold font-serif">湖北传统纹样库</span>
           </Link>

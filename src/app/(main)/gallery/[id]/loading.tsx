@@ -1,6 +1,6 @@
 export default function DetailLoading() {
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-0.5 bg-rice-deep overflow-hidden">
+    <div className="fixed top-0 left-0 right-0 z-50 h-0.5 bg-border overflow-hidden">
       <div className="h-full bg-gold" style={{ width: '0%', animation: 'detailProgress 1.5s ease-in-out infinite' }} />
       <style>{`
         @keyframes detailProgress {

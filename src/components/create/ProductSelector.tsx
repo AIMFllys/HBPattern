@@ -20,8 +20,8 @@ export const ProductSelector = memo(function ProductSelector() {
   )
 
   return (
-    <div className="custom-scrollbar flex items-center gap-1 overflow-x-auto border-b border-rice-deep bg-rice-warm/55 px-3 py-2">
-      <span className="flex-shrink-0 px-2 text-xs font-bold uppercase tracking-wider text-ink-faint">
+    <div className="custom-scrollbar flex items-center gap-1 overflow-x-auto border-b border-border bg-surface-elevated/55 px-3 py-2">
+      <span className="flex-shrink-0 px-2 text-xs font-bold uppercase tracking-wider text-text-faint">
         载体
       </span>
       {PRODUCT_CONFIGS.map(product => {
@@ -37,7 +37,7 @@ export const ProductSelector = memo(function ProductSelector() {
             className={`flex flex-shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-all ${
               isActive
                 ? 'bg-cinnabar text-white shadow-sm'
-                : 'text-ink-light hover:bg-rice-warm hover:text-ink-medium'
+                : 'text-text-muted hover:bg-surface-elevated hover:text-text'
             } ${product.available ? '' : 'cursor-not-allowed opacity-50'}`}
             title={product.description}
           >

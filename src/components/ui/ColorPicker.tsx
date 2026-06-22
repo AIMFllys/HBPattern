@@ -42,7 +42,7 @@ export function ColorPicker({ value, onChange, label = '底色' }: Props) {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="text-xs font-bold uppercase tracking-tighter text-ink-faint">
+        <label className="text-xs font-bold uppercase tracking-tighter text-text-faint">
           {label}
         </label>
         <CurrentColorPreview color={value} />
@@ -62,11 +62,11 @@ export function ColorPicker({ value, onChange, label = '底色' }: Props) {
         <button
           type="button"
           onClick={handleCustomClick}
-          className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-dashed border-rice-deep transition-colors hover:border-cinnabar"
+          className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-dashed border-border transition-colors hover:border-cinnabar"
           title="自定义颜色"
           aria-label="自定义颜色"
         >
-          <Icon name="add" size={14} className="text-ink-faint" />
+          <Icon name="add" size={14} className="text-text-faint" />
         </button>
       </div>
 
@@ -111,7 +111,7 @@ function PresetColorButton({
       className={`h-7 w-7 rounded-full border-2 transition-all hover:scale-110 ${
         isActive
           ? 'scale-110 border-cinnabar ring-2 ring-cinnabar/30'
-          : 'border-white shadow-sm'
+          : 'border-surface-inset shadow-sm'
       }`}
       title={name}
       aria-label={`选择${name}`}
@@ -129,8 +129,8 @@ function CurrentColorPreview({ color }: { color: string }) {
   }, [color])
 
   return (
-    <span className="flex items-center gap-1.5 text-xs text-ink-light">
-      <span ref={ref} className="h-3.5 w-3.5 rounded-full border border-rice-deep" />
+    <span className="flex items-center gap-1.5 text-xs text-text-muted">
+      <span ref={ref} className="h-3.5 w-3.5 rounded-full border border-border" />
       {color}
     </span>
   )

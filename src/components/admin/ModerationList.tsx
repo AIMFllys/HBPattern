@@ -29,20 +29,20 @@ export default function ModerationList({ patterns }: { patterns: PendingPattern[
   }
 
   if (items.length === 0) {
-    return <p className="text-ink-faint text-sm py-8 text-center">暂无待审核纹样 🎉</p>
+    return <p className="text-text-faint text-sm py-8 text-center">暂无待审核纹样 🎉</p>
   }
 
   return (
     <div className="space-y-3">
       {items.map((p) => (
-        <div key={p.id} className="flex items-center gap-4 bg-white rounded-lg border border-rice-deep p-4">
+        <div key={p.id} className="flex items-center gap-4 bg-surface-inset rounded-lg border border-border p-4">
           <div
-            className="w-16 h-16 rounded-lg bg-rice-warm bg-cover bg-center shrink-0"
+            className="w-16 h-16 rounded-lg bg-surface-elevated bg-cover bg-center shrink-0"
             style={{ backgroundImage: p.media?.[0]?.url ? `url("${p.media[0].url}")` : undefined }}
           />
           <div className="flex-1 min-w-0">
-            <p className="font-bold text-ink truncate">{p.name}</p>
-            <p className="text-xs text-ink-faint">
+            <p className="font-bold text-text truncate">{p.name}</p>
+            <p className="text-xs text-text-faint">
               {p.uploader?.[0]?.nickname ?? '未知'} · {p.era ?? '未标注'} · {new Date(p.created_at).toLocaleDateString('zh-CN')}
             </p>
           </div>

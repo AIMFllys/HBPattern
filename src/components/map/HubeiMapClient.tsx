@@ -290,7 +290,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-73px)] flex-col overflow-hidden bg-[#f8f4eb] lg:flex-row">
+    <main className="flex min-h-[calc(100vh-73px)] flex-col overflow-hidden bg-surface lg:flex-row transition-colors">
       {/* Desktop sidebar */}
       <div className="hidden lg:flex">
         <MapSidebar
@@ -329,7 +329,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         />
       </div>
 
-      <section className="relative min-h-[50vh] flex-1 overflow-hidden bg-[#fdf9ee] lg:min-h-[760px]">
+      <section className="relative min-h-[50vh] flex-1 overflow-hidden bg-surface-inset lg:min-h-[760px]">
         <MapCanvas
           viewportRef={viewportRef}
           zoom={zoom}
@@ -347,10 +347,10 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         />
 
         <div className="pointer-events-none absolute left-3 top-3 max-w-[14rem] sm:left-5 sm:top-5 sm:max-w-[22rem] lg:max-w-[22rem]">
-          <div className="pointer-events-auto border-l-4 border-gold bg-white/88 p-3 shadow-xl backdrop-blur sm:p-4">
+          <div className="pointer-events-auto border-l-4 border-gold bg-surface-overlay p-3 shadow-xl backdrop-blur sm:p-4">
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-gold">当前视图</p>
-            <h2 className="mt-1 font-serif text-base font-black text-ink sm:text-xl">湖北省行政区域 Demo</h2>
-            <p className="mt-1 hidden text-xs leading-5 text-ink-light sm:block">
+            <h2 className="mt-1 font-serif text-base font-black text-text sm:text-xl">湖北省行政区域 Demo</h2>
+            <p className="mt-1 hidden text-xs leading-5 text-text-muted sm:block">
               城市标签在 {Math.round(HUBEI_MAP_LABEL_THRESHOLDS.city * 100)}% 后显示，地点标签在 {Math.round(HUBEI_MAP_LABEL_THRESHOLDS.place * 100)}% 后显示。
             </p>
           </div>
@@ -370,7 +370,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         <button
           type="button"
           onClick={() => setIsMobileSidebarOpen(true)}
-          className="absolute bottom-5 right-5 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-ink text-rice shadow-modal transition-transform hover:scale-105 lg:hidden"
+          className="absolute bottom-5 right-5 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-surface-elevated text-text shadow-modal transition-transform hover:scale-105 lg:hidden"
           aria-label="打开区域面板"
         >
           <Icon name="menu" size={22} />

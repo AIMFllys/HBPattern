@@ -49,7 +49,7 @@ export function OffsetPad() {
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-xs font-bold uppercase tracking-tighter text-ink-faint">
+      <span className="text-xs font-bold uppercase tracking-tighter text-text-faint">
         偏移 OFFSET
       </span>
       <div
@@ -58,14 +58,14 @@ export function OffsetPad() {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        className="relative h-16 w-16 touch-none select-none rounded border border-rice-deep bg-rice-warm cursor-crosshair"
+        className="relative h-16 w-16 touch-none select-none rounded border border-border bg-surface-elevated cursor-crosshair"
         aria-label="纹样偏移控制"
       >
-        <div className="absolute left-1/2 top-0 h-full w-px bg-rice-deep" />
-        <div className="absolute left-0 top-1/2 h-px w-full bg-rice-deep" />
+        <div className="absolute left-1/2 top-0 h-full w-px bg-border" />
+        <div className="absolute left-0 top-1/2 h-px w-full bg-border" />
         <OffsetDot offsetX={offsetX} offsetY={offsetY} isDragging={isDragging} />
       </div>
-      <span className="text-xs text-ink-faint">
+      <span className="text-xs text-text-faint">
         {offsetX}, {offsetY}
       </span>
     </div>

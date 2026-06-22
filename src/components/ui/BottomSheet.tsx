@@ -46,7 +46,7 @@ export function BottomSheet({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[var(--z-overlay)] bg-ink/50"
+            className="fixed inset-0 z-[var(--z-overlay)] bg-backdrop"
             onClick={onClose}
             aria-hidden="true"
           />
@@ -60,23 +60,23 @@ export function BottomSheet({
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
-            className="fixed bottom-0 left-0 right-0 z-[var(--z-modal)] flex flex-col rounded-t-2xl bg-rice"
+            className="fixed bottom-0 left-0 right-0 z-[var(--z-modal)] flex flex-col rounded-t-2xl bg-surface"
             style={{ maxHeight }}
           >
             <div
               className="flex justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing"
               aria-hidden="true"
             >
-              <div className="h-1 w-10 rounded-full bg-ink-faint/60" />
+              <div className="h-1 w-10 rounded-full bg-text-faint/60" />
             </div>
 
             {title && (
-              <div className="flex items-center justify-between border-b border-rice-deep px-4 pb-3">
-                <h2 className="font-serif text-lg font-bold text-ink">{title}</h2>
+              <div className="flex items-center justify-between border-b border-border px-4 pb-3">
+                <h2 className="font-serif text-lg font-bold text-text">{title}</h2>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="flex h-8 w-8 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-rice-warm hover:text-ink"
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-text-faint transition-colors hover:bg-surface-elevated hover:text-text"
                   aria-label="关闭"
                 >
                   <span className="material-symbols-outlined text-xl">close</span>

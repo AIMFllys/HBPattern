@@ -27,7 +27,7 @@ export default function NavLinks({ items, primaryColor }: NavLinksProps) {
             className={`text-sm font-medium transition-colors py-1 ${
               isActive
                 ? `${colorClass} border-b-2 ${borderClass}`
-                : 'text-ink-medium hover:text-cinnabar'
+                : 'text-text-secondary hover:text-cinnabar'
             }`}
           >
             {item.name}

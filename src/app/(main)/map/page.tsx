@@ -14,7 +14,7 @@ export default async function MapPage() {
   const initialPatterns = await getInitialMapPatterns()
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-rice">
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-surface transition-colors">
       <SiteHeader
         logoIcon="storm"
         siteName="湖北非遗3D文化地图"

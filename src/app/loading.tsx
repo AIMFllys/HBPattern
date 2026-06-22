@@ -2,7 +2,7 @@ export default function Loading() {
   return (
     <>
       {/* Top progress bar - subtle, non-intrusive */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-0.5 bg-rice-deep overflow-hidden">
+      <div className="fixed top-0 left-0 right-0 z-50 h-0.5 bg-border overflow-hidden">
         <div className="h-full bg-cinnabar loading-bar" />
       </div>
       <style>{`

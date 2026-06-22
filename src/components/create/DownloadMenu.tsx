@@ -122,7 +122,7 @@ export function DownloadMenu() {
       <button
         type="button"
         onClick={() => setOpen(prev => !prev)}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink-light shadow-card transition-all hover:text-cinnabar hover:shadow-hover"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-inset text-text-muted shadow-card transition-all hover:text-cinnabar hover:shadow-hover"
         title="下载"
         aria-label="下载"
         aria-expanded={open}
@@ -131,9 +131,9 @@ export function DownloadMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-12 w-64 overflow-hidden rounded-xl border border-rice-deep bg-white shadow-modal">
-          <div className="border-b border-rice-deep/50 bg-rice-warm/40 px-4 py-2.5">
-            <span className="block text-xs font-bold uppercase tracking-widest text-ink-faint">下载导出</span>
+        <div className="absolute right-0 top-12 w-64 overflow-hidden rounded-xl border border-border bg-surface-inset shadow-modal">
+          <div className="border-b border-border-subtle bg-surface-elevated/40 px-4 py-2.5">
+            <span className="block text-xs font-bold uppercase tracking-widest text-text-faint">下载导出</span>
           </div>
           <ul className="max-h-[60vh] overflow-y-auto py-1">
             {MENU_ITEMS.map(item => {
@@ -145,11 +145,11 @@ export function DownloadMenu() {
                     type="button"
                     onClick={() => runExport(item.kind)}
                     disabled={disabled}
-                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-rice-warm/60 disabled:cursor-wait disabled:opacity-60"
+                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors hover:bg-surface-elevated/60 disabled:cursor-wait disabled:opacity-60"
                   >
-                    <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-rice-warm text-ink-light">
+                    <span className="flex h-8 w-8 flex-none items-center justify-center rounded-lg bg-surface-elevated text-text-muted">
                       {itemStatus === 'processing' ? (
-                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-ink-faint/30 border-t-ink-light" />
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-text-faint/30 border-t-text-muted" />
                       ) : itemStatus === 'error' ? (
                         <Icon name="error" size={18} className="text-cinnabar" />
                       ) : (
@@ -157,8 +157,8 @@ export function DownloadMenu() {
                       )}
                     </span>
                     <span className="flex flex-1 flex-col">
-                      <span className="text-sm font-bold text-ink">{item.label}</span>
-                      <span className="text-[11px] text-ink-faint">{item.desc}</span>
+                      <span className="text-sm font-bold text-text">{item.label}</span>
+                      <span className="text-[11px] text-text-faint">{item.desc}</span>
                     </span>
                   </button>
                 </li>
@@ -166,7 +166,7 @@ export function DownloadMenu() {
             })}
           </ul>
           {errorMessage && (
-            <div className="border-t border-rice-deep/50 bg-cinnabar/5 px-4 py-2 text-xs font-bold text-cinnabar">
+            <div className="border-t border-border-subtle bg-cinnabar/5 px-4 py-2 text-xs font-bold text-cinnabar">
               {errorMessage}
             </div>
           )}

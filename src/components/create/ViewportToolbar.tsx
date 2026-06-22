@@ -11,7 +11,7 @@ export function ViewportToolbar() {
       <button
         type="button"
         onClick={() => setCameraPreset('front')}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink-light shadow-card transition-all hover:text-cinnabar hover:shadow-hover"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-inset text-text-muted shadow-card transition-all hover:text-cinnabar hover:shadow-hover"
         title="重置视角"
         aria-label="重置视角"
       >
@@ -20,7 +20,7 @@ export function ViewportToolbar() {
       <button
         type="button"
         onClick={() => setCameraPreset('free')}
-        className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-ink-light shadow-card transition-all hover:text-cinnabar hover:shadow-hover"
+        className="flex h-10 w-10 items-center justify-center rounded-full bg-surface-inset text-text-muted shadow-card transition-all hover:text-cinnabar hover:shadow-hover"
         title="自由视角"
         aria-label="自由视角"
       >

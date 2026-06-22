@@ -70,10 +70,10 @@ function Scene() {
 
 function LoadingFallback() {
   return (
-    <div className="flex h-full min-h-[400px] items-center justify-center bg-rice-warm/60">
+    <div className="flex h-full min-h-[400px] items-center justify-center bg-surface-elevated/60">
       <div className="flex flex-col items-center gap-3">
         <div className="h-10 w-10 animate-spin rounded-full border-2 border-gold border-t-transparent" />
-        <span className="text-sm font-medium text-ink-light">加载 3D 视图...</span>
+        <span className="text-sm font-medium text-text-muted">加载 3D 视图...</span>
       </div>
     </div>
   )
@@ -81,7 +81,7 @@ function LoadingFallback() {
 
 export default function Canvas3D() {
   return (
-    <div className="canvas-3d-container relative h-full min-h-[400px] w-full overflow-hidden bg-rice-warm">
+    <div className="canvas-3d-container relative h-full min-h-[400px] w-full overflow-hidden bg-surface-elevated">
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
           shadows
