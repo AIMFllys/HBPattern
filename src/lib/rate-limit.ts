@@ -46,10 +46,41 @@ function getStore(): Map<string, RateLimitEntry> {
  *   （已登录：user.id；未登录：x-forwarded-for 首个 IP 或 'anonymous'）。
  * - 超配额抛 RateLimitError（含 Retry-After）。
  * - 当 env.RATE_LIMIT_DISABLED === '1'（测试态）则直接返回，不抛错（Req 7.5.b）。
+ *
+ * ─── 边缘部署注意事项 ───────────────────────────────────────────────────────
+ * 本实现使用进程内存 Map（globalThis）做计数，仅在单实例环境下有效。
+ * 在腾讯云 EdgeOne Pages / Vercel Edge / 多实例 Serverless 环境下，每个实例
+ * 独立计数，限流会失效（用户轮询不同实例可绕过配额）。
+ *
+ * 生产部署默认降级为 no-op：
+ * - 当 NODE_ENV='production' 且未显式设置 RATE_LIMIT_DISABLED 时，自动跳过限流
+ *   并在首次调用时打印一条 console.warn 提示。
+ * - 自建单实例部署（如宝塔 PM2）时，显式设置 RATE_LIMIT_DISABLED='0' 启用。
+ * - EdgeOne Pages 部署时，依赖平台控制台的「速率限制 / WAF 规则」做边缘限流。
+ *
+ * 测试环境通过显式设置 RATE_LIMIT_DISABLED='1' 或 '0' 控制行为（见 property10 测试）。
  */
+let __prodWarned = false
+
 export function rateLimit(quota: QuotaKey, subjectId: string): void {
   // Requirement 7.5.b：测试环境可通过环境变量全局禁用限流
   if (process.env.RATE_LIMIT_DISABLED === '1') {
+    return
+  }
+
+  // 生产环境默认降级：未显式启用时跳过限流（边缘多实例下进程内计数无意义）
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.RATE_LIMIT_DISABLED !== '0'
+  ) {
+    if (!__prodWarned) {
+      __prodWarned = true
+      console.warn(
+        '[rate-limit] 生产环境未显式启用（RATE_LIMIT_DISABLED 非 "0"），' +
+          '限流已降级为 no-op。边缘/多实例部署请依赖平台侧速率限制；' +
+          '自建单实例部署如需启用请设置 RATE_LIMIT_DISABLED=0。',
+      )
+    }
     return
   }
 
