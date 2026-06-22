@@ -54,7 +54,7 @@ export default function CommentSection({ patternId }: { patternId: string }) {
     <section className="mt-16 pt-8 border-t border-gold/20">
       <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
         <Icon name="chat" size={20} /> 讨论区
-        <span className="text-sm text-ink-faint font-normal">({comments.length})</span>
+        <span className="text-sm text-text-faint font-normal">({comments.length})</span>
       </h3>
 
       {user ? (
@@ -68,11 +68,11 @@ export default function CommentSection({ patternId }: { patternId: string }) {
               onChange={(e) => setContent(e.target.value)}
               placeholder="分享你的看法..."
               maxLength={500}
-              className="w-full p-3 border border-rice-deep rounded-lg text-sm resize-none focus:border-cinnabar focus:ring-1 focus:ring-cinnabar outline-none bg-white"
+              className="w-full p-3 border border-border rounded-lg text-sm resize-none focus:border-cinnabar focus:ring-1 focus:ring-cinnabar outline-none bg-surface-inset placeholder:text-text-faint/50"
               rows={3}
             />
             <div className="flex justify-between items-center mt-2">
-              <span className="text-xs text-ink-faint">{content.length}/500</span>
+              <span className="text-xs text-text-faint">{content.length}/500</span>
               <button
                 type="submit"
                 disabled={!content.trim() || loading}
@@ -84,26 +84,26 @@ export default function CommentSection({ patternId }: { patternId: string }) {
           </div>
         </form>
       ) : (
-        <div className="mb-8 p-4 bg-rice-warm rounded-lg text-center text-sm text-ink-light">
+        <div className="mb-8 p-4 bg-surface-elevated rounded-lg text-center text-sm text-text-muted">
           <a href="/login" className="text-cinnabar font-bold hover:underline">登录</a> 后参与讨论
         </div>
       )}
 
       {topLevel.length === 0 ? (
-        <p className="text-center text-ink-faint text-sm py-8">暂无评论，来发表第一条吧</p>
+        <p className="text-center text-text-faint text-sm py-8">暂无评论，来发表第一条吧</p>
       ) : (
         <div className="space-y-4">
           {topLevel.map((comment) => (
             <div key={comment.id} className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-rice-warm flex items-center justify-center text-xs font-bold text-ink-medium shrink-0">
+              <div className="w-8 h-8 rounded-full bg-surface-elevated flex items-center justify-center text-xs font-bold text-text-secondary shrink-0">
                 {comment.user?.nickname?.[0] ?? '匿'}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-ink">{comment.user?.nickname ?? '匿名用户'}</span>
-                  <span className="text-xs text-ink-faint">{new Date(comment.created_at).toLocaleDateString('zh-CN')}</span>
+                  <span className="text-sm font-bold text-text">{comment.user?.nickname ?? '匿名用户'}</span>
+                  <span className="text-xs text-text-faint">{new Date(comment.created_at).toLocaleDateString('zh-CN')}</span>
                 </div>
-                <p className="text-sm text-ink-medium mt-1">{comment.content}</p>
+                <p className="text-sm text-text-secondary mt-1">{comment.content}</p>
               </div>
             </div>
           ))}

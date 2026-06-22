@@ -90,7 +90,7 @@ export function ExportDialog() {
   return (
     <dialog
       ref={dialogRef}
-      className="workshop-export-dialog w-[min(28rem,calc(100vw-2rem))] max-w-md rounded-2xl border-0 bg-white p-0 text-left shadow-modal backdrop:bg-ink/55 backdrop:backdrop-blur-sm"
+      className="workshop-export-dialog w-[min(28rem,calc(100vw-2rem))] max-w-md rounded-2xl border-0 bg-surface-inset p-0 text-left shadow-modal backdrop:bg-ink/55 backdrop:backdrop-blur-sm"
       aria-labelledby="workshop-export-title"
       onClick={(event) => {
         if (event.target === dialogRef.current) setIsExporting(false)
@@ -98,14 +98,14 @@ export function ExportDialog() {
     >
       <div className="p-6">
             <div className="mb-5 flex items-center justify-between">
-              <h2 id="workshop-export-title" className="flex items-center gap-2 text-lg font-bold text-ink">
+              <h2 id="workshop-export-title" className="flex items-center gap-2 text-lg font-bold text-text">
                 <Icon name="download" className="text-gold" />
                 导出设计稿
               </h2>
               <button
                 type="button"
                 onClick={() => setIsExporting(false)}
-                className="text-ink-faint transition-colors hover:text-ink-medium"
+                className="text-text-faint transition-colors hover:text-text"
                 aria-label="关闭导出对话框"
               >
                 <Icon name="close" />
@@ -114,7 +114,7 @@ export function ExportDialog() {
 
             <div className="space-y-5">
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-ink-faint">格式</p>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-text-faint">格式</p>
                 <div className="grid grid-cols-4 gap-2">
                   {FORMAT_OPTIONS.map(option => (
                     <button
@@ -124,7 +124,7 @@ export function ExportDialog() {
                       className={`rounded-lg px-2 py-2 text-center transition-colors ${
                         config.format === option.value
                           ? 'bg-gold text-white shadow-sm'
-                          : 'bg-rice-warm text-ink-light hover:bg-rice-deep'
+                          : 'bg-surface-elevated text-text-muted hover:bg-border'
                       }`}
                     >
                       <span className="block text-sm font-bold">{option.label}</span>
@@ -135,7 +135,7 @@ export function ExportDialog() {
               </div>
 
               <div>
-                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-ink-faint">分辨率</p>
+                <p className="mb-2 text-xs font-bold uppercase tracking-wider text-text-faint">分辨率</p>
                 <div className="grid grid-cols-3 gap-2">
                   {SCALE_OPTIONS.map(scale => (
                     <button
@@ -145,19 +145,19 @@ export function ExportDialog() {
                       className={`rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
                         config.scale === scale
                           ? 'bg-gold text-white shadow-sm'
-                          : 'bg-rice-warm text-ink-light hover:bg-rice-deep'
+                          : 'bg-surface-elevated text-text-muted hover:bg-border'
                       }`}
                     >
                       {scale}x
                     </button>
                   ))}
                 </div>
-                <p className="mt-2 text-xs text-ink-faint">
+                <p className="mt-2 text-xs text-text-faint">
                   输出 {outputWidth} × {outputHeight}px，{estimate}
                 </p>
               </div>
 
-              <label className="flex items-center gap-2 text-sm font-medium text-ink-light">
+              <label className="flex items-center gap-2 text-sm font-medium text-text-muted">
                 <input
                   type="checkbox"
                   checked={config.includeBackground}
@@ -168,7 +168,7 @@ export function ExportDialog() {
               </label>
 
               <div>
-                <label className="mb-2 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-ink-faint">
+                <label className="mb-2 flex items-center justify-between text-xs font-bold uppercase tracking-wider text-text-faint">
                   质量
                   <span>{Math.round(config.quality * 100)}%</span>
                 </label>
@@ -178,12 +178,12 @@ export function ExportDialog() {
                   max={100}
                   value={Math.round(config.quality * 100)}
                   onChange={event => setConfig(current => ({ ...current, quality: Number(event.target.value) / 100 }))}
-                  className="h-1 w-full cursor-pointer appearance-none rounded-lg bg-rice-deep accent-gold"
+                  className="h-1 w-full cursor-pointer appearance-none rounded-lg bg-border accent-gold"
                 />
               </div>
 
               {config.format === 'svg' && (
-                <p className="rounded-lg bg-gold/10 px-3 py-2 text-xs text-ink-light">
+                <p className="rounded-lg bg-gold/10 px-3 py-2 text-xs text-text-muted">
                   SVG 为嵌入位图的容器格式，用于排版和转存，不是可编辑矢量图层。
                 </p>
               )}

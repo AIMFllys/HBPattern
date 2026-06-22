@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
+import { BaseSurfaceMaterial } from '../BaseSurfaceMaterial'
 import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function Frame() {
@@ -16,6 +17,10 @@ export default function Frame() {
 
   return (
     <group ref={groupRef}>
+      <mesh position={[0, 0, -0.02]}>
+        <planeGeometry args={[2.4, 1.8]} />
+        <BaseSurfaceMaterial side={THREE.DoubleSide} />
+      </mesh>
       <mesh position={[0, 0, 0]}>
         <planeGeometry args={[2.4, 1.8]} />
         <TexturedMaterial roughnessOverride={50} side={THREE.DoubleSide} />

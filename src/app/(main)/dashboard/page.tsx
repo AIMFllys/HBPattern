@@ -21,30 +21,30 @@ export default async function DashboardPage() {
   ])
 
   return (
-    <div className="min-h-screen bg-[#f8f8f6]">
-      <SiteHeader logoIcon="account_balance" siteName="管理后台" primaryColor="cinnabar" />
+    <div className="min-h-screen bg-surface transition-colors">
+      <SiteHeader siteName="管理后台" primaryColor="cinnabar" />
       <main className="max-w-6xl mx-auto px-6 py-10">
         <h1 className="text-2xl font-bold mb-8">数据概览</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white rounded-xl p-6 border border-rice-deep">
+          <div className="bg-surface-inset rounded-xl p-6 border border-border">
             <div className="flex items-center gap-3 mb-2">
               <Icon name="landscape" size={24} className="text-cinnabar" />
-              <span className="text-sm text-ink-faint">已发布纹样</span>
+              <span className="text-sm text-text-faint">已发布纹样</span>
             </div>
-            <p className="text-3xl font-bold text-ink">{patternsRes.count ?? 0}</p>
+            <p className="text-3xl font-bold text-text">{patternsRes.count ?? 0}</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-rice-deep">
+          <div className="bg-surface-inset rounded-xl p-6 border border-border">
             <div className="flex items-center gap-3 mb-2">
               <Icon name="group" size={24} className="text-cinnabar" />
-              <span className="text-sm text-ink-faint">注册用户</span>
+              <span className="text-sm text-text-faint">注册用户</span>
             </div>
-            <p className="text-3xl font-bold text-ink">{usersRes.count ?? 0}</p>
+            <p className="text-3xl font-bold text-text">{usersRes.count ?? 0}</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-rice-deep">
+          <div className="bg-surface-inset rounded-xl p-6 border border-border">
             <div className="flex items-center gap-3 mb-2">
               <Icon name="pending" size={24} className="text-warning" />
-              <span className="text-sm text-ink-faint">待审核</span>
+              <span className="text-sm text-text-faint">待审核</span>
             </div>
             <p className="text-3xl font-bold text-warning">{pendingRes.count ?? 0}</p>
           </div>
@@ -53,7 +53,7 @@ export default async function DashboardPage() {
         <h2 className="text-xl font-bold mb-4">待审核纹样</h2>
         <ModerationList patterns={pendingListRes.data ?? []} />
       </main>
-      <SiteFooter variant="light" />
+      <SiteFooter />
     </div>
   )
 }

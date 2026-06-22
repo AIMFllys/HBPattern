@@ -87,6 +87,7 @@ const user = await requireRole(['admin'])  // 失败抛 403
 - 进程内存滑动窗口计数器
 - Key: `${route}:${userId}` 或 `${route}:${ip}`
 - 超限抛 `RATE_LIMIT_EXCEEDED` (429) + `Retry-After` header
+- **边缘部署限制**：进程内存计数仅在单实例有效。EdgeOne Pages / Vercel Edge 等多实例环境下每个实例独立计数，限流会失效。生产环境（`NODE_ENV='production'`）默认降级为 no-op，除非显式设置 `RATE_LIMIT_DISABLED='0'`（用于自建单实例部署）。EdgeOne 部署时应依赖平台控制台的「速率限制 / WAF 规则」做边缘限流。
 
 ## 环境变量安全
 
@@ -94,8 +95,9 @@ const user = await requireRole(['admin'])  // 失败抛 403
 |------|----------|------|
 | `NEXT_PUBLIC_SUPABASE_URL` | 客户端 + 服务端 | Supabase 项目 URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | 客户端 + 服务端 | Supabase 公开 key |
-| `DATABASE_URL` | 仅服务端 | 数据库连接串 |
-| `DIRECT_URL` | 仅服务端 | 直连数据库 URL |
+| `DATABASE_URL` | 仅运维脚本 | Supabase 连接池地址，仅 `scripts/check-db-security.ts` 等运维脚本使用，应用运行时不读取 |
+| `DIRECT_URL` | 仅运维脚本 | Supabase 直连地址，同上 |
 | `CORS_ALLOWED_ORIGINS` | 仅服务端 | CORS 白名单 |
+| `RATE_LIMIT_DISABLED` | 仅服务端 | `'1'` 禁用、`'0'` 显式启用、未设置时生产默认降级 |
 
 **禁止**：将 `DATABASE_URL`、`DIRECT_URL` 等敏感变量以 `NEXT_PUBLIC_` 前缀暴露。

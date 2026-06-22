@@ -70,7 +70,7 @@ export default function AuthModal() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="absolute inset-0 bg-ink/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-backdrop backdrop-blur-sm"
             onClick={handleClose}
             aria-hidden="true"
           />
@@ -88,13 +88,13 @@ export default function AuthModal() {
               duration: 0.3,
               ease: [0, 0, 0.2, 1],
             }}
-            className="relative z-10 w-full max-w-md mx-4 bg-rice rounded-xl shadow-modal p-8"
+            className="relative z-10 w-full max-w-md mx-4 bg-surface rounded-xl shadow-modal p-8 transition-colors"
           >
             {/* 关闭按钮 */}
             <button
               type="button"
               onClick={handleClose}
-              className="absolute right-4 top-4 z-20 flex h-8 w-8 items-center justify-center rounded-full text-ink-faint transition-colors hover:bg-rice-warm hover:text-ink"
+              className="absolute right-4 top-4 z-20 flex h-8 w-8 items-center justify-center rounded-full text-text-faint transition-colors hover:bg-surface-elevated hover:text-text"
               aria-label="关闭"
             >
               <Icon name="close" size={20} />

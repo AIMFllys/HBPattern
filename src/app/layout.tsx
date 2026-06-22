@@ -4,6 +4,8 @@ import AuthProvider from '@/components/providers/AuthProvider'
 import QueryProvider from '@/components/providers/QueryProvider'
 import AuthModal from '@/components/auth/AuthModal'
 import { ServiceWorkerRegistration } from '@/components/providers/ServiceWorkerRegistration'
+import ThemeProvider from '@/components/providers/ThemeProvider'
+import { createThemeScript } from '@/lib/theme'
 
 export const metadata: Metadata = {
   metadataBase: new URL(
@@ -22,6 +24,21 @@ export const metadata: Metadata = {
     siteName: "湖北纹案文化展示平台",
   },
   manifest: '/manifest.json',
+  icons: {
+    icon: [
+      { url: '/icons/icon-72x72.png', sizes: '72x72', type: 'image/png' },
+      { url: '/icons/icon-96x96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icons/icon-128x128.png', sizes: '128x128', type: 'image/png' },
+      { url: '/icons/icon-144x144.png', sizes: '144x144', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-384x384.png', sizes: '384x384', type: 'image/png' },
+      { url: '/icons/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/icons/icon-152x152.png', sizes: '152x152', type: 'image/png' },
+      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+    ],
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -33,9 +50,16 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: createThemeScript() }}
+          suppressHydrationWarning
+        />
+      </head>
       <body>
-        <ServiceWorkerRegistration />
+        <ThemeProvider>
+          <ServiceWorkerRegistration />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[400] btn-primary"
@@ -48,6 +72,7 @@ export default function RootLayout({
             {children}
           </AuthProvider>
         </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )

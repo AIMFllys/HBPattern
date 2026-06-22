@@ -20,8 +20,8 @@ export function PasswordUpdatePanel() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mb-10 rounded-xl border border-cinnabar/20 bg-white p-5 shadow-card">
-      <h2 className="text-lg font-bold text-ink">更新登录密码</h2>
+    <form onSubmit={handleSubmit} className="mb-10 rounded-xl border border-cinnabar/20 bg-surface-inset p-5 shadow-card">
+      <h2 className="text-lg font-bold text-text">更新登录密码</h2>
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <input
           type="password"
@@ -29,7 +29,7 @@ export function PasswordUpdatePanel() {
           minLength={8}
           required
           onChange={event => setPassword(event.target.value)}
-          className="min-w-0 flex-1 rounded-lg border border-rice-deep bg-rice px-4 py-2 text-sm outline-none focus:border-cinnabar"
+          className="min-w-0 flex-1 rounded-lg border border-border bg-surface px-4 py-2 text-sm outline-none focus:border-cinnabar placeholder:text-text-faint/50"
           placeholder="输入新密码"
         />
         <button
@@ -40,7 +40,7 @@ export function PasswordUpdatePanel() {
           {loading ? '更新中...' : '保存密码'}
         </button>
       </div>
-      {message && <p className="mt-3 text-sm text-ink-light">{message}</p>}
+      {message && <p className="mt-3 text-sm text-text-muted">{message}</p>}
     </form>
   )
 }

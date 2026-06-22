@@ -1,11 +1,8 @@
 import type { DemoMapBinding, DemoPatternDraft } from '@/types'
-import { DEFAULT_VIEW } from './mapDemoTypes'
 import type { DemoMode, DraftForm, MapDemoState } from './mapDemoTypes'
 import { createEmptyDraft, getFirstPlaceId } from './utils/mapDemoUtils'
 
 export interface MapDemoUiState {
-  zoom: number
-  pan: { x: number; y: number }
   selectedRegionId: string
   selectedPlaceId: string | null
   mode: DemoMode
@@ -23,8 +20,6 @@ export interface MapDemoUiState {
 
 type MapDemoAction =
   | { type: 'hydrateStorage'; stored: MapDemoState }
-  | { type: 'setZoom'; zoom: number }
-  | { type: 'setPan'; pan: { x: number; y: number } }
   | { type: 'setMode'; mode: DemoMode }
   | { type: 'setPatternQuery'; query: string }
   | { type: 'setSelectedPatternId'; patternId: string }
@@ -39,12 +34,10 @@ type MapDemoAction =
   | { type: 'addBinding'; binding: DemoMapBinding; minZoom: number }
   | { type: 'addDraftAndBinding'; draft: DemoPatternDraft; binding: DemoMapBinding; minZoom: number }
   | { type: 'removeBinding'; bindingId: string }
-  | { type: 'resetView' }
+  | { type: 'resetSelection' }
 
 export function createInitialMapDemoState(selectedPatternId: string): MapDemoUiState {
   return {
-    zoom: DEFAULT_VIEW.zoom,
-    pan: DEFAULT_VIEW.pan,
     selectedRegionId: 'wuhan',
     selectedPlaceId: null,
     mode: 'bind',
@@ -70,10 +63,6 @@ export function mapDemoReducer(state: MapDemoUiState, action: MapDemoAction): Ma
         drafts: action.stored.drafts,
         storageReady: true,
       }
-    case 'setZoom':
-      return { ...state, zoom: action.zoom }
-    case 'setPan':
-      return { ...state, pan: action.pan }
     case 'setMode':
       return { ...state, mode: action.mode }
     case 'setPatternQuery':
@@ -123,7 +112,6 @@ export function mapDemoReducer(state: MapDemoUiState, action: MapDemoAction): Ma
         ...state,
         bindings: [action.binding, ...state.bindings],
         bindingNote: '',
-        zoom: Math.max(state.zoom, action.minZoom),
         ...selectionPatch(action.binding.regionId, action.binding.placeId, state.draftForm),
       }
     case 'addDraftAndBinding':
@@ -135,7 +123,6 @@ export function mapDemoReducer(state: MapDemoUiState, action: MapDemoAction): Ma
         patternQuery: '',
         draftForm: createEmptyDraft(action.draft.regionId, action.draft.placeId),
         mode: 'bind',
-        zoom: Math.max(state.zoom, action.minZoom),
         selectedRegionId: action.draft.regionId,
         selectedPlaceId: action.draft.placeId,
         bindingRegionId: action.draft.regionId,
@@ -143,11 +130,9 @@ export function mapDemoReducer(state: MapDemoUiState, action: MapDemoAction): Ma
       }
     case 'removeBinding':
       return { ...state, bindings: state.bindings.filter(binding => binding.id !== action.bindingId) }
-    case 'resetView':
+    case 'resetSelection':
       return {
         ...state,
-        zoom: DEFAULT_VIEW.zoom,
-        pan: DEFAULT_VIEW.pan,
         ...selectionPatch('wuhan', null, state.draftForm),
       }
     default:

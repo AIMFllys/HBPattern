@@ -29,13 +29,13 @@ function ColorAdjustSection() {
   const disabled = layer.locked
 
   return (
-    <section className="border-t border-rice-deep bg-white p-4">
+    <section className="border-t border-border bg-surface-inset p-4">
       <PanelHeader icon="palette" title={`色彩调节 - ${layer.name}`}>
         <button
           type="button"
           onClick={() => updateActiveLayerColorAdjust(DEFAULT_COLOR_ADJUST)}
           disabled={disabled}
-          className="text-xs font-bold text-ink-faint transition-colors hover:text-cinnabar disabled:opacity-40"
+          className="text-xs font-bold text-text-faint transition-colors hover:text-cinnabar disabled:opacity-40"
         >
           重置
         </button>
@@ -101,7 +101,7 @@ function ColorAdjustSection() {
           type="button"
           onClick={() => updateActiveLayerColorAdjust({ tint: null })}
           disabled={disabled || colorAdjust.tint === null}
-          className="rounded-lg border border-rice-deep px-3 py-2 text-xs font-bold text-ink-light transition-colors hover:border-cinnabar/40 hover:text-cinnabar disabled:opacity-40"
+          className="rounded-lg border border-border px-3 py-2 text-xs font-bold text-text-muted transition-colors hover:border-cinnabar/40 hover:text-cinnabar disabled:opacity-40"
         >
           清除染色
         </button>
@@ -124,7 +124,7 @@ function TransformSection() {
   }
 
   return (
-    <section className="border-t border-rice-deep bg-white p-4">
+    <section className="border-t border-border bg-surface-inset p-4">
       <PanelHeader icon="transform" title={`变换 - ${layer.name}`} />
       <div className="grid gap-x-6 gap-y-3 md:grid-cols-2 xl:grid-cols-5">
         <ParameterSlider
@@ -210,7 +210,7 @@ function SymmetrySection() {
   const setSymmetry = useWorkshopStore(state => state.setSymmetry)
 
   return (
-    <section className="border-t border-rice-deep bg-white p-4">
+    <section className="border-t border-border bg-surface-inset p-4">
       <PanelHeader icon="texture" title="对称模式" />
       <div className="grid grid-cols-4 gap-2 md:grid-cols-7">
         {SYMMETRY_OPTIONS.map(option => (
@@ -221,7 +221,7 @@ function SymmetrySection() {
             className={`flex flex-col items-center gap-1 rounded-lg px-2 py-2 text-xs font-bold transition-colors ${
               symmetry.type === option.type
                 ? 'bg-gold text-white shadow-sm'
-                : 'bg-rice-warm text-ink-light hover:bg-rice-deep'
+                : 'bg-surface-elevated text-text-muted hover:bg-border'
             }`}
           >
             <Icon name={option.icon} size={18} />
@@ -250,7 +250,7 @@ function SymmetrySection() {
             unit="%"
             primaryColor="gold"
           />
-          <label className="flex items-center gap-2 text-xs font-bold text-ink-light">
+          <label className="flex items-center gap-2 text-xs font-bold text-text-muted">
             <input
               type="checkbox"
               checked={symmetry.showGuides}
@@ -278,7 +278,7 @@ function PanelHeader({
     <div className="mb-3 flex items-center justify-between gap-3">
       <div className="flex min-w-0 items-center gap-2">
         <Icon name={icon} size={16} className="text-gold" />
-        <h3 className="truncate text-xs font-bold uppercase tracking-wider text-ink">{title}</h3>
+        <h3 className="truncate text-xs font-bold uppercase tracking-wider text-text">{title}</h3>
       </div>
       {children}
     </div>
@@ -306,7 +306,7 @@ function ToggleButton({
       onClick={onClick}
       disabled={disabled}
       className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-bold transition-colors disabled:opacity-40 ${
-        active ? 'bg-gold text-white' : 'bg-rice-warm text-ink-light hover:bg-rice-deep'
+        active ? 'bg-gold text-white' : 'bg-surface-elevated text-text-muted hover:bg-border'
       }`}
     >
       <Icon name={icon} size={14} className={rotateIcon ? 'rotate-90' : ''} />
@@ -317,7 +317,7 @@ function ToggleButton({
 
 function EmptyPanel({ message }: { message: string }) {
   return (
-    <section className="border-t border-rice-deep bg-white p-4 text-center text-sm text-ink-faint">
+    <section className="border-t border-border bg-surface-inset p-4 text-center text-sm text-text-faint">
       {message}
     </section>
   )

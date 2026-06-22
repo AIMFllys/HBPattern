@@ -16,7 +16,7 @@ function LegendItem({ color, label, shape }: { color: string; label: string; sha
 
 export function MapLegend() {
   return (
-    <div className="absolute bottom-5 right-5 flex flex-col gap-1.5 border border-rice-deep bg-white/92 px-3 py-2.5 text-[10px] font-bold text-ink-medium shadow-lg backdrop-blur lg:bottom-auto lg:top-36">
+    <div className="absolute bottom-5 right-5 flex flex-col gap-1.5 border border-border bg-surface-overlay px-3 py-2.5 text-[10px] font-bold text-text-secondary shadow-lg backdrop-blur lg:bottom-auto lg:top-36">
       <LegendItem color="bg-cinnabar" shape="circle" label="当前选中区域" />
       <LegendItem color="bg-gold" shape="bar" label="城市中心点" />
       <LegendItem color="bg-ink" shape="square" label="关键地点" />

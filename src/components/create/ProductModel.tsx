@@ -24,7 +24,9 @@ export function ProductModel({ productId }: Props) {
 
   return (
     <Suspense fallback={<FallbackMesh />}>
-      <ModelComponent />
+      <group userData={{ productId, exportableRoot: true }}>
+        <ModelComponent />
+      </group>
     </Suspense>
   )
 }

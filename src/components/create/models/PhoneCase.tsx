@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import * as THREE from 'three'
+import { BaseSurfaceMaterial } from '../BaseSurfaceMaterial'
 import { TexturedMaterial } from '../TexturedMaterial'
 
 export default function PhoneCase() {
@@ -17,6 +18,9 @@ export default function PhoneCase() {
 
   return (
     <group ref={groupRef}>
+      <RoundedBox args={[1.18, 2.35, 0.16]} radius={0.09} smoothness={4}>
+        <BaseSurfaceMaterial side={THREE.BackSide} />
+      </RoundedBox>
       <RoundedBox args={[1.18, 2.35, 0.16]} radius={0.09} smoothness={4}>
         <TexturedMaterial roughnessOverride={42} metalnessOverride={5} />
       </RoundedBox>

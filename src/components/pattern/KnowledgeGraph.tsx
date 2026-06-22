@@ -214,9 +214,9 @@ export function KnowledgeGraph({ nodes, links }: KnowledgeGraphProps) {
   }, [nodes, links, handleClick])
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-rice-deep bg-white">
-      <div className="flex items-center gap-4 px-6 py-3 border-b border-rice-deep/50">
-        <h3 className="font-serif text-lg font-bold text-ink">演化关系图谱</h3>
+    <div className="relative w-full overflow-hidden rounded-2xl border border-border bg-surface-inset">
+      <div className="flex items-center gap-4 px-6 py-3 border-b border-border-subtle">
+        <h3 className="font-serif text-lg font-bold text-text">演化关系图谱</h3>
         <div className="flex flex-wrap gap-3 text-xs">
           {Object.entries(LINK_LABELS).map(([type, label]) => (
             <span key={type} className="flex items-center gap-1.5">
@@ -227,7 +227,7 @@ export function KnowledgeGraph({ nodes, links }: KnowledgeGraphProps) {
                   ...(type === 'variant_of' ? { backgroundImage: `repeating-linear-gradient(90deg, ${LINK_COLORS[type]} 0, ${LINK_COLORS[type]} 4px, transparent 4px, transparent 7px)` } : {}),
                 }}
               />
-              <span className="text-ink-medium">{label}</span>
+              <span className="text-text-secondary">{label}</span>
             </span>
           ))}
         </div>

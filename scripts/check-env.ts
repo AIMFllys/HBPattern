@@ -10,7 +10,10 @@ import { loadEnvConfig } from '@next/env'
 // script sees the same variables the build/runtime will.
 loadEnvConfig(process.cwd())
 
-/** Hard requirements — missing any of these aborts the build. */
+/** Hard requirements — missing any of these aborts the build.
+ * NEXT_PUBLIC_* 在构建时打入前端代码，运行时必需。
+ * DATABASE_URL / DIRECT_URL 仅运维脚本（scripts/check-db-security.ts、
+ * scripts/seed.ts）使用，应用运行时不读取，但 prebuild 阶段校验可提前发现配置缺失。 */
 const REQUIRED_VARS = [
   'NEXT_PUBLIC_SUPABASE_URL',
   'NEXT_PUBLIC_SUPABASE_ANON_KEY',

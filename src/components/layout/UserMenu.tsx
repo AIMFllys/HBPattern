@@ -14,12 +14,12 @@ export default function UserMenu() {
   const router = useRouter()
 
   if (isLoading) {
-    return <div className="w-10 h-10 rounded-full bg-rice-warm animate-pulse" />
+    return <div className="w-10 h-10 rounded-full bg-surface-elevated animate-pulse" />
   }
 
   if (!user) {
     return (
-      <Link href="/login" className="flex items-center justify-center w-10 h-10 rounded-full bg-rice-warm text-ink-medium hover:text-cinnabar hover:bg-cinnabar/10 transition-colors">
+      <Link href="/login" className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-elevated text-text-secondary hover:text-cinnabar hover:bg-cinnabar/10 transition-colors">
         <Icon name="person" />
       </Link>
     )
@@ -38,7 +38,7 @@ export default function UserMenu() {
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="w-10 h-10 rounded-full overflow-hidden border-2 border-rice-deep hover:border-cinnabar transition-colors"
+        className="w-10 h-10 rounded-full overflow-hidden border-2 border-border hover:border-cinnabar transition-colors"
         aria-label="用户菜单"
       >
         {user.avatar_url ? (
@@ -53,20 +53,20 @@ export default function UserMenu() {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-12 z-50 w-48 bg-white rounded-xl shadow-xl border border-rice-deep py-2">
-            <div className="px-4 py-2 border-b border-rice-deep">
-              <p className="text-sm font-bold text-ink truncate">{user.nickname}</p>
-              <p className="text-xs text-ink-faint truncate">{user.email}</p>
+          <div className="absolute right-0 top-12 z-50 w-48 bg-surface-inset rounded-xl shadow-xl border border-border py-2">
+            <div className="px-4 py-2 border-b border-border">
+              <p className="text-sm font-bold text-text truncate">{user.nickname}</p>
+              <p className="text-xs text-text-faint truncate">{user.email}</p>
             </div>
-            <Link href="/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-ink-medium hover:bg-rice-warm hover:text-cinnabar">
+            <Link href="/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-text-secondary hover:bg-surface-elevated hover:text-cinnabar">
               <Icon name="person" size={16} /> 个人中心
             </Link>
             {user.role === 'admin' && (
-              <Link href="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-ink-medium hover:bg-rice-warm hover:text-cinnabar">
+              <Link href="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm text-text-secondary hover:bg-surface-elevated hover:text-cinnabar">
                 <Icon name="dashboard" size={16} /> 管理后台
               </Link>
             )}
-            <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-ink-medium hover:bg-rice-warm hover:text-error">
+            <button onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-text-secondary hover:bg-surface-elevated hover:text-error">
               <Icon name="logout" size={16} /> 退出登录
             </button>
           </div>

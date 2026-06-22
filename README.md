@@ -21,11 +21,11 @@ HBPattern 是一个面向湖北非遗纹样的数字化展示、检索、互动�
 当前实现以代码仓库为准：
 
 - 前端框架：Next.js `16.2.1`、React `19.2.4`、TypeScript `5`
-- 数据与 ORM：PostgreSQL、Prisma
+- 数据与存储：Supabase PostgreSQL（PostGIS + pgvector）
 - 认证与存储：Supabase Auth、Supabase Storage
 - 接口规范：App Router API Routes、Zod 校验、统一响应封装
 - 交互能力：Three.js、React Three Fiber、Drei
-- 工程质量：ESLint、Vitest、Prisma Seed、环境变量检查脚本
+- 工程质量：ESLint、Vitest、Supabase Migrations、环境变量检查脚本
 
 ---
 
@@ -54,11 +54,9 @@ HBPattern/
 │   ├── components/                  # 可复用组件
 │   ├── hooks/                       # React Hooks
 │   └── lib/                         # 工具库、数据库、鉴权、校验、安全、上传
-├── prisma/
-│   ├── schema.prisma                # 数据库 Schema
-│   ├── seed.ts                      # 初始化种子数据
-│   └── prisma.config.ts             # Prisma 配置
-├── scripts/                         # 环境检查与工程脚本
+├── supabase/
+│   └── migrations/                  # SQL migrations（schema 真相源）
+├── scripts/                         # 环境检查、种子数据、工程脚本
 └── public/                          # 静态资源
 ```
 
@@ -70,8 +68,7 @@ HBPattern/
 
 - Node.js `20+`
 - npm
-- PostgreSQL 数据库
-- Supabase 项目（Auth + Storage）
+- Supabase 项目（PostgreSQL 数据库 + Auth + Storage）
 
 ### 1. 克隆项目
 
@@ -118,13 +115,20 @@ npx tsx scripts/check-env.ts
 
 ### 4. 初始化数据库
 
+在 Supabase 控制台 → SQL Editor，按顺序执行 `supabase/migrations/` 下的 SQL 文件：
+
+1. `0000_init.sql` — 建表（ extensions / enums / 所有 hp_* 表 / 外键 / 触发器）
+2. `0001_performance_indexes.sql` — 性能索引
+3. `0002_rls_policies.sql` — 行级安全策略
+4. `0003_hp_toggle_like.sql` — 点赞 RPC
+
+随后执行种子数据：
+
 ```bash
-npx prisma generate
-npx prisma db push
-npx tsx prisma/seed.ts
+npm run seed
 ```
 
-生产环境建议使用正式迁移流程管理数据库版本，不建议直接依赖 `db push`。
+> 种子脚本需 `SUPABASE_SERVICE_ROLE_KEY` 环境变量（绕过 RLS）。
 
 ### 5. 启动开发服务器
 
@@ -254,7 +258,7 @@ npm run dev
 
 ## 数据模型
 
-核心模型位于 `prisma/schema.prisma`，当前包括：
+数据库 schema 由 `supabase/migrations/0000_init.sql` 定义（唯一真相源），核心表包括：
 
 - `hp_users`
 - `hp_patterns`

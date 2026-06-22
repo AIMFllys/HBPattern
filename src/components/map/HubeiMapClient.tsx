@@ -1,52 +1,53 @@
 'use client'
 
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import type { PointerEvent, WheelEvent } from 'react'
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react'
+import type { Map as MaplibreMapInstance } from 'maplibre-gl'
 import {
-  HUBEI_MAP_LABEL_THRESHOLDS,
-  HUBEI_MAP_STORAGE_KEY,
   findHubeiPlace,
   findHubeiRegion,
   hubeiRegions,
-  projectHubeiPoint,
+  HUBEI_MAP_STORAGE_KEY,
 } from '@/data/map/hubei'
 import { analyzePatternDraft } from '@/lib/map/patternAnalysis'
+import { createGalleryMapBindings } from '@/lib/map/patternGeo'
 import type { DemoMapBinding, DemoPatternDraft, MapPatternOption, PatternAnalysisResult } from '@/types'
-import { MapCanvas } from './MapCanvas'
+import { Icon } from '@/components/icons/Icon'
+import { BottomSheet } from '@/components/ui/BottomSheet'
+import { MapBindingsLayer } from './MapBindingsLayer'
 import { MapControls } from './MapControls'
 import { MapInfoPanel } from './MapInfoPanel'
 import { MapLegend } from './MapLegend'
+import { MapPlacesLayer } from './MapPlacesLayer'
 import { MapPlaceDetail } from './MapPlaceDetail'
+import { MapRegionsLayer } from './MapRegionsLayer'
 import { MapSidebar } from './MapSidebar'
-import type { DisplayBinding, DraftForm, DragState } from './mapDemoTypes'
+import type { DisplayBinding, DraftForm } from './mapDemoTypes'
 import { createInitialMapDemoState, mapDemoReducer } from './useMapDemoState'
+import { useMapLibre } from './useMapLibre'
 import {
-  clampZoom,
   createId,
   draftToPatternOption,
   ensurePlaceId,
   parseStoredState,
 } from './utils/mapDemoUtils'
 import { readImageForDemo } from './utils/imageProcessing'
-import { Icon } from '@/components/icons/Icon'
-import { BottomSheet } from '@/components/ui/BottomSheet'
-import { createGalleryMapBindings } from '@/lib/map/patternGeo'
+
+const MapLibreMap = dynamic(() => import('./MapLibreMap'), { ssr: false }) as React.ComponentType<
+  React.ComponentProps<typeof import('./MapLibreMap')['default']>
+>
 
 interface HubeiMapClientProps {
   initialPatterns: MapPatternOption[]
 }
 
 export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps) {
-  const viewportRef = useRef<HTMLDivElement>(null)
-  const dragRef = useRef<DragState | null>(null)
   const [state, dispatch] = useReducer(
     mapDemoReducer,
     initialPatterns[0]?.id ?? '',
     createInitialMapDemoState,
   )
   const {
-    zoom,
-    pan,
     selectedRegionId,
     selectedPlaceId,
     mode,
@@ -63,6 +64,8 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   } = state
 
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+  const [mapInstance, setMapInstance] = useState<MaplibreMapInstance | null>(null)
+  const { mapRef, flyToRegion, resetView, zoomIn, zoomOut } = useMapLibre()
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -84,11 +87,6 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   const selectedPlace = selectedPlaceId ? (findHubeiPlace(selectedRegion.id, selectedPlaceId) ?? null) : null
   const bindingRegion = findHubeiRegion(bindingRegionId) ?? hubeiRegions[0]
   const draftRegion = findHubeiRegion(draftForm.regionId) ?? hubeiRegions[0]
-
-  const projectedRegions = useMemo(
-    () => hubeiRegions.map(region => ({ region, projected: projectHubeiPoint(region.point) })),
-    [],
-  )
 
   const totalPlaces = useMemo(
     () => hubeiRegions.reduce((sum, region) => sum + region.keyPlaces.length, 0),
@@ -139,75 +137,36 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
     [bindings, draftForm],
   )
 
-  function updateZoom(nextZoom: number) {
-    dispatch({ type: 'setZoom', zoom: clampZoom(nextZoom) })
-  }
+  const handleMapReady = useCallback((map: MaplibreMapInstance) => {
+    setMapInstance(map)
+  }, [])
 
-  function handleWheel(event: WheelEvent<HTMLDivElement>) {
-    event.preventDefault()
-    const delta = event.deltaY > 0 ? -0.12 : 0.12
-    updateZoom(zoom + delta)
-  }
-
-  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
-    if (event.button !== 0) return
-    dragRef.current = { pointerId: event.pointerId, x: event.clientX, y: event.clientY }
-    event.currentTarget.setPointerCapture(event.pointerId)
-  }
-
-  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    const drag = dragRef.current
-    const rect = viewportRef.current?.getBoundingClientRect()
-    if (!drag || drag.pointerId !== event.pointerId || !rect) return
-
-    const dx = ((event.clientX - drag.x) / rect.width) * 100
-    const dy = ((event.clientY - drag.y) / rect.height) * 100
-    dragRef.current = { ...drag, x: event.clientX, y: event.clientY }
-    dispatch({
-      type: 'setPan',
-      pan: {
-        x: pan.x + dx / zoom,
-        y: pan.y + dy / zoom,
-      },
-    })
-  }
-
-  function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
-    if (dragRef.current?.pointerId === event.pointerId) {
-      dragRef.current = null
-      event.currentTarget.releasePointerCapture(event.pointerId)
-    }
-  }
-
-  function resetView() {
-    dispatch({ type: 'resetView' })
-  }
-
-  function syncSelectedLocation(regionId: string, placeId: string | null) {
+  const syncSelectedLocation = useCallback((regionId: string, placeId: string | null) => {
     dispatch({ type: 'syncSelectedLocation', regionId, placeId })
-  }
+  }, [])
 
-  function selectRegion(regionId: string) {
+  const selectRegion = useCallback((regionId: string) => {
     syncSelectedLocation(regionId, null)
     const region = findHubeiRegion(regionId)
     if (region) {
-      const point = projectHubeiPoint(region.point)
-      dispatch({ type: 'setZoom', zoom: 1.55 })
-      dispatch({ type: 'setPan', pan: { x: 50 - point.x, y: 50 - point.y } })
+      flyToRegion([region.point.lng, region.point.lat], 9)
     }
-  }
+  }, [flyToRegion, syncSelectedLocation])
 
-  function selectPlace(regionId: string, placeId: string) {
+  const selectPlace = useCallback((regionId: string, placeId: string) => {
     syncSelectedLocation(regionId, placeId)
-  }
+  }, [syncSelectedLocation])
 
   function focusRegion(regionId: string) {
     const region = findHubeiRegion(regionId)
     if (!region) return
-    const point = projectHubeiPoint(region.point)
     syncSelectedLocation(regionId, null)
-    dispatch({ type: 'setZoom', zoom: 1.55 })
-    dispatch({ type: 'setPan', pan: { x: 50 - point.x, y: 50 - point.y } })
+    flyToRegion([region.point.lng, region.point.lat], 9)
+  }
+
+  function handleResetView() {
+    resetView()
+    dispatch({ type: 'resetSelection' })
   }
 
   function updateBindingRegion(regionId: string) {
@@ -290,7 +249,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
   }
 
   return (
-    <main className="flex min-h-[calc(100vh-73px)] flex-col overflow-hidden bg-[#f8f4eb] lg:flex-row">
+    <main id="main-content" className="flex min-h-[calc(100vh-73px)] flex-col overflow-hidden bg-surface lg:flex-row transition-colors">
       {/* Desktop sidebar */}
       <div className="hidden lg:flex">
         <MapSidebar
@@ -311,7 +270,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
           storageReady={storageReady}
           displayBindings={displayBindings}
           draftAnalysis={draftAnalysis}
-          resetView={resetView}
+          resetView={handleResetView}
           focusRegion={focusRegion}
           setMode={(nextMode) => dispatch({ type: 'setMode', mode: nextMode })}
           setPatternQuery={(query) => dispatch({ type: 'setPatternQuery', query })}
@@ -329,34 +288,42 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         />
       </div>
 
-      <section className="relative min-h-[50vh] flex-1 overflow-hidden bg-[#fdf9ee] lg:min-h-[760px]">
-        <MapCanvas
-          viewportRef={viewportRef}
-          zoom={zoom}
-          pan={pan}
-          selectedRegion={selectedRegion}
-          selectedPlace={selectedPlace}
-          displayBindings={displayBindings}
-          projectedRegions={projectedRegions}
-          handleWheel={handleWheel}
-          handlePointerDown={handlePointerDown}
-          handlePointerMove={handlePointerMove}
-          handlePointerUp={handlePointerUp}
-          selectRegion={selectRegion}
-          selectPlace={selectPlace}
+      <section className="relative min-h-[50vh] flex-1 overflow-hidden bg-surface-inset lg:min-h-[760px]">
+        <MapLibreMap
+          mapRef={mapRef}
+          selectedRegionId={selectedRegionId}
+          onMapReady={handleMapReady}
+          onRegionClick={selectRegion}
         />
 
+        {mapInstance && (
+          <>
+            <MapRegionsLayer map={mapInstance} selectedRegionId={selectedRegionId} />
+            <MapPlacesLayer
+              map={mapInstance}
+              selectedRegion={selectedRegion}
+              selectedPlace={selectedPlace}
+              onSelectPlace={selectPlace}
+            />
+            <MapBindingsLayer
+              map={mapInstance}
+              displayBindings={displayBindings}
+              onSelectPlace={selectPlace}
+            />
+          </>
+        )}
+
         <div className="pointer-events-none absolute left-3 top-3 max-w-[14rem] sm:left-5 sm:top-5 sm:max-w-[22rem] lg:max-w-[22rem]">
-          <div className="pointer-events-auto border-l-4 border-gold bg-white/88 p-3 shadow-xl backdrop-blur sm:p-4">
+          <div className="pointer-events-auto border-l-4 border-gold bg-surface-overlay p-3 shadow-xl backdrop-blur sm:p-4">
             <p className="text-[10px] font-black uppercase tracking-[0.24em] text-gold">当前视图</p>
-            <h2 className="mt-1 font-serif text-base font-black text-ink sm:text-xl">湖北省行政区域 Demo</h2>
-            <p className="mt-1 hidden text-xs leading-5 text-ink-light sm:block">
-              城市标签在 {Math.round(HUBEI_MAP_LABEL_THRESHOLDS.city * 100)}% 后显示，地点标签在 {Math.round(HUBEI_MAP_LABEL_THRESHOLDS.place * 100)}% 后显示。
+            <h2 className="mt-1 font-serif text-base font-black text-text sm:text-xl">湖北省文化地图</h2>
+            <p className="mt-1 hidden text-xs leading-5 text-text-muted sm:block">
+              矢量瓦片底图 · 地形晕渲 · 河流水系 · 县级边界
             </p>
           </div>
         </div>
 
-        <MapControls zoom={zoom} updateZoom={updateZoom} resetView={resetView} />
+        <MapControls zoomIn={zoomIn} zoomOut={zoomOut} resetView={handleResetView} />
         <MapInfoPanel
           selectedRegion={selectedRegion}
           selectedPlace={selectedPlace}
@@ -370,7 +337,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
         <button
           type="button"
           onClick={() => setIsMobileSidebarOpen(true)}
-          className="absolute bottom-5 right-5 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-ink text-rice shadow-modal transition-transform hover:scale-105 lg:hidden"
+          className="absolute bottom-5 right-5 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-surface-elevated text-text shadow-modal transition-transform hover:scale-105 lg:hidden"
           aria-label="打开区域面板"
         >
           <Icon name="menu" size={22} />
@@ -403,7 +370,7 @@ export default function HubeiMapClient({ initialPatterns }: HubeiMapClientProps)
             storageReady={storageReady}
             displayBindings={displayBindings}
             draftAnalysis={draftAnalysis}
-            resetView={resetView}
+            resetView={handleResetView}
             focusRegion={focusRegion}
             setMode={(nextMode) => dispatch({ type: 'setMode', mode: nextMode })}
             setPatternQuery={(query) => dispatch({ type: 'setPatternQuery', query })}

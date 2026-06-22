@@ -72,8 +72,8 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
   const mainImage = pattern.media?.[0]?.url
 
   return (
-    <div className="layout-container flex h-full grow flex-col bg-[#f8f8f6]">
-      <SiteHeader logoIcon="landscape" siteName="纹样大观" primaryColor="gold" />
+    <div className="layout-container flex h-full grow flex-col bg-surface transition-colors">
+      <SiteHeader siteName="纹样大观" primaryColor="gold" />
 
       {/* Peak Experience: Full-bleed hero image */}
       <PatternHeroImage
@@ -90,7 +90,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
           <div className="lg:col-span-2 flex flex-col gap-8 py-4">
             <div className="flex justify-between items-start">
               <div className="flex flex-col gap-2">
-                <h1 className="text-4xl lg:text-5xl font-black text-ink leading-tight">{pattern.name}</h1>
+                <h1 className="text-4xl lg:text-5xl font-black text-text leading-tight">{pattern.name}</h1>
                 {pattern.era && (
                   <p className="text-gold text-xl italic font-serif">{pattern.era}</p>
                 )}
@@ -122,7 +122,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
             </div>
 
             {pattern.description && (
-              <div className="prose prose-lg max-w-none text-ink/80 leading-relaxed">
+              <div className="prose prose-lg max-w-none text-text-secondary leading-relaxed">
                 <p className="first-letter:text-5xl first-letter:font-bold first-letter:text-cinnabar-deep first-letter:mr-3 first-letter:float-left">
                   {pattern.description}
                 </p>
@@ -144,7 +144,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
             {pattern.tags && pattern.tags.length > 0 && (
               <div className="flex gap-2 flex-wrap">
                 {pattern.tags.map((t: { tag: { id: string; name: string } }) => (
-                  <span key={t.tag.id} className="px-3 py-1 bg-rice-warm border border-rice-deep rounded-full text-xs text-ink-medium">
+                  <span key={t.tag.id} className="px-3 py-1 bg-surface-elevated border border-border rounded-full text-xs text-text-secondary">
                     {t.tag.name}
                   </span>
                 ))}
@@ -154,14 +154,14 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
 
           {/* Color Palette sidebar */}
           <div className="lg:col-span-1 py-4">
-            <div className="sticky top-24 bg-white rounded-2xl border border-rice-deep p-6 shadow-card">
+            <div className="sticky top-24 bg-surface-inset rounded-2xl border border-border p-6 shadow-card">
               <ColorPalette colors={palette} />
             </div>
           </div>
         </div>
 
         {/* Section 2: Animated Timeline */}
-        <section className="mt-20 py-12 border-t border-rice-deep/50">
+        <section className="mt-20 py-12 border-t border-border-subtle">
           <AnimatedTimeline />
         </section>
 
@@ -201,7 +201,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {related.map((p) => (
                 <Link key={p.id} href={`/gallery/${p.id}`} className="flex flex-col gap-3 group">
-                  <div className="aspect-square bg-white rounded-lg overflow-hidden border border-gold/10">
+                  <div className="aspect-square bg-surface-inset rounded-lg overflow-hidden border border-gold/10">
                     <div
                       className="w-full h-full group-hover:scale-110 transition-transform duration-500 bg-cover bg-center"
                       style={{ backgroundColor: '#3d3d30', backgroundImage: p.media?.[0]?.url ? `url("${p.media[0].url}")` : undefined }}
@@ -218,7 +218,7 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
         )}
       </main>
 
-      <SiteFooter variant="dark" />
+      <SiteFooter />
     </div>
   )
 }

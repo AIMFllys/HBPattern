@@ -6,7 +6,7 @@ import { ColorPicker } from '@/components/ui/ColorPicker'
 import { Icon } from '@/components/icons/Icon'
 import { useCreateStore } from '@/stores/useCreateStore'
 import type { CameraPreset, TilingMode } from '@/types/create'
-import { ExportButton, SaveCreationButton } from './ExportButton'
+import { SaveCreationButton } from './ExportButton'
 import { OffsetPad } from './OffsetPad'
 
 const TILING_OPTIONS: { value: TilingMode; label: string; icon: string }[] = [
@@ -41,9 +41,8 @@ export const ParameterPanel = memo(function ParameterPanel() {
     resetTextureParams()
     resetMaterialParams()
   }, [resetTextureParams, resetMaterialParams])
-
   return (
-    <div className="border-t border-rice-deep bg-white">
+    <div className="border-t border-border bg-surface-inset">
       <div className="p-4">
         <div className="flex flex-wrap items-start gap-5">
           <div className="grid flex-1 grid-cols-2 gap-4 xl:grid-cols-4">
@@ -81,11 +80,11 @@ export const ParameterPanel = memo(function ParameterPanel() {
             />
           </div>
 
-          <div className="h-20 w-px self-center bg-rice-deep" />
+          <div className="h-20 w-px self-center bg-border" />
 
           <OffsetPad />
 
-          <div className="h-20 w-px self-center bg-rice-deep" />
+          <div className="h-20 w-px self-center bg-border" />
 
           <SegmentedIconGroup
             label="平铺"
@@ -95,22 +94,22 @@ export const ParameterPanel = memo(function ParameterPanel() {
             activeClassName="bg-cinnabar text-white"
           />
 
-          <div className="h-20 w-px self-center bg-rice-deep" />
+          <div className="h-20 w-px self-center bg-border" />
 
           <SegmentedIconGroup
             label="视角"
             options={CAMERA_OPTIONS}
             activeValue={cameraPreset}
             onChange={value => setCameraPreset(value as CameraPreset)}
-            activeClassName="bg-ink text-white"
+            activeClassName="bg-surface-elevated text-text shadow-hover"
           />
 
-          <div className="h-20 w-px self-center bg-rice-deep" />
+          <div className="h-20 w-px self-center bg-border" />
 
           <div className="min-w-[168px]">
             <ColorPicker value={materialParams.baseColor} onChange={handleBaseColorChange} label="底色 BASE" />
-            <label className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-rice-deep bg-rice-warm px-3 py-2 text-xs font-bold text-ink-light">
-              <span>纯色轮廓</span>
+            <label className="mt-3 flex items-center justify-between gap-3 rounded-lg border border-border bg-surface-elevated px-3 py-2 text-xs font-bold text-text-muted">
+              <span>显示底色背板</span>
               <input
                 type="checkbox"
                 checked={materialParams.showBaseSurface}
@@ -122,22 +121,21 @@ export const ParameterPanel = memo(function ParameterPanel() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rice-deep bg-rice-warm/30 px-4 py-2">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-surface-elevated/30 px-4 py-2">
         <button
           type="button"
           onClick={handleReset}
-          className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-ink-light transition-colors hover:text-ink-medium"
+          className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold text-text-muted transition-colors hover:text-text"
         >
           <Icon name="restart_alt" size={16} />
           重置参数
         </button>
-        <div className="flex items-center gap-2 text-xs text-ink-faint">
+        <div className="flex items-center gap-2 text-xs text-text-faint">
           <span>X偏移: {textureParams.offsetX}%</span>
           <span>Y偏移: {textureParams.offsetY}%</span>
         </div>
         <div className="flex items-center gap-2">
           <SaveCreationButton />
-          <ExportButton />
         </div>
       </div>
     </div>
@@ -159,7 +157,7 @@ function SegmentedIconGroup({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="text-xs font-bold uppercase tracking-tighter text-ink-faint">
+      <span className="text-xs font-bold uppercase tracking-tighter text-text-faint">
         {label}
       </span>
       <div className="flex gap-1">
@@ -171,7 +169,7 @@ function SegmentedIconGroup({
             className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
               activeValue === option.value
                 ? activeClassName
-                : 'bg-rice-warm text-ink-light hover:bg-rice-deep'
+                : 'bg-surface-elevated text-text-muted hover:bg-border'
             }`}
             title={option.label}
             aria-label={option.label}

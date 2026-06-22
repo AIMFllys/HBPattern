@@ -44,11 +44,11 @@ export const PatternAssetCard = memo(function PatternAssetCard({
         className={`aspect-square overflow-hidden rounded-xl border-2 p-1 transition-all ${
           isSelected
             ? 'border-gold bg-gold/5 shadow-md shadow-gold/20'
-            : 'border-transparent bg-rice-warm hover:border-rice-deep group-hover:shadow-sm'
+            : 'border-transparent bg-surface-elevated hover:border-border group-hover:shadow-sm'
         }`}
       >
         <div
-          className={`relative h-full w-full overflow-hidden rounded-lg bg-rice-warm transition-transform duration-500 group-hover:scale-110 ${
+          className={`relative h-full w-full overflow-hidden rounded-lg bg-surface-elevated transition-transform duration-500 group-hover:scale-110 ${
             imageLoaded ? '' : 'animate-pulse'
           }`}
           style={fallbackStyle}
@@ -73,10 +73,10 @@ export const PatternAssetCard = memo(function PatternAssetCard({
         </div>
       </div>
       <div className="mt-1.5 px-0.5">
-        <p className={`truncate text-xs font-bold ${isSelected ? 'text-gold' : 'text-ink-light group-hover:text-ink-medium'}`}>
+        <p className={`truncate text-xs font-bold ${isSelected ? 'text-gold' : 'text-text-muted group-hover:text-text'}`}>
           {pattern.name}
         </p>
-        <p className="truncate text-[10px] text-ink-faint">
+        <p className="truncate text-[10px] text-text-faint">
           {[pattern.era, pattern.technique?.name].filter(Boolean).join(' · ') || '湖北纹样'}
         </p>
       </div>

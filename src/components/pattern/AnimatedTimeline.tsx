@@ -42,11 +42,11 @@ export function AnimatedTimeline({ items }: AnimatedTimelineProps) {
               className="relative"
             >
               {/* Dot */}
-              <div className="absolute -left-8 top-1.5 w-3 h-3 rounded-full bg-gold border-2 border-rice shadow-sm" />
+              <div className="absolute -left-8 top-1.5 w-3 h-3 rounded-full bg-gold border-2 border-surface shadow-sm" />
 
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-3">
-                  <span className="text-lg font-bold text-ink">{item.label}</span>
+                  <span className="text-lg font-bold text-text">{item.label}</span>
                   {item.era && (
                     <span className="text-xs text-gold font-serif italic px-2 py-0.5 bg-gold/10 rounded-full">
                       {item.era}
@@ -54,7 +54,7 @@ export function AnimatedTimeline({ items }: AnimatedTimelineProps) {
                   )}
                 </div>
                 {item.description && (
-                  <p className="text-sm text-ink-light leading-relaxed">{item.description}</p>
+                  <p className="text-sm text-text-muted leading-relaxed">{item.description}</p>
                 )}
               </div>
             </motion.div>

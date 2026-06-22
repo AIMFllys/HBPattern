@@ -21,10 +21,10 @@ export function FeaturedPatterns({ patterns }: FeaturedPatternsProps) {
   const { ref, isInView } = useScrollReveal()
 
   return (
-    <section className="w-full bg-ink py-24 text-white">
+    <section className="w-full bg-surface-elevated py-24 text-text border-y border-border-subtle transition-colors">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between mb-12">
-          <h2 className="text-3xl font-bold font-serif">精选珍品</h2>
+          <h2 className="text-3xl font-bold font-serif text-text">精选珍品</h2>
           <Link href="/gallery" className="text-sm text-gold font-bold flex items-center gap-1 hover:underline">
             浏览全部 <Icon name="arrow_forward" size={16} />
           </Link>
@@ -44,7 +44,7 @@ export function FeaturedPatterns({ patterns }: FeaturedPatternsProps) {
                 }}
               >
                 <Link href={`/gallery/${p.id}`} className="flex flex-col gap-4 group">
-                  <div className="aspect-[4/5] bg-white/5 rounded-xl overflow-hidden border border-white/10 relative">
+                  <div className="aspect-[4/5] bg-surface-inset rounded-xl overflow-hidden border border-border relative">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div
                       className="w-full h-full group-hover:scale-110 transition-transform duration-700 bg-cover bg-center"
@@ -56,7 +56,7 @@ export function FeaturedPatterns({ patterns }: FeaturedPatternsProps) {
                   </div>
                   <div>
                     <h5 className="font-bold text-lg group-hover:text-gold transition-colors">{p.name}</h5>
-                    <span className="text-sm text-white/60">{p.era}</span>
+                    <span className="text-sm text-text-muted">{p.era}</span>
                   </div>
                 </Link>
               </motion.div>

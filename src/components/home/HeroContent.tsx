@@ -21,7 +21,7 @@ export function HeroContent() {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.1 }}
-        className="text-5xl lg:text-7xl font-black text-ink font-serif leading-tight"
+        className="text-5xl lg:text-7xl font-black text-text font-serif leading-tight"
       >
         探索千年<br />
         <span className="text-cinnabar">传统纹样</span>之美
@@ -31,7 +31,7 @@ export function HeroContent() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
-        className="text-lg text-ink-light max-w-xl leading-relaxed"
+        className="text-lg text-text-muted max-w-xl leading-relaxed"
       >
         致力于通过数字技术保存和复兴荆楚大地数千年的文化遗产，为设计师、学者提供精准的传统美学资源与 AI 创作工具。
       </motion.p>

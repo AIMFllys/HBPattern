@@ -17,14 +17,14 @@ const TABS: { value: MobileCreateTab; label: string; icon: string }[] = [
 
 export function MobileToolbar({ activeTab, onTabChange }: Props) {
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-rice-deep bg-white px-4 py-2 shadow-modal lg:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-40 flex items-center justify-around border-t border-border bg-surface-inset px-4 py-2 shadow-modal lg:hidden">
       {TABS.map(tab => (
         <button
           key={tab.value}
           type="button"
           onClick={() => onTabChange(tab.value)}
           className={`flex min-w-20 flex-col items-center gap-0.5 rounded-lg px-4 py-1 transition-colors ${
-            activeTab === tab.value ? 'text-cinnabar' : 'text-ink-faint'
+            activeTab === tab.value ? 'text-cinnabar' : 'text-text-faint'
           }`}
         >
           <Icon name={tab.icon} size={20} />

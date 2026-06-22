@@ -26,10 +26,10 @@ export const LayerPanel = memo(function LayerPanel() {
   )
 
   return (
-    <section className="border-t border-rice-deep bg-white">
-      <div className="flex items-center justify-between border-b border-rice-deep/50 px-4 py-2">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-ink-faint">图层</h3>
-        <span className="text-xs text-ink-faint">{layers.length} 层</span>
+    <section className="border-t border-border bg-surface-inset">
+      <div className="flex items-center justify-between border-b border-border-subtle px-4 py-2">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-text-faint">图层</h3>
+        <span className="text-xs text-text-faint">{layers.length} 层</span>
       </div>
 
       <div className="custom-scrollbar max-h-44 overflow-y-auto">
@@ -49,7 +49,7 @@ export const LayerPanel = memo(function LayerPanel() {
               className={`flex items-center gap-2 border-l-2 px-3 py-2 transition-colors ${
                 isActive
                   ? 'border-gold bg-gold/10'
-                  : 'border-transparent hover:bg-rice-warm'
+                  : 'border-transparent hover:bg-surface-elevated'
               }`}
             >
               <button
@@ -58,13 +58,13 @@ export const LayerPanel = memo(function LayerPanel() {
                   event.stopPropagation()
                   updateLayer(layer.id, { visible: !layer.visible })
                 }}
-                className="text-ink-faint transition-colors hover:text-ink-medium"
+                className="text-text-faint transition-colors hover:text-text"
                 title={layer.visible ? '隐藏图层' : '显示图层'}
               >
                 <Icon name={layer.visible ? 'visibility' : 'visibility_off'} size={16} />
               </button>
 
-              <span className={`min-w-0 flex-1 truncate text-xs ${isActive ? 'font-bold text-ink' : 'text-ink-light'}`}>
+              <span className={`min-w-0 flex-1 truncate text-xs ${isActive ? 'font-bold text-text' : 'text-text-muted'}`}>
                 {layer.name}
               </span>
 
@@ -74,7 +74,7 @@ export const LayerPanel = memo(function LayerPanel() {
                     ? 'bg-cinnabar/10 text-cinnabar'
                     : layer.loadStatus === 'loading'
                       ? 'bg-gold/10 text-gold'
-                      : 'bg-rice-warm text-ink-faint'
+                      : 'bg-surface-elevated text-text-faint'
                 }`}
               >
                 {layer.opacity}%
@@ -86,7 +86,7 @@ export const LayerPanel = memo(function LayerPanel() {
                   event.stopPropagation()
                   updateLayer(layer.id, { locked: !layer.locked })
                 }}
-                className="text-ink-faint transition-colors hover:text-ink-medium"
+                className="text-text-faint transition-colors hover:text-text"
                 title={layer.locked ? '解锁图层' : '锁定图层'}
               >
                 <Icon name={layer.locked ? 'lock' : 'lock_open'} size={14} />
@@ -99,7 +99,7 @@ export const LayerPanel = memo(function LayerPanel() {
                   handleMove(originalIndex, 1)
                 }}
                 disabled={originalIndex >= layers.length - 1}
-                className="text-ink-faint transition-colors hover:text-ink-medium disabled:opacity-30"
+                className="text-text-faint transition-colors hover:text-text disabled:opacity-30"
                 title="上移图层"
               >
                 <Icon name="keyboard_arrow_up" size={16} />
@@ -112,7 +112,7 @@ export const LayerPanel = memo(function LayerPanel() {
                   handleMove(originalIndex, -1)
                 }}
                 disabled={originalIndex <= 0}
-                className="text-ink-faint transition-colors hover:text-ink-medium disabled:opacity-30"
+                className="text-text-faint transition-colors hover:text-text disabled:opacity-30"
                 title="下移图层"
               >
                 <Icon name="keyboard_arrow_down" size={16} />
@@ -125,7 +125,7 @@ export const LayerPanel = memo(function LayerPanel() {
                     event.stopPropagation()
                     removeLayer(layer.id)
                   }}
-                  className="text-ink-faint transition-colors hover:text-cinnabar"
+                  className="text-text-faint transition-colors hover:text-cinnabar"
                   title="删除图层"
                 >
                   <Icon name="close" size={14} />
@@ -148,14 +148,14 @@ function ActiveLayerControls() {
 
   if (!layer || !activeLayerId) {
     return (
-      <div className="border-t border-rice-deep/50 px-4 py-3 text-center text-sm text-ink-faint">
+      <div className="border-t border-border-subtle px-4 py-3 text-center text-sm text-text-faint">
         请选择一个图层
       </div>
     )
   }
 
   return (
-    <div className="grid gap-3 border-t border-rice-deep/50 px-4 py-3 md:grid-cols-[1fr_180px]">
+    <div className="grid gap-3 border-t border-border-subtle px-4 py-3 md:grid-cols-[1fr_180px]">
       <ParameterSlider
         label="透明度"
         value={layer.opacity}
@@ -170,11 +170,11 @@ function ActiveLayerControls() {
         />
       ) : (
       <label className="flex items-center gap-2">
-        <span className="text-xs font-bold uppercase tracking-tighter text-ink-faint">混合</span>
+        <span className="text-xs font-bold uppercase tracking-tighter text-text-faint">混合</span>
         <select
           value={layer.blendMode}
           onChange={event => updateLayer(activeLayerId, { blendMode: event.target.value as CanvasBlendMode })}
-          className="min-w-0 flex-1 rounded border border-rice-deep bg-rice-warm px-2 py-1 text-xs text-ink-medium outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/30"
+          className="min-w-0 flex-1 rounded border border-border bg-surface-elevated px-2 py-1 text-xs text-text-secondary outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/30"
         >
           {Object.entries(BLEND_MODE_LABELS).map(([value, label]) => (
             <option key={value} value={value}>

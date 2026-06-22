@@ -53,8 +53,8 @@
 }
 
 .museum-frame {
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.1), 0 20px 25px -5px rgba(0,0,0,0.1);
-  border: 12px solid #e5e7eb;
+  box-shadow: var(--color-museum-frame-shadow);
+  border: 12px solid var(--color-frame-border);
 }
 
 .writing-vertical {
@@ -68,24 +68,80 @@
 }
 
 .glass-panel {
-  background: rgba(255, 255, 255, 0.4);
+  background: var(--color-glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--color-glass-border);
 }
 
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #d2ae1e transparent;
+  scrollbar-color: var(--color-scrollbar-thumb) transparent;
 }
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #d2ae1e; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: var(--color-scrollbar-thumb); border-radius: 10px; }
 
 .canvas-3d-container canvas {
   display: block;
   width: 100% !important;
   height: 100% !important;
+}
+
+/* === MapLibre GL 地图容器（楚文化水墨风） === */
+.maplibre-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #f5f0e6;
+}
+
+.maplibre-container .maplibregl-map {
+  font-family: var(--font-serif);
+}
+
+.maplibre-container canvas {
+  display: block;
+  outline: none;
+}
+
+/* 自定义 attribution 样式 — 水墨风 */
+.maplibre-container .maplibregl-ctrl-attrib {
+  background: rgba(245, 240, 230, 0.7);
+  color: var(--color-ink-light);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-top-left-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.maplibre-container .maplibregl-ctrl-attrib a {
+  color: var(--color-cinnabar);
+}
+
+.maplibre-container .maplibregl-ctrl-logo {
+  display: none;
+}
+
+/* 去掉默认缩放按钮的圆角，匹配项目方角设计 */
+.maplibre-container .maplibregl-ctrl-group {
+  background: var(--color-surface-overlay);
+  border: 1px solid var(--color-border);
+  border-radius: 0;
+  box-shadow: var(--shadow-card);
+}
+
+.maplibre-container .maplibregl-ctrl-group button {
+  width: 36px;
+  height: 36px;
+}
+
+.maplibre-container .maplibregl-ctrl-group button:hover {
+  background: rgba(201, 168, 76, 0.15);
+}
+
+.maplibre-container .maplibregl-ctrl-icon {
+  filter: invert(15%) sepia(20%) saturate(800%) hue-rotate(355deg);
 }
 
 input[type="range"]::-webkit-slider-thumb {
@@ -114,7 +170,8 @@ input[type="range"]::-moz-range-thumb {
   filter: drop-shadow(0 0 6px rgba(179, 77, 67, 0.8));
 }
 
-@theme inline {
+/* === Brand & Traditional Palette (constant across themes) === */
+:root {
   /* --- Primary Palette --- */
   --color-cinnabar:       #b84a39;   /* 朱砂红 - 主色调 CTA / Accent */
   --color-cinnabar-deep:  #8c2f22;   /* 深朱砂 - Hover */
@@ -139,6 +196,143 @@ input[type="range"]::-moz-range-thumb {
   --color-error:          #b84a39;
   --color-info:           #4a6b8a;
 
+  /* --- Dark Mode Base Tokens --- */
+  --color-ink-night:      #f5f0e8;   /* 深色模式文字（米色） */
+  --color-rice-night:     #12110d;   /* 深色模式背景（深墨） */
+  --color-ink-900:        #1a1915;   /* 深色卡片背景 */
+  --color-ink-800:        #25241d;   /* 深色内嵌背景 */
+  --color-ink-700:        #3a382e;   /* 深色分隔线 */
+  --color-ink-600:        #54523f;   /* 深色次要分隔线 */
+  --color-cinnabar-glow:  rgba(184, 74, 57, 0.4);
+
+  /* --- Semantic Theme Tokens (Light defaults) --- */
+  --color-surface:           var(--color-rice);
+  --color-surface-elevated:  var(--color-rice-warm);
+  --color-surface-inset:     #ffffff;
+  --color-surface-overlay:   rgba(255, 255, 255, 0.92);
+  --color-text:              var(--color-ink);
+  --color-text-secondary:    var(--color-ink-medium);
+  --color-text-muted:        var(--color-ink-light);
+  --color-text-faint:        var(--color-ink-faint);
+  --color-border:            var(--color-rice-deep);
+  --color-border-subtle:     rgba(214, 204, 186, 0.5);
+  --color-border-strong:     var(--color-ink-light);
+  --color-backdrop:          rgba(26, 26, 20, 0.5);
+  --color-glass-bg:          rgba(255, 255, 255, 0.4);
+  --color-glass-border:      rgba(255, 255, 255, 0.3);
+  --color-frame-border:      #e5e7eb;
+  --color-scrollbar-track:   var(--color-rice);
+  --color-scrollbar-thumb:   var(--color-rice-deep);
+  --color-scrollbar-thumb-hover: var(--color-ink-faint);
+  --shadow-card:             0 2px 12px rgba(26, 26, 20, 0.08);
+  --shadow-hover:            0 8px 32px rgba(26, 26, 20, 0.15);
+  --shadow-modal:            0 20px 60px rgba(26, 26, 20, 0.25);
+  --color-selection-bg:      rgba(184, 74, 57, 0.2);
+  --color-selection-fg:      var(--color-cinnabar-deep);
+  --color-museum-frame-shadow: inset 0 0 40px rgba(0,0,0,0.1), 0 20px 25px -5px rgba(0,0,0,0.1);
+  --color-header-bg:         rgba(245, 240, 232, 0.8);
+  --color-header-border:     rgba(214, 204, 186, 0.5);
+}
+
+/* --- Dark Mode: system preference --- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-surface:           var(--color-rice-night);
+    --color-surface-elevated:  var(--color-ink-900);
+    --color-surface-inset:     var(--color-ink-800);
+    --color-surface-overlay:   rgba(26, 25, 21, 0.92);
+    --color-text:              var(--color-ink-night);
+    --color-text-secondary:    #d6d0c2;
+    --color-text-muted:        #a8a696;
+    --color-text-faint:        #8a8775;
+    --color-border:            var(--color-ink-700);
+    --color-border-subtle:     rgba(58, 56, 46, 0.5);
+    --color-border-strong:     var(--color-ink-600);
+    --color-backdrop:          rgba(0, 0, 0, 0.65);
+    --color-glass-bg:          rgba(18, 17, 13, 0.6);
+    --color-glass-border:      rgba(245, 240, 232, 0.08);
+    --color-frame-border:      var(--color-ink-700);
+    --color-scrollbar-track:   var(--color-rice-night);
+    --color-scrollbar-thumb:   var(--color-ink-700);
+    --color-scrollbar-thumb-hover: var(--color-ink-600);
+    --shadow-card:             0 2px 12px rgba(0, 0, 0, 0.4);
+    --shadow-hover:            0 8px 32px rgba(0, 0, 0, 0.55);
+    --shadow-modal:            0 20px 60px rgba(0, 0, 0, 0.7);
+    --color-selection-bg:      rgba(212, 121, 106, 0.25);
+    --color-selection-fg:      var(--color-cinnabar-light);
+    --color-museum-frame-shadow: inset 0 0 40px rgba(0,0,0,0.3), 0 20px 25px -5px rgba(0,0,0,0.4);
+    --color-header-bg:         rgba(18, 17, 13, 0.85);
+    --color-header-border:     rgba(58, 56, 46, 0.5);
+    color-scheme: dark;
+  }
+}
+
+/* --- Dark Mode: manual toggle --- */
+[data-theme="dark"] {
+  --color-surface:           var(--color-rice-night);
+  --color-surface-elevated:  var(--color-ink-900);
+  --color-surface-inset:     var(--color-ink-800);
+  --color-surface-overlay:   rgba(26, 25, 21, 0.92);
+  --color-text:              var(--color-ink-night);
+  --color-text-secondary:    #d6d0c2;
+  --color-text-muted:        #a8a696;
+  --color-text-faint:        #8a8775;
+  --color-border:            var(--color-ink-700);
+  --color-border-subtle:     rgba(58, 56, 46, 0.5);
+  --color-border-strong:     var(--color-ink-600);
+  --color-backdrop:          rgba(0, 0, 0, 0.65);
+  --color-glass-bg:          rgba(18, 17, 13, 0.6);
+  --color-glass-border:      rgba(245, 240, 232, 0.08);
+  --color-frame-border:      var(--color-ink-700);
+  --color-scrollbar-track:   var(--color-rice-night);
+  --color-scrollbar-thumb:   var(--color-ink-700);
+  --color-scrollbar-thumb-hover: var(--color-ink-600);
+  --shadow-card:             0 2px 12px rgba(0, 0, 0, 0.4);
+  --shadow-hover:            0 8px 32px rgba(0, 0, 0, 0.55);
+  --shadow-modal:            0 20px 60px rgba(0, 0, 0, 0.7);
+  --color-selection-bg:      rgba(212, 121, 106, 0.25);
+  --color-selection-fg:      var(--color-cinnabar-light);
+  --color-museum-frame-shadow: inset 0 0 40px rgba(0,0,0,0.3), 0 20px 25px -5px rgba(0,0,0,0.4);
+  --color-header-bg:         rgba(18, 17, 13, 0.85);
+  --color-header-border:     rgba(58, 56, 46, 0.5);
+  color-scheme: dark;
+}
+
+@theme inline {
+  /* --- Brand Colors (constant) --- */
+  --color-cinnabar:       var(--color-cinnabar);
+  --color-cinnabar-deep:  var(--color-cinnabar-deep);
+  --color-cinnabar-light: var(--color-cinnabar-light);
+  --color-rice:           var(--color-rice);
+  --color-rice-warm:      var(--color-rice-warm);
+  --color-rice-deep:      var(--color-rice-deep);
+  --color-ink:            var(--color-ink);
+  --color-ink-medium:     var(--color-ink-medium);
+  --color-ink-light:      var(--color-ink-light);
+  --color-ink-faint:      var(--color-ink-faint);
+  --color-gold:           var(--color-gold);
+  --color-gold-light:     var(--color-gold-light);
+  --color-success:        var(--color-success);
+  --color-warning:        var(--color-warning);
+  --color-error:          var(--color-error);
+  --color-info:           var(--color-info);
+
+  /* --- Semantic Theme Tokens --- */
+  --color-surface:           var(--color-surface);
+  --color-surface-elevated:  var(--color-surface-elevated);
+  --color-surface-inset:     var(--color-surface-inset);
+  --color-surface-overlay:   var(--color-surface-overlay);
+  --color-text:              var(--color-text);
+  --color-text-secondary:    var(--color-text-secondary);
+  --color-text-muted:        var(--color-text-muted);
+  --color-text-faint:        var(--color-text-faint);
+  --color-border:            var(--color-border);
+  --color-border-subtle:     var(--color-border-subtle);
+  --color-border-strong:     var(--color-border-strong);
+  --color-backdrop:          var(--color-backdrop);
+  --color-glass-bg:          var(--color-glass-bg);
+  --color-glass-border:      var(--color-glass-border);
+
   /* --- Typography --- */
   --font-serif:   "Noto Serif SC", "Newsreader", Georgia, serif;
   --font-sans:    "Noto Sans SC", "Inter", system-ui, sans-serif;
@@ -155,20 +349,15 @@ input[type="range"]::-moz-range-thumb {
   --radius-full: 9999px;
 
   /* --- Shadows --- */
-  --shadow-card:  0 2px 12px rgba(26, 26, 20, 0.08);
-  --shadow-hover: 0 8px 32px rgba(26, 26, 20, 0.15);
-  --shadow-modal: 0 20px 60px rgba(26, 26, 20, 0.25);
+  --shadow-card:  var(--shadow-card);
+  --shadow-hover: var(--shadow-hover);
+  --shadow-modal: var(--shadow-modal);
 
   /* --- Transitions --- */
   --duration-fast:   150ms;
   --duration-normal: 250ms;
   --duration-slow:   400ms;
   --ease-default:    cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* --- Dark Mode Tokens --- */
-  --color-ink-night:     #f5f0e8;   /* 深色模式文字（米色） */
-  --color-rice-night:    #12110d;   /* 深色模式背景（深墨） */
-  --color-cinnabar-glow: rgba(184, 74, 57, 0.4);
 
   /* --- Z-Index Scale --- */
   --z-base:    0;
@@ -181,24 +370,8 @@ input[type="range"]::-moz-range-thumb {
 
 /* === Base Reset & Global Styles === */
 :root {
-  --background: var(--color-rice);
-  --foreground: var(--color-ink);
-}
-
-/* --- Dark Mode: system preference --- */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --background: var(--color-rice-night);
-    --foreground: var(--color-ink-night);
-    color-scheme: dark;
-  }
-}
-
-/* --- Dark Mode: manual toggle --- */
-[data-theme="dark"] {
-  --background: var(--color-rice-night);
-  --foreground: var(--color-ink-night);
-  color-scheme: dark;
+  --background: var(--color-surface);
+  --foreground: var(--color-text);
 }
 
 *, *::before, *::after {
@@ -211,63 +384,25 @@ html {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.map-page,
+.map-page * {
+  scroll-behavior: auto !important;
+}
+
 body {
-  background-color: var(--background, var(--color-rice));
-  color: var(--color-ink-medium);
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
   font-family: var(--font-sans);
   line-height: 1.7;
   min-height: 100vh;
-}
-
-/* --- Dark Mode Body --- */
-[data-theme="dark"] body,
-:root:not([data-theme="light"]):has(body) {
-  /* handled by CSS variables above */
-}
-
-[data-theme="dark"] body {
-  background-color: var(--color-rice-night);
-  color: var(--color-ink-night);
-}
-
-[data-theme="dark"] h1,
-[data-theme="dark"] h2,
-[data-theme="dark"] h3,
-[data-theme="dark"] h4,
-[data-theme="dark"] h5,
-[data-theme="dark"] h6 {
-  color: var(--color-ink-night);
-}
-
-[data-theme="dark"] .card {
-  background-color: #1a1915;
-  border-color: #2a2920;
-}
-
-[data-theme="dark"] .glass-panel {
-  background: rgba(18, 17, 13, 0.6);
-  border-color: rgba(245, 240, 232, 0.08);
-}
-
-[data-theme="dark"] .museum-frame {
-  border-color: #2a2920;
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.3), 0 20px 25px -5px rgba(0,0,0,0.4);
-}
-
-[data-theme="dark"] header {
-  background-color: rgba(18, 17, 13, 0.85);
-  border-color: rgba(42, 41, 32, 0.5);
-}
-
-[data-theme="dark"] .seal-tag {
-  border-color: var(--color-cinnabar-glow);
-  color: var(--color-cinnabar-light);
+  transition: background-color var(--duration-normal) var(--ease-default),
+              color var(--duration-normal) var(--ease-default);
 }
 
 /* === Typography === */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
-  color: var(--color-ink);
+  color: var(--color-text);
   line-height: 1.3;
   font-weight: 600;
   letter-spacing: -0.02em;
@@ -333,11 +468,13 @@ a:hover { color: var(--color-cinnabar-deep); }
 }
 
 .card {
-  background-color: var(--color-rice-warm);
-  border: 1px solid var(--color-rice-deep);
+  background-color: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
-  transition: box-shadow var(--duration-normal) var(--ease-default);
+  transition: box-shadow var(--duration-normal) var(--ease-default),
+              background-color var(--duration-normal) var(--ease-default),
+              border-color var(--duration-normal) var(--ease-default);
 }
 .card:hover {
   box-shadow: var(--shadow-hover);
@@ -346,12 +483,12 @@ a:hover { color: var(--color-cinnabar-deep); }
 /* === Scroll bar customization === */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-rice-deep) var(--color-rice);
+  scrollbar-color: var(--color-scrollbar-thumb) var(--color-scrollbar-track);
 }
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--color-rice); }
-::-webkit-scrollbar-thumb { background: var(--color-rice-deep); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-ink-faint); }
+::-webkit-scrollbar-track { background: var(--color-scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--color-scrollbar-thumb); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-scrollbar-thumb-hover); }
 
 /* === Rendering performance === */
 .workshop-pattern-card {
@@ -390,8 +527,8 @@ a:hover { color: var(--color-cinnabar-deep); }
 
 /* === Selection === */
 ::selection {
-  background-color: rgba(184, 74, 57, 0.2);
-  color: var(--color-cinnabar-deep);
+  background-color: var(--color-selection-bg);
+  color: var(--color-selection-fg);
 }
 
 /* === Focus Ring === */

@@ -24,10 +24,10 @@ export default function NavLinks({ items, primaryColor }: NavLinksProps) {
           <Link
             key={item.path}
             href={item.path}
-            className={`text-sm font-medium transition-colors py-1 ${
+            className={`text-sm font-medium transition-colors py-0.5 border-b-2 ${
               isActive
-                ? `${colorClass} border-b-2 ${borderClass}`
-                : 'text-ink-medium hover:text-cinnabar'
+                ? `${colorClass} ${borderClass}`
+                : 'text-text-secondary hover:text-cinnabar border-transparent'
             }`}
           >
             {item.name}
