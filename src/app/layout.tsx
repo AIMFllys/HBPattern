@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { headers } from "next/headers"
 import "./globals.css"
 import AuthProvider from '@/components/providers/AuthProvider'
 import QueryProvider from '@/components/providers/QueryProvider'
@@ -46,14 +47,26 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // 读取 proxy.ts 注入的 nonce，给 inline script 加 nonce 属性，
+  // 使其在生产环境 CSP（script-src 'self' 'nonce-xxx'）下可执行。
+  // 缺失时（如直接 SSR 没经过 middleware）退化为无 nonce，dev 模式仍可用。
+  let nonce: string | undefined
+  try {
+    const h = await headers()
+    nonce = h.get('x-nonce') ?? undefined
+  } catch {
+    // headers() 在某些静态生成场景可能不可用，忽略
+  }
+
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: createThemeScript() }}
+          nonce={nonce}
           suppressHydrationWarning
         />
       </head>
