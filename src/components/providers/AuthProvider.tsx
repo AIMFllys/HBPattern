@@ -1,35 +1,48 @@
 'use client'
 
 import { useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
-import { ensureUserProfile } from '@/lib/auth/profile'
 import { useAuthStore } from '@/stores/useAuthStore'
+
+function sessionUserFrom(value: unknown) {
+  if (!value || typeof value !== 'object') return null
+  const record = value as Record<string, unknown>
+  if (typeof record.id !== 'string' || typeof record.email !== 'string' || typeof record.nickname !== 'string') {
+    return null
+  }
+  if (record.avatar_url !== null && typeof record.avatar_url !== 'string') return null
+  if (record.role !== undefined && record.role !== null && typeof record.role !== 'string') return null
+  const role = typeof record.role === 'string' ? record.role : undefined
+  return {
+    id: record.id,
+    email: record.email,
+    nickname: record.nickname,
+    avatar_url: record.avatar_url,
+    ...(role ? { role } : {}),
+  }
+}
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
   const setUser = useAuthStore((s) => s.setUser)
 
   useEffect(() => {
-    const supabase = createClient()
+    let cancelled = false
 
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        supabase.from('hp_users').select('id, email, nickname, avatar_url, role').eq('id', user.id).single()
-          .then(async ({ data }) => setUser(data ?? await ensureUserProfile(supabase, user)))
-      } else {
-        setUser(null)
-      }
-    })
+    fetch('/api/auth/session', { cache: 'no-store', credentials: 'same-origin' })
+      .then(async (response) => {
+        if (!response.ok) return null
+        const body = await response.json().catch(() => null) as { user?: unknown } | null
+        return sessionUserFrom(body?.user)
+      })
+      .then((user) => {
+        if (!cancelled) setUser(user)
+      })
+      .catch(() => {
+        if (!cancelled) setUser(null)
+      })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session?.user) {
-        supabase.from('hp_users').select('id, email, nickname, avatar_url, role').eq('id', session.user.id).single()
-          .then(async ({ data }) => setUser(data ?? await ensureUserProfile(supabase, session.user)))
-      } else {
-        setUser(null)
-      }
-    })
-
-    return () => subscription.unsubscribe()
+    return () => {
+      cancelled = true
+    }
   }, [setUser])
 
   return <>{children}</>

@@ -4,9 +4,15 @@
  * 策略：network-first（HTML 导航请求）/ stale-while-revalidate（静态资源）
  * 不再使用 cache-first，避免把 SSR 错误页 / loading 骨架永久缓存导致"白屏自锁"。
  *
- * 版本号升级到 v2 用于强制清掉 v1 阶段可能已缓存的坏响应。
+ * 版本号升级到 v3，清掉 v2 里可能缓存的登录页、个人页和接口响应。
  */
-const CACHE_NAME = 'hbpattern-v2'
+const CACHE_NAME = 'hbpattern-v3'
+const PRIVATE_PATH_PREFIXES = ['/login', '/profile', '/dashboard', '/upload', '/auth', '/api']
+
+function isPrivatePath(pathname) {
+  return PRIVATE_PATH_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`))
+}
+
 const STATIC_CACHE = [
   '/',
   '/gallery',
@@ -40,6 +46,7 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return
   const url = new URL(event.request.url)
   if (url.origin !== self.location.origin) return
+  if (isPrivatePath(url.pathname)) return
 
   const isNavigation =
     event.request.mode === 'navigate' ||

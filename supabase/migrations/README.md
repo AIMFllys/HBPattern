@@ -10,11 +10,12 @@ push` against a linked project), or `psql`.
 | `0001_performance_indexes.sql` | Indexes for hot query paths + `pg_trgm` search | Additive, safe |
 | `0002_rls_policies.sql` | Row Level Security policies (security gate) | **Test on a branch first** |
 | `0003_hp_toggle_like.sql` | Reference definition of the like-toggle RPC | `CREATE OR REPLACE`; diff vs live first |
+| `0004_security_boundaries.sql` | Tighten user, pattern, media, comment, and badge boundaries left open by 0002/0003 | Apply after 0000–0003; does not rewrite those files |
 
 ## Recommended apply order & verification
 
 1. **Branch first.** Create a Supabase preview branch (or a staging project) and
-   apply `0000` → `0003` there.
+   apply `0000` → `0004` there.
 2. After `0002`, smoke-test every path with a real session: gallery list/detail,
    post a comment, like/unlike, upload (owner), moderate (admin), login/logout.
    Enabling RLS with a wrong policy denies access and will take pages down.

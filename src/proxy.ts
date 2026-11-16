@@ -4,7 +4,7 @@ import { resolveRequestId } from "@/lib/api/requestId"
 import { SECURITY_HEADERS } from "@/lib/security/headers"
 import { buildCsp, generateNonce } from "@/lib/security/csp"
 import { corsHeaders } from "@/lib/api/cors"
-import { AUTH_ROUTES, isProtectedPagePath, resolveSafeNextPath } from "@/lib/auth/routes"
+import { AUTH_ROUTES, isProtectedPagePath, resolveSafeNextPath, sessionCookieOptions } from "@/lib/auth/routes"
 
 /**
  * 判断 Supabase 环境变量是否已配置。
@@ -64,9 +64,10 @@ export async function proxy(request: NextRequest) {
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
+          cookieOptions: sessionCookieOptions(),
           cookies: {
             getAll() { return request.cookies.getAll() },
-            setAll(cookiesToSet) {
+            setAll(cookiesToSet, headers) {
               cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value))
               supabaseResponse = NextResponse.next({
                 request: { headers: requestHeaders },
@@ -74,6 +75,11 @@ export async function proxy(request: NextRequest) {
               cookiesToSet.forEach(({ name, value, options }) =>
                 supabaseResponse.cookies.set(name, value, options)
               )
+              if (headers) {
+                Object.entries(headers).forEach(([key, value]) => {
+                  supabaseResponse.headers.set(key, value)
+                })
+              }
             },
           },
         }
@@ -92,7 +98,11 @@ export async function proxy(request: NextRequest) {
       }
 
       if (pathname === AUTH_ROUTES.login && user) {
-        const nextPath = resolveSafeNextPath(request.nextUrl.searchParams.get('next'))
+        const nextPath = resolveSafeNextPath(
+          request.nextUrl.searchParams.get('next'),
+          '/',
+          request.nextUrl.origin,
+        )
         return withSecurityHeaders(NextResponse.redirect(new URL(nextPath, request.nextUrl.origin)), nonce)
       }
     } catch {

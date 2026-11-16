@@ -1,14 +1,20 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import maplibregl, { Map as MaplibreMapInstance, NavigationControl, GeoJSONSource } from 'maplibre-gl'
+import {
+  Map as MaplibreMapInstance,
+  NavigationControl,
+  type GeoJSONSource,
+  type MapMouseEvent,
+  type MapGeoJSONFeature,
+} from 'maplibre-gl'
 import { createInkStyle, HUBEI_MAP_INITIAL } from '@/lib/map/style/inkStyle'
 import { buildHubeiRegionsGeoJSON } from '@/lib/map/sources/hubeiGeoJson'
 import { neighborProvincesGeoJSON } from '@/lib/map/sources/neighborProvinces'
 import { hubeiRiversGeoJSON } from '@/lib/map/sources/hubeiRivers'
 
 type MapInstance = MaplibreMapInstance
-type MapLayerMouseEvent = maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }
+type MapLayerMouseEvent = MapMouseEvent & { features?: MapGeoJSONFeature[] }
 
 interface Props {
   mapRef: React.MutableRefObject<MapInstance | null>

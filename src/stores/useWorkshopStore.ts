@@ -65,8 +65,13 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function createLayerId(prefix = 'layer') {
-  const randomPart = Math.random().toString(36).slice(2, 8)
-  return `${prefix}-${Date.now()}-${randomPart}`
+  if (typeof crypto === 'undefined' || typeof crypto.getRandomValues !== 'function') {
+    throw new Error('Web Crypto random values are unavailable')
+  }
+  const bytes = new Uint8Array(16)
+  crypto.getRandomValues(bytes)
+  const randomPart = Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')
+  return `${prefix}-${randomPart}`
 }
 
 function createBackgroundLayer(): WorkshopLayer {

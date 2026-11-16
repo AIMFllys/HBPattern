@@ -36,10 +36,16 @@ export default function ModerationList({ patterns }: { patterns: PendingPattern[
     <div className="space-y-3">
       {items.map((p) => (
         <div key={p.id} className="flex items-center gap-4 bg-surface-inset rounded-lg border border-border p-4">
-          <div
-            className="w-16 h-16 rounded-lg bg-surface-elevated bg-cover bg-center shrink-0"
-            style={{ backgroundImage: p.media?.[0]?.url ? `url("${p.media[0].url}")` : undefined }}
-          />
+          <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-surface-elevated">
+            {p.media?.[0]?.url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={p.media[0].url}
+                alt={p.name}
+                className="h-full w-full object-cover object-center"
+              />
+            ) : null}
+          </div>
           <div className="flex-1 min-w-0">
             <p className="font-bold text-text truncate">{p.name}</p>
             <p className="text-xs text-text-faint">

@@ -27,11 +27,20 @@ const patternDraftSchema = z.object({
   createdAt: z.string(),
 })
 
+function randomHex(bytes: Uint8Array) {
+  return Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('')
+}
+
 export function createId(prefix: string) {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return `${prefix}-${crypto.randomUUID()}`
   }
-  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`
+  if (typeof crypto === 'undefined' || typeof crypto.getRandomValues !== 'function') {
+    throw new Error('Web Crypto random values are unavailable')
+  }
+  const bytes = new Uint8Array(16)
+  crypto.getRandomValues(bytes)
+  return `${prefix}-${randomHex(bytes)}`
 }
 
 export function getFirstPlaceId(regionId: string) {

@@ -107,13 +107,10 @@ export function withApi<T, Ctx = unknown>(
       }
 
       // 步骤 4b：未知异常 → 映射为 INTERNAL_ERROR / 500
+      // 服务端日志只保留时间、级别、requestId 和错误名，不写 stack 或 message。
       const ts = new Date().toISOString()
       const name = err instanceof Error ? err.constructor.name : 'UnknownError'
-      const message = err instanceof Error ? err.message : String(err)
-      const stack = err instanceof Error ? err.stack : undefined
-      console.error(
-        JSON.stringify({ ts, level: 'error', requestId, name, message, stack }),
-      )
+      console.error(JSON.stringify({ ts, level: 'error', requestId, name }))
 
       const errorBody: ApiError = {
         error: {

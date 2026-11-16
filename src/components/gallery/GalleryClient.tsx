@@ -144,9 +144,18 @@ export default function GalleryClient({ patterns, total, page, totalPages, curre
                   <Link href={`/gallery/${pattern.id}`} className="group cursor-pointer block">
                     <div className="relative overflow-hidden rounded-xl bg-surface-elevated aspect-[4/5]">
                       <div
-                        className="w-full h-full transition-transform duration-500 group-hover:scale-105 bg-cover bg-center"
-                        style={{ backgroundColor: palette[0] ?? '#3d3d30', backgroundImage: imageUrl ? `url("${imageUrl}")` : undefined }}
-                      />
+                        className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+                        style={{ backgroundColor: palette[0] ?? '#3d3d30' }}
+                      >
+                        {imageUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img
+                            src={imageUrl}
+                            alt={pattern.name}
+                            className="h-full w-full object-cover object-center"
+                          />
+                        ) : null}
+                      </div>
                       {pattern.is_ai_generated && (
                         <div className="absolute top-3 right-3 bg-surface-overlay backdrop-blur px-2 py-1 rounded text-[10px] font-bold text-cinnabar uppercase tracking-tight">
                           AI 生成

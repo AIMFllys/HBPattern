@@ -20,13 +20,22 @@ const UUID_V4_RE =
 // proxy() 调用 createServerClient，需要 mock 以避免真实 Supabase 连接。
 // 返回一个最小化的 fake client：auth.getUser() 返回未登录状态。
 let mockUser: { id: string; email?: string } | null = null
+let lastCookieOptions: {
+  httpOnly?: boolean
+  secure?: boolean
+  sameSite?: string
+  path?: string
+} | null = null
 
 vi.mock('@supabase/ssr', () => ({
-  createServerClient: () => ({
-    auth: {
-      getUser: async () => ({ data: { user: mockUser }, error: null }),
-    },
-  }),
+  createServerClient: (_url: string, _key: string, options?: { cookieOptions?: typeof lastCookieOptions }) => {
+    lastCookieOptions = options?.cookieOptions ?? null
+    return {
+      auth: {
+        getUser: async () => ({ data: { user: mockUser }, error: null }),
+      },
+    }
+  },
 }))
 
 // ── 辅助：从 NextResponse 读取转发的请求头 ────────────────────────────────────
@@ -46,6 +55,7 @@ function makeRequest(headers?: Record<string, string>): NextRequest {
 // ── 设置 Supabase 环境变量（proxy.ts 中 createServerClient 需要） ─────────────
 beforeEach(() => {
   mockUser = null
+  lastCookieOptions = null
   process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://example.supabase.co'
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key'
 })
@@ -120,5 +130,39 @@ describe('proxy() — X-Request-Id 前置注入', () => {
     const response = await proxy(request)
 
     expect(response.headers.get('location')).toBe('http://localhost/')
+  })
+
+  it('登录页 + 反斜杠 next 时，应回退到本站首页', async () => {
+    mockUser = { id: 'user-1', email: 'user@example.com' }
+    const request = new NextRequest(`http://localhost/login?next=${encodeURIComponent('/\\evil.example')}`)
+    const response = await proxy(request)
+
+    expect(response.headers.get('location')).toBe('http://localhost/')
+  })
+
+  it('会话刷新使用 httpOnly cookie，secure 仅在 production', async () => {
+    const env = process.env as Record<string, string | undefined>
+    const previous = env.NODE_ENV
+    try {
+      env.NODE_ENV = 'development'
+      await proxy(makeRequest())
+      expect(lastCookieOptions).toEqual({
+        path: '/',
+        sameSite: 'lax',
+        httpOnly: true,
+        secure: false,
+      })
+
+      env.NODE_ENV = 'production'
+      await proxy(makeRequest())
+      expect(lastCookieOptions).toEqual({
+        path: '/',
+        sameSite: 'lax',
+        httpOnly: true,
+        secure: true,
+      })
+    } finally {
+      env.NODE_ENV = previous
+    }
   })
 })

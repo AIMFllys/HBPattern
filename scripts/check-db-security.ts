@@ -10,11 +10,15 @@
  *  - Whether the performance indexes from supabase/migrations exist.
  *
  * Prints no secrets. Usage: npx tsx scripts/check-db-security.ts
+ *
+ * TLS stays on. The server certificate is verified unless DB_SSL_INSECURE=1.
+ * That variable is unset by default. The connection string is never printed.
  */
 import { loadEnvConfig } from '@next/env'
 loadEnvConfig(process.cwd())
 
-import { Client } from 'pg'
+import { Client, type ClientConfig } from 'pg'
+import { parseIntoClientConfig } from 'pg-connection-string'
 
 // Prefer the pooler (DATABASE_URL, IPv4) — direct host is often IPv6-only.
 const conn = process.env.DATABASE_URL || process.env.DIRECT_URL
@@ -23,8 +27,20 @@ if (!conn) {
   process.exit(1)
 }
 
+/** Verify the server certificate unless DB_SSL_INSECURE is exactly "1". Never disables TLS. */
+function dbClientConfig(connectionString: string): ClientConfig {
+  const parsed = parseIntoClientConfig(connectionString)
+  const config: ClientConfig = {
+    ...parsed,
+    ssl: { rejectUnauthorized: process.env.DB_SSL_INSECURE !== '1' },
+  }
+  // pg lets a parsed connectionString replace an explicit ssl option.
+  delete config.connectionString
+  return config
+}
+
 async function main() {
-  const client = new Client({ connectionString: conn, ssl: { rejectUnauthorized: false } })
+  const client = new Client(dbClientConfig(conn))
   await client.connect()
 
   // 1. RLS status for all public hp_* tables
@@ -90,4 +106,9 @@ async function main() {
   }
 }
 
-main().catch((e) => { console.error('DB check failed:', e.message); process.exit(2) })
+main().catch((e: unknown) => {
+  const raw = e instanceof Error ? e.message : 'unknown error'
+  const message = raw.split(conn).join('[redacted]')
+  console.error('DB check failed:', message)
+  process.exit(2)
+})

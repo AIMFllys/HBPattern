@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 
 export function PasswordUpdatePanel() {
   const [password, setPassword] = useState('')
@@ -12,11 +11,26 @@ export function PasswordUpdatePanel() {
     event.preventDefault()
     setMessage(null)
     setLoading(true)
-    const supabase = createClient()
-    const { error } = await supabase.auth.updateUser({ password })
-    setLoading(false)
-    setMessage(error ? error.message : '密码已更新')
-    if (!error) setPassword('')
+    try {
+      const response = await fetch('/api/auth/password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        cache: 'no-store',
+        body: JSON.stringify({ password }),
+      })
+      const body = await response.json().catch(() => null) as { error?: unknown } | null
+      if (!response.ok) {
+        setMessage(typeof body?.error === 'string' && body.error ? body.error : '密码更新失败')
+        return
+      }
+      setMessage('密码已更新')
+      setPassword('')
+    } catch {
+      setMessage('密码更新失败')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

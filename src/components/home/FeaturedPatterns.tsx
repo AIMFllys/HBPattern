@@ -47,9 +47,18 @@ export function FeaturedPatterns({ patterns }: FeaturedPatternsProps) {
                   <div className="aspect-[4/5] bg-surface-inset rounded-xl overflow-hidden border border-border relative">
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     <div
-                      className="w-full h-full group-hover:scale-110 transition-transform duration-700 bg-cover bg-center"
-                      style={{ backgroundColor: palette[0] ?? '#2a1f0e', backgroundImage: p.media?.[0]?.url ? `url("${p.media[0].url}")` : undefined }}
-                    />
+                      className="h-full w-full transition-transform duration-700 group-hover:scale-110"
+                      style={{ backgroundColor: palette[0] ?? '#2a1f0e' }}
+                    >
+                      {p.media?.[0]?.url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={p.media[0].url}
+                          alt={p.name}
+                          className="h-full w-full object-cover object-center"
+                        />
+                      ) : null}
+                    </div>
                     <div className="absolute bottom-4 left-4 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
                       <span className="text-xs font-bold bg-cinnabar text-white px-2 py-1 rounded">查看详情</span>
                     </div>

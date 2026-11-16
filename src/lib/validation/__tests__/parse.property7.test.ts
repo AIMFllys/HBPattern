@@ -12,13 +12,19 @@
  *     SHALL be in [200, 299].
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import * as fc from 'fast-check'
 import { NextRequest } from 'next/server'
 import { withApi } from '@/lib/api/withApi'
 import { ok } from '@/lib/api/response'
 import { parseOrThrow } from '@/lib/validation/parse'
 import { CreatePatternBody } from '@/lib/validation/schemas'
+
+const STORAGE_ORIGIN = 'https://hbpattern-test.supabase.co'
+
+function storageObjectUrl(objectName: string): string {
+  return `${STORAGE_ORIGIN}/storage/v1/object/public/pattern-images/${objectName}`
+}
 
 // ─── 辅助：构造测试用 NextRequest ─────────────────────────────────────────────
 
@@ -88,12 +94,12 @@ const invalidBodyArb = fc.oneof(
 /**
  * 生成满足 CreatePatternBody 约束的 body。
  * - name: 1..100 字符
- * - imageUrl: 合法 URL
+ * - imageUrl: 本项目 Storage 公开对象的 https 地址（任意 URL 不再视为合法）
  * - 可选字段均省略（最简合法 body）
  */
 const validBodyArb = fc.record({
   name: fc.string({ minLength: 1, maxLength: 100 }).filter((s) => s.trim().length >= 1),
-  imageUrl: fc.webUrl(),
+  imageUrl: fc.uuid().map((id) => storageObjectUrl(`${id}.jpg`)),
 })
 
 // ─── Property 7(a)：无效 body → 400 VALIDATION_ERROR，dbInsertMock 未被调用 ──
@@ -101,8 +107,16 @@ const validBodyArb = fc.record({
 describe('Property 7: Zod 校验是业务逻辑的唯一闸门', () => {
   let dbInsertMock: ReturnType<typeof vi.fn<DbInsertMock>>
 
+  const previousSupabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+
   beforeEach(() => {
     dbInsertMock = vi.fn<DbInsertMock>().mockResolvedValue({ id: 'mock-id' })
+    process.env.NEXT_PUBLIC_SUPABASE_URL = STORAGE_ORIGIN
+  })
+
+  afterEach(() => {
+    if (previousSupabaseUrl === undefined) delete process.env.NEXT_PUBLIC_SUPABASE_URL
+    else process.env.NEXT_PUBLIC_SUPABASE_URL = previousSupabaseUrl
   })
 
   it(
@@ -148,4 +162,37 @@ describe('Property 7: Zod 校验是业务逻辑的唯一闸门', () => {
       )
     },
   )
+
+  it('imageUrl 只接受本项目 Storage 的 https 公开对象，环境变量缺失时拒绝', () => {
+    const valid = storageObjectUrl('object.jpg')
+    expect(CreatePatternBody.safeParse({ name: '纹样', imageUrl: valid }).success).toBe(true)
+
+    expect(CreatePatternBody.safeParse({
+      name: '纹样',
+      imageUrl: valid.replace('https://', 'http://'),
+    }).success).toBe(false)
+
+    expect(CreatePatternBody.safeParse({
+      name: '纹样',
+      imageUrl: 'https://other.example/storage/v1/object/public/pattern-images/object.jpg',
+    }).success).toBe(false)
+
+    expect(CreatePatternBody.safeParse({
+      name: '纹样',
+      imageUrl: `${STORAGE_ORIGIN}/rest/v1/object.jpg`,
+    }).success).toBe(false)
+
+    expect(CreatePatternBody.safeParse({
+      name: '纹样',
+      imageUrl: `${STORAGE_ORIGIN}/storage/v1/object/public/`,
+    }).success).toBe(false)
+
+    expect(CreatePatternBody.safeParse({
+      name: '纹样',
+      imageUrl: `https://user:pass@${STORAGE_ORIGIN.slice('https://'.length)}/storage/v1/object/public/pattern-images/object.jpg`,
+    }).success).toBe(false)
+
+    delete process.env.NEXT_PUBLIC_SUPABASE_URL
+    expect(CreatePatternBody.safeParse({ name: '纹样', imageUrl: valid }).success).toBe(false)
+  })
 })

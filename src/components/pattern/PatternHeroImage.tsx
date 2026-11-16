@@ -20,11 +20,12 @@ export function PatternHeroImage({ imageUrl, patternName, isAiGenerated, palette
         className="absolute inset-0"
       >
         {imageUrl ? (
-          <div
-            className="w-full h-full bg-cover bg-center"
-            role="img"
-            aria-label={patternName}
-            style={{ backgroundImage: `url("${imageUrl}")` }}
+          // 地址只作为 URL 属性。存储主机随 NEXT_PUBLIC_SUPABASE_URL 变化，不走 next/image 白名单。
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={imageUrl}
+            alt={patternName}
+            className="h-full w-full object-cover object-center"
           />
         ) : (
           <div

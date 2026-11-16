@@ -45,40 +45,40 @@ function getStore(): Map<string, RateLimitEntry> {
  * - 进程内存计数，key = `${quota}:${subjectId}`，subjectId 由调用方传入
  *   （已登录：user.id；未登录：x-forwarded-for 首个 IP 或 'anonymous'）。
  * - 超配额抛 RateLimitError（含 Retry-After）。
- * - 当 env.RATE_LIMIT_DISABLED === '1'（测试态）则直接返回，不抛错（Req 7.5.b）。
+ * - 当 env.RATE_LIMIT_DISABLED === '1'（测试态 / 本地关闭）则直接返回，不抛错（Req 7.5.b）。
+ * - 当 env.RATE_LIMIT_DISABLED === '0' 时显式执行进程内计数，不再看 NODE_ENV。
  *
  * ─── 边缘部署注意事项 ───────────────────────────────────────────────────────
- * 本实现使用进程内存 Map（globalThis）做计数，仅在单实例环境下有效。
- * 在腾讯云 EdgeOne Pages / Vercel Edge / 多实例 Serverless 环境下，每个实例
- * 独立计数，限流会失效（用户轮询不同实例可绕过配额）。
+ * 本实现使用进程内存 Map（globalThis）做计数，仅在单实例环境下完整有效。
+ * 多实例下每个进程各计各的，不能代替共享配额。
  *
- * 生产部署默认降级为 no-op：
- * - 当 NODE_ENV='production' 且未显式设置 RATE_LIMIT_DISABLED 时，自动跳过限流
- *   并在首次调用时打印一条 console.warn 提示。
- * - 自建单实例部署（如宝塔 PM2）时，显式设置 RATE_LIMIT_DISABLED='0' 启用。
- * - EdgeOne Pages 部署时，依赖平台控制台的「速率限制 / WAF 规则」做边缘限流。
+ * 默认执行进程内限流。不因 NODE_ENV=production 跳过。
+ * - RATE_LIMIT_DISABLED=1：关闭进程内计数（测试与本地）。
+ * - RATE_LIMIT_DISABLED=0：显式开启进程内计数（优先于平台开关）。
+ * - RATE_LIMIT_PLATFORM：默认不设置，即不跳过。只有值为 "1" 时才跳过进程内计数，
+ *   表示运维已经启用平台限流。跳过时打一条警告，而不是静默降级。
  *
  * 测试环境通过显式设置 RATE_LIMIT_DISABLED='1' 或 '0' 控制行为（见 property10 测试）。
  */
-let __prodWarned = false
+let __platformWarned = false
 
 export function rateLimit(quota: QuotaKey, subjectId: string): void {
-  // Requirement 7.5.b：测试环境可通过环境变量全局禁用限流
+  // Requirement 7.5.b：测试与本地可通过环境变量全局禁用限流
   if (process.env.RATE_LIMIT_DISABLED === '1') {
     return
   }
 
-  // 生产环境默认降级：未显式启用时跳过限流（边缘多实例下进程内计数无意义）
+  // =0 是显式开启，即使同时设置了平台开关也执行进程内计数。
+  // 只有未显式开启、且 RATE_LIMIT_PLATFORM=1 时才把计数交给平台。
   if (
-    process.env.NODE_ENV === 'production' &&
-    process.env.RATE_LIMIT_DISABLED !== '0'
+    process.env.RATE_LIMIT_DISABLED !== '0' &&
+    process.env.RATE_LIMIT_PLATFORM === '1'
   ) {
-    if (!__prodWarned) {
-      __prodWarned = true
+    if (!__platformWarned) {
+      __platformWarned = true
       console.warn(
-        '[rate-limit] 生产环境未显式启用（RATE_LIMIT_DISABLED 非 "0"），' +
-          '限流已降级为 no-op。边缘/多实例部署请依赖平台侧速率限制；' +
-          '自建单实例部署如需启用请设置 RATE_LIMIT_DISABLED=0。',
+        '[rate-limit] RATE_LIMIT_PLATFORM=1，已跳过进程内计数，限流由平台负责。' +
+          '未配置平台规则时请去掉该变量，或设置 RATE_LIMIT_DISABLED=0 强制启用进程内计数。',
       )
     }
     return
