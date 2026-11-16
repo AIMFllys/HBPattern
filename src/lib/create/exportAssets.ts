@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js'
 import type { CreationSnapshot, PatternGeneratorConfig, ProductId, TextureParams, MaterialParams } from '@/types/create'
 import { generatePatternCanvas } from '@/lib/textures/generatePattern'
-import { downloadBlob } from '@/lib/workshop/exportUtils'
+import { canvasToBlob, downloadBlob } from '@/lib/workshop/exportUtils'
 
 function createTimestamp() {
   return new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
@@ -15,16 +15,6 @@ function sanitize(input: string) {
 
 function buildBaseName(productName: string, patternName: string | null) {
   return `湖北纹案_${sanitize(productName)}_${sanitize(patternName ?? '无纹样')}`
-}
-
-function canvasToBlob(canvas: HTMLCanvasElement, mimeType: string, quality?: number): Promise<Blob> {
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      blob => (blob ? resolve(blob) : reject(new Error('导出失败'))),
-      mimeType,
-      quality
-    )
-  })
 }
 
 export async function exportPreviewPng(canvas: HTMLCanvasElement, productName: string, patternName: string | null) {

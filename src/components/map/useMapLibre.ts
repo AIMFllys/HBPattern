@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import type { Map as MaplibreMapInstance } from 'maplibre-gl'
 import { HUBEI_MAP_INITIAL } from '@/lib/map/style/inkStyle'
 
@@ -9,7 +9,6 @@ import { HUBEI_MAP_INITIAL } from '@/lib/map/style/inkStyle'
  */
 export function useMapLibre() {
   const mapRef = useRef<MaplibreMapInstance | null>(null)
-  const [ready, setReady] = useState(false)
 
   const flyToRegion = useCallback((center: [number, number], zoom = 9) => {
     const map = mapRef.current
@@ -49,8 +48,6 @@ export function useMapLibre() {
     map.zoomOut({ duration: 250 })
   }, [])
 
-  const getZoom = useCallback(() => mapRef.current?.getZoom() ?? HUBEI_MAP_INITIAL.zoom, [])
-
   useEffect(() => {
     return () => {
       mapRef.current = null
@@ -59,12 +56,9 @@ export function useMapLibre() {
 
   return {
     mapRef,
-    ready,
-    setReady,
     flyToRegion,
     resetView,
     zoomIn,
     zoomOut,
-    getZoom,
   }
 }

@@ -29,7 +29,7 @@
 | 事件处理 | `handle` 前缀 | `handleSubmit`, `handleClose` |
 | 异步函数 | 动词开头 | `getPatterns`, `requireAuth`, `resolveApiCaller` |
 
-### 数据库 (Prisma / Supabase)
+### 数据库 (Supabase)
 
 | 类型 | 规则 | 示例 |
 |------|------|------|

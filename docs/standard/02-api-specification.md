@@ -24,13 +24,13 @@
 
 对外提供服务，支持 CORS，未来接入 API Key。
 
-| 方法 | 路径 | 说明 |
-|------|------|------|
-| GET | `/api/v1/patterns` | 纹样列表 |
-| GET | `/api/v1/patterns/[id]` | 纹样详情 |
-| GET | `/api/v1/regions` | 地区列表 |
-| GET | `/api/v1/stats` | 平台统计 |
-| OPTIONS | `/api/v1/*` | CORS 预检 |
+| 方法 | 路径 | 说明 | 限流 |
+|------|------|------|------|
+| GET | `/api/v1/patterns` | 纹样列表 | 120 次 / 60 秒 / IP |
+| GET | `/api/v1/patterns/[id]` | 纹样详情 | 120 次 / 60 秒 / IP |
+| GET | `/api/v1/regions` | 地区列表 | 120 次 / 60 秒 / IP |
+| GET | `/api/v1/stats` | 平台统计 | 120 次 / 60 秒 / IP |
+| OPTIONS | `/api/v1/*` | CORS 预检 | 否 |
 
 ---
 
@@ -68,6 +68,14 @@
 }
 ```
 
+分页字段由 `src/lib/api/response.ts` 的 `okList` 计算：
+
+- `totalPages = Math.max(1, Math.ceil(total / limit))`
+- `hasNext = page < totalPages`
+- `hasPrev = page > 1`
+
+成功响应的 `meta` 含 `requestId` 与 `timestamp`（ISO 8601），由 `withApi` 填入。
+
 ### 错误响应
 
 ```json
@@ -104,22 +112,44 @@
 
 ## 响应 Headers
 
-所有 API 响应包含：
+响应头按写入方分开。
+
+### `withApi`
+
+`withApi` 在它构造的响应上设置 `X-Request-Id`。成功响应（`ok` / `okList`）再通过 `versionHeaders()` 设置 `X-API-Version: v1`。
 
 | Header | 值 | 说明 |
 |--------|-----|------|
-| `X-Request-Id` | UUID v4 | 请求追踪 ID |
-| `X-API-Version` | `v1` | API 版本 |
-| `X-Content-Type-Options` | `nosniff` | 安全 |
-| `X-Frame-Options` | `DENY` | 安全 |
+| `X-Request-Id` | UUID v4 | `withApi` 写入的请求追踪 ID |
+| `X-API-Version` | `v1` | 成功响应经 `versionHeaders()` 写入 |
 
-v1 公开 API 额外包含：
+### `src/proxy.ts` 的 `withSecurityHeaders`
+
+`withSecurityHeaders` 把下列头加到 `config.matcher` 命中的请求上，包括 API：
 
 | Header | 值 |
 |--------|-----|
-| `Access-Control-Allow-Origin` | `*` |
-| `Access-Control-Allow-Methods` | `GET, OPTIONS` |
-| `Access-Control-Allow-Headers` | `Content-Type, X-API-Key, X-Request-Id` |
+| `X-Content-Type-Options` | `nosniff` |
+| `X-Frame-Options` | `DENY` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` |
+| `Content-Security-Policy` | `buildCsp(nonce)` 的结果 |
+
+`NODE_ENV=production` 时另设 `Strict-Transport-Security: max-age=63072000; includeSubDomains`。
+
+matcher 排除 `_next/static`、`_next/image`、`favicon.ico` 以及 svg/png/jpg/jpeg/gif/webp 静态资源。
+
+### CORS（`/api/v1/*`）
+
+来源是 `src/lib/api/cors.ts` 的 `corsHeaders()`。
+
+- `CORS_ALLOWED_ORIGINS` 未设置时默认 `['*']`，因此 `Access-Control-Allow-Origin` 为 `*`。
+- 设置后按逗号分割。列表中含 `*` 时头仍为 `*`；否则请求的 `Origin` 在列表中则回显该 Origin，不在列表中则用列表第一项。
+- `Access-Control-Allow-Methods`：`GET, OPTIONS`
+- `Access-Control-Allow-Headers`：`Content-Type, X-API-Key, X-Request-Id`
+- `Access-Control-Max-Age`：`86400`
+
+`/api/v1/*` 的实际响应由 `src/proxy.ts` 注入这些头。各 v1 route 的 `OPTIONS` 调用 `handleOptions`。
 
 ---
 
@@ -203,13 +233,23 @@ export const PatternIdParam = z.object({
 
 ## 限流配额
 
-| 路由 | 窗口 | 最大请求数 |
-|------|------|-----------|
-| `POST /api/patterns` | 60s | 10 |
-| `POST /api/upload` | 60s | 20 |
-| `POST /api/patterns/[id]/comments` | 60s | 30 |
+进程内配额定义在 `src/lib/rate-limit.ts` 的 `QUOTAS`。计数 key 为 `${quota}:${subjectId}`，`subjectId` 由调用方传入。
 
-限流 key = `${quota}:${userId}`，未登录使用 IP。
+| 路由 | 窗口 | 最大请求数 | 主体 |
+|------|------|-----------|------|
+| `POST /api/patterns` | 60s | 10 | 用户 id |
+| `POST /api/upload` | 60s | 20 | 用户 id |
+| `POST /api/patterns/[id]/comments` | 60s | 30 | 用户 id |
+| `GET /api/v1/patterns` | 60s | 120 | `clientIp` |
+| `GET /api/v1/patterns/[id]` | 60s | 120 | `clientIp` |
+| `GET /api/v1/regions` | 60s | 120 | `clientIp` |
+| `GET /api/v1/stats` | 60s | 120 | `clientIp` |
+
+路由表里其余路由没有进程内限流配额。
+
+`clientIp` 取 `x-forwarded-for` 的首个 IP，否则取 `x-real-ip`，都没有则为 `anonymous`。
+
+`RATE_LIMIT_DISABLED=1` 时 `rateLimit` 直接返回。`NODE_ENV=production` 且 `RATE_LIMIT_DISABLED` 不是 `0` 时，进程内限流为 no-op，并打一次 warn。自建单实例要启用进程内限流，把 `RATE_LIMIT_DISABLED` 设为 `0`。
 
 ---
 

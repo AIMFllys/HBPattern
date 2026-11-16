@@ -1,4 +1,4 @@
-import type { FeatureCollection, Geometry, Point } from 'geojson'
+import type { FeatureCollection, Point } from 'geojson'
 import { hubeiRegions } from '@/data/map/hubei'
 import type { HubeiKeyPlace, HubeiRegion } from '@/types'
 
@@ -39,5 +39,3 @@ export function buildHubeiPlacesGeoJSON(
 
   return { type: 'FeatureCollection', features } as FeatureCollection<Point, HubeiPlaceFeatureProps>
 }
-
-export type { FeatureCollection, Geometry }

@@ -63,5 +63,3 @@ export function PatternHeroImage({ imageUrl, patternName, isAiGenerated, palette
     </section>
   )
 }
-
-export default PatternHeroImage

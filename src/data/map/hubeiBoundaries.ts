@@ -10,5 +10,4 @@ export interface HubeiBoundaryFeature {
   path: string
 }
 
-export const HUBEI_BOUNDARY_SOURCE = boundaryData.source
 export const hubeiBoundaryFeatures = boundaryData.features as HubeiBoundaryFeature[]

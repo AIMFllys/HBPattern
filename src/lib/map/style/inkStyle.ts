@@ -1,4 +1,5 @@
 import type { StyleSpecification } from 'maplibre-gl'
+import { hubeiRegions } from '@/data/map/hubei'
 
 /**
  * 楚文化水墨风 MapLibre style
@@ -47,11 +48,7 @@ export const HUBEI_MAP_INITIAL = {
   maxZoom: 14,
 } as const
 
-const HUBEI_REGION_NAMES = [
-  '武汉市', '黄石市', '十堰市', '宜昌市', '襄阳市', '鄂州市',
-  '荆门市', '孝感市', '荆州市', '黄冈市', '咸宁市', '随州市',
-  '恩施土家族苗族自治州', '仙桃市', '潜江市', '天门市', '神农架林区',
-]
+const HUBEI_REGION_NAMES = hubeiRegions.map(region => region.name)
 
 export function createInkStyle(): StyleSpecification {
   return {

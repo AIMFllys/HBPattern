@@ -46,5 +46,3 @@ export function buildHubeiRegionsGeoJSON(selectedRegionId: string): FeatureColle
 export function adcodeToFeatureId(adcode: number): number {
   return adcode
 }
-
-export const hubeiGeoJSONSource = hubeiGeoData

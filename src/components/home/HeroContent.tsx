@@ -53,5 +53,3 @@ export function HeroContent() {
     </div>
   )
 }
-
-export default HeroContent

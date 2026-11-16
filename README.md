@@ -29,6 +29,12 @@ HBPattern 是一个面向湖北非遗纹样的数字化展示、检索、互动�
 
 ---
 
+## 工程规范
+
+现行规范见 [docs/standard/README.md](./docs/standard/README.md)。数据库 schema 以 `supabase/migrations/` 为准。不要把 `docs/plans/`、`docs/summary/` 当规范。
+
+---
+
 ## 项目结构
 
 ```text
@@ -41,10 +47,11 @@ HBPattern/
 │   │   │   ├── map/                 # 3D 文化地图
 │   │   │   ├── create/              # 3D/AI 创作入口
 │   │   │   ├── workshop/            # 创作工作台
+│   │   │   ├── dashboard/           # 管理后台
+│   │   │   ├── profile/             # 个人中心
 │   │   │   └── upload/              # 纹样上传
-│   │   ├── (auth)/                  # 登录与个人中心
+│   │   ├── (auth)/login/            # 登录（login）
 │   │   ├── auth/callback/route.ts   # Supabase OAuth 回调
-│   │   ├── dashboard/               # 管理后台
 │   │   └── api/                     # API Routes
 │   │       ├── patterns/            # 纹样列表、详情、评论、点赞、审核
 │   │       ├── regions/             # 地区字典
@@ -53,12 +60,18 @@ HBPattern/
 │   │       └── v1/                  # 对外公开 API
 │   ├── components/                  # 可复用组件
 │   ├── hooks/                       # React Hooks
-│   └── lib/                         # 工具库、数据库、鉴权、校验、安全、上传
+│   ├── lib/                         # 工具库、数据库、鉴权、校验、安全、上传
+│   ├── stores/                      # Zustand 客户端状态
+│   ├── types/                       # TypeScript 类型
+│   ├── data/                        # 静态数据与 Mock
+│   └── proxy.ts                     # Next.js Proxy（原 middleware）
 ├── supabase/
 │   └── migrations/                  # SQL migrations（schema 真相源）
 ├── scripts/                         # 环境检查、种子数据、工程脚本
 └── public/                          # 静态资源
 ```
+
+完整目录树见 [docs/standard/01-architecture.md](./docs/standard/01-architecture.md)。
 
 ---
 
@@ -77,11 +90,7 @@ git clone https://github.com/AIMFllys/HBPattern.git
 cd HBPattern
 ```
 
-如果是在当前本地工作区：
-
-```bash
-cd D:/project/HBPattern/HBPattern
-```
+进入仓库根目录再执行后续命令。
 
 ### 2. 安装依赖
 
@@ -98,7 +107,7 @@ npm install
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
-# PostgreSQL / Prisma
+# DATABASE_URL 与 DIRECT_URL 仅供 scripts/check-env.ts 的 prebuild 校验和运维脚本使用，应用运行时不读取，不是 Prisma
 DATABASE_URL=postgresql://user:password@host:5432/hbpattern
 DIRECT_URL=postgresql://user:password@host:5432/hbpattern
 
@@ -106,6 +115,8 @@ DIRECT_URL=postgresql://user:password@host:5432/hbpattern
 CORS_ALLOWED_ORIGINS=http://localhost:6427
 RATE_LIMIT_DISABLED=1
 ```
+
+必填：`NEXT_PUBLIC_SUPABASE_URL`、`NEXT_PUBLIC_SUPABASE_ANON_KEY`、`DATABASE_URL`、`DIRECT_URL`。
 
 启动前可检查环境变量：
 
@@ -147,9 +158,12 @@ npm run dev
 | `npm run dev` | 启动开发服务器（默认端口 `6427`） |
 | `npm run build` | 生产构建 |
 | `npm run start` | 启动生产服务 |
-| `npm run lint` | 运行 ESLint |
-| `npm run test` | 运行 Vitest |
+| `npm run lint` | ESLint，并执行 `scripts/lint-guards.mjs` |
+| `npm test` | `vitest run`，全量，不是烟测 |
 | `npm run test:watch` | 监听模式运行 Vitest |
+| CI `quality`（`.github/workflows/ci.yml`） | 依次跑 `npm run lint`、`npx tsc --noEmit`、`npm test`。不跑 `npm run build`。不收覆盖率 |
+| CI secret scanning | gitleaks |
+| typecheck | 仓库没有单独的 typecheck npm script。CI 使用 `npx tsc --noEmit` |
 
 ---
 
@@ -172,16 +186,21 @@ npm run dev
 
 ## API 规范
 
+本节是摘要。详细规范见 [docs/standard/02-api-specification.md](./docs/standard/02-api-specification.md)。
+
 ### 响应格式
 
 ```json
 {
   "data": {},
   "meta": {
-    "requestId": "..."
+    "requestId": "...",
+    "timestamp": "2026-11-16T00:00:00.000Z"
   }
 }
 ```
+
+`timestamp` 为 ISO 8601。
 
 列表响应：
 
@@ -192,13 +211,22 @@ npm run dev
     "page": 1,
     "limit": 20,
     "total": 0,
-    "totalPages": 0
+    "totalPages": 1,
+    "hasNext": false,
+    "hasPrev": false
   },
   "meta": {
-    "requestId": "..."
+    "requestId": "...",
+    "timestamp": "2026-11-16T00:00:00.000Z"
   }
 }
 ```
+
+| 字段 | 计算 |
+|------|------|
+| `totalPages` | `max(1, ceil(total / limit))` |
+| `hasNext` | `page < totalPages` |
+| `hasPrev` | `page > 1` |
 
 错误响应：
 
@@ -245,8 +273,16 @@ npm run dev
 | `POST /api/patterns` | 60 秒 10 次 |
 | `POST /api/upload` | 60 秒 20 次 |
 | `POST /api/patterns/:id/comments` | 60 秒 30 次 |
+| `GET /api/v1/patterns` | 按来源 IP，60 秒 120 次 |
+| `GET /api/v1/patterns/:id` | 按来源 IP，60 秒 120 次 |
+| `GET /api/v1/regions` | 按来源 IP，60 秒 120 次 |
+| `GET /api/v1/stats` | 按来源 IP，60 秒 120 次 |
 
-开发环境可通过 `RATE_LIMIT_DISABLED=1` 关闭限流。
+生产环境在 `RATE_LIMIT_DISABLED` 不是 `"0"` 时，进程内限流为 no-op。开发用 `RATE_LIMIT_DISABLED=1` 关闭。自建单实例要启用则设为 `0`。以上是现状。
+
+### CORS
+
+未设置 `CORS_ALLOWED_ORIGINS` 时，`Access-Control-Allow-Origin` 为 `*`。设置后为逗号分隔白名单。详细规范见 [docs/standard/02-api-specification.md](./docs/standard/02-api-specification.md)。
 
 ### 上传限制
 

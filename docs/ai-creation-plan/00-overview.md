@@ -1,4 +1,5 @@
 # AI 创作中心 - 纯前端 3D 文创预览系统
+> 历史文档。现行工程规范以 [../standard/README.md](../standard/README.md) 为准。本文不再作为实现依据。
 
 ## 项目概述
 
@@ -30,7 +31,7 @@
 | 轮次 | 文档 | 内容 | 预估复杂度 |
 |------|------|------|-----------|
 | **Round 1** | `01-dependencies-setup.md` | 安装依赖 + 基础 3D 视口 | ⭐⭐ |
-| **Round 2** | `02-product-models.md` | 6 种文创产品程序化几何体 | ⭐⭐⭐ |
+| **Round 2** | `02-3d-viewport-models.md` | 6 种文创产品程序化几何体 | ⭐⭐⭐ |
 | **Round 3** | `03-texture-system.md` | 动态纹理系统 + 参数化控制 | ⭐⭐⭐⭐ |
 | **Round 4** | `04-pattern-library.md` | 纹样库 UI + 程序化纹理生成 | ⭐⭐⭐ |
 | **Round 5** | `05-ui-integration.md` | 完整页面集成 + 产品选择器 | ⭐⭐⭐ |
