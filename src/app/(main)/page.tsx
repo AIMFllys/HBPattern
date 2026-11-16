@@ -35,10 +35,14 @@ export default async function HomePage() {
           <div className="flex-1 relative w-full max-w-md lg:max-w-none">
             <div className="absolute inset-0 bg-gradient-radial from-cinnabar/20 to-transparent rounded-full blur-3xl opacity-50"></div>
             <div className="museum-frame bg-surface-inset overflow-hidden rounded-lg relative z-10 transform rotate-2 hover:rotate-0 transition-transform duration-700">
-              <div
-                className="w-full aspect-[4/5] bg-cover bg-center"
-                style={{ backgroundColor: '#2a1f0e', backgroundImage: `url("${featuredFrameImage}")` }}
-              />
+              <div className="aspect-[4/5] w-full bg-[#2a1f0e]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={featuredFrameImage}
+                  alt={featured[0]?.name ?? '精选纹样'}
+                  className="h-full w-full object-cover object-center"
+                />
+              </div>
             </div>
             {featured[0] && (
               <div className="absolute -bottom-6 -left-6 bg-surface-inset p-4 rounded-xl shadow-xl border border-border z-20 flex items-center gap-4">

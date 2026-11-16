@@ -192,3 +192,53 @@ describe('Property 10(c): 不同 subjectId 的计数器相互独立', () => {
     )
   })
 })
+
+describe('UPLOAD-004: 默认执行进程内限流，不因 NODE_ENV=production 跳过', () => {
+  const previous = {
+    nodeEnv: process.env.NODE_ENV,
+    disabled: process.env.RATE_LIMIT_DISABLED,
+    platform: process.env.RATE_LIMIT_PLATFORM,
+  }
+
+  afterEach(() => {
+    const env = process.env as Record<string, string | undefined>
+    if (previous.nodeEnv === undefined) delete env.NODE_ENV
+    else env.NODE_ENV = previous.nodeEnv
+    if (previous.disabled === undefined) delete env.RATE_LIMIT_DISABLED
+    else env.RATE_LIMIT_DISABLED = previous.disabled
+    if (previous.platform === undefined) delete env.RATE_LIMIT_PLATFORM
+    else env.RATE_LIMIT_PLATFORM = previous.platform
+    __resetRateLimiterForTests()
+  })
+
+  it('生产环境未设置开关时，第 max+1 次抛 RateLimitError', () => {
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = 'production'
+    delete process.env.RATE_LIMIT_DISABLED
+    delete process.env.RATE_LIMIT_PLATFORM
+    __resetRateLimiterForTests()
+    const max = QUOTAS['POST /api/upload'].max
+    for (let i = 0; i < max; i++) rateLimit('POST /api/upload', 'prod-user')
+    expect(() => rateLimit('POST /api/upload', 'prod-user')).toThrow(RateLimitError)
+  })
+
+  it('只有 RATE_LIMIT_PLATFORM=1 且未显式开启时才跳过进程内计数', () => {
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = 'production'
+    delete process.env.RATE_LIMIT_DISABLED
+    process.env.RATE_LIMIT_PLATFORM = '1'
+    __resetRateLimiterForTests()
+    const max = QUOTAS['POST /api/upload'].max
+    expect(() => {
+      for (let i = 0; i < max + 5; i++) rateLimit('POST /api/upload', 'platform-user')
+    }).not.toThrow()
+  })
+
+  it('RATE_LIMIT_DISABLED=0 时即使 PLATFORM=1 也执行计数', () => {
+    ;(process.env as Record<string, string | undefined>).NODE_ENV = 'production'
+    process.env.RATE_LIMIT_DISABLED = '0'
+    process.env.RATE_LIMIT_PLATFORM = '1'
+    __resetRateLimiterForTests()
+    const max = QUOTAS['POST /api/upload'].max
+    for (let i = 0; i < max; i++) rateLimit('POST /api/upload', 'explicit-user')
+    expect(() => rateLimit('POST /api/upload', 'explicit-user')).toThrow(RateLimitError)
+  })
+})

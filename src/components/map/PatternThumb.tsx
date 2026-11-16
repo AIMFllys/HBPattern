@@ -7,11 +7,24 @@ export function PatternThumb({ pattern, small = false }: { pattern: MapPatternOp
 
   return (
     <span
-      className={`block shrink-0 overflow-hidden border border-border bg-cover bg-center ${sizeClass}`}
-      style={{
-        backgroundColor: palette[0],
-        backgroundImage: pattern.imageUrl ? `url("${pattern.imageUrl}")` : `linear-gradient(135deg, ${palette.join(', ')})`,
-      }}
-    />
+      className={`relative block shrink-0 overflow-hidden border border-border ${sizeClass}`}
+      style={
+        pattern.imageUrl
+          ? { backgroundColor: palette[0] }
+          : {
+              backgroundColor: palette[0],
+              backgroundImage: `linear-gradient(135deg, ${palette.join(', ')})`,
+            }
+      }
+    >
+      {pattern.imageUrl ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={pattern.imageUrl}
+          alt={pattern.name}
+          className="h-full w-full object-cover object-center"
+        />
+      ) : null}
+    </span>
   )
 }

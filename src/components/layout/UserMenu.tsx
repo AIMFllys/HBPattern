@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { Icon } from '@/components/icons/Icon'
 
@@ -26,8 +25,16 @@ export default function UserMenu() {
   }
 
   async function handleLogout() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'same-origin',
+        cache: 'no-store',
+      })
+      if (!response.ok) return
+    } catch {
+      return
+    }
     useAuthStore.getState().setUser(null)
     setOpen(false)
     router.push('/')

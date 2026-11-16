@@ -18,6 +18,54 @@ import { createClient } from '@/lib/supabase/server'
 
 type CommentCtx = { params: Promise<{ id: string }> }
 
+type CommentRow = {
+  id: string
+  content: string
+  parent_id: string | null
+  created_at: string
+  user_id: string
+}
+
+type PublicProfile = {
+  id: string
+  nickname: string
+  avatar_url: string | null
+}
+
+// hp_users 的 SELECT 只放行本人或管理员。昵称和头像从只含公开列的视图读取。
+async function attachPublicProfiles(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  rows: CommentRow[],
+  failureMessage: string,
+) {
+  const ids = [...new Set(rows.map((row) => row.user_id))]
+  const profiles = new Map<string, PublicProfile>()
+
+  if (ids.length > 0) {
+    const { data, error } = await supabase
+      .from('hp_user_public')
+      .select('id, nickname, avatar_url')
+      .in('id', ids)
+
+    if (error) {
+      throw new AppError('INTERNAL_ERROR', failureMessage, { cause: error })
+    }
+
+    for (const profile of (data ?? []) as PublicProfile[]) {
+      profiles.set(profile.id, {
+        id: profile.id,
+        nickname: profile.nickname,
+        avatar_url: profile.avatar_url,
+      })
+    }
+  }
+
+  return rows.map(({ user_id, ...row }) => ({
+    ...row,
+    user: profiles.get(user_id) ?? null,
+  }))
+}
+
 export const GET = withApi<unknown, CommentCtx>(async (_req: NextRequest, ctx: CommentCtx) => {
   const { id } = parseOrThrow(PatternIdParam, await ctx.params)
 
@@ -25,7 +73,7 @@ export const GET = withApi<unknown, CommentCtx>(async (_req: NextRequest, ctx: C
 
   const { data, error } = await supabase
     .from('hp_comments')
-    .select('id, content, parent_id, created_at, user:hp_users(id, nickname, avatar_url)')
+    .select('id, content, parent_id, created_at, user_id')
     .eq('pattern_id', id)
     .eq('status', 'approved')
     .order('created_at', { ascending: false })
@@ -35,7 +83,12 @@ export const GET = withApi<unknown, CommentCtx>(async (_req: NextRequest, ctx: C
     throw new AppError('INTERNAL_ERROR', '获取评论失败', { cause: error })
   }
 
-  return ok(data ?? [])
+  const comments = await attachPublicProfiles(
+    supabase,
+    (data ?? []) as CommentRow[],
+    '获取评论失败',
+  )
+  return ok(comments)
 })
 
 export const POST = withApi<unknown, CommentCtx>(async (req: NextRequest, ctx: CommentCtx) => {
@@ -75,12 +128,17 @@ export const POST = withApi<unknown, CommentCtx>(async (req: NextRequest, ctx: C
       parent_id: body.parentId ?? null,
       status: 'approved',
     })
-    .select('id, content, parent_id, created_at, user:hp_users(id, nickname, avatar_url)')
+    .select('id, content, parent_id, created_at, user_id')
     .single()
 
-  if (error) {
+  if (error || !data) {
     throw new AppError('INTERNAL_ERROR', '发表评论失败', { cause: error })
   }
 
-  return ok(data, { status: 201 })
+  const [comment] = await attachPublicProfiles(
+    supabase,
+    [data as CommentRow],
+    '发表评论失败',
+  )
+  return ok(comment, { status: 201 })
 })

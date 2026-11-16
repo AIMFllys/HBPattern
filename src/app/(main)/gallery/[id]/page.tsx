@@ -55,15 +55,15 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
   } catch (err) {
     // 保留 Next.js 内部控制流错误（notFound、redirect 等）
     unstable_rethrow(err)
-    // 关联数据缺失或模板异常：记录结构化日志后降级为 404（Requirement 1.2.a）
+    // 只留路径、纹样 id 和异常名。不写 message，不写 stack。
     const ts = new Date().toISOString()
+    const name = err instanceof Error && err.name ? err.name : 'UnknownError'
     console.error(JSON.stringify({
       ts,
       level: 'error',
       path: '/gallery/[id]',
       id,
-      err: String(err),
-      stack: (err as Error)?.stack,
+      name,
     }))
     notFound()
   }
@@ -203,9 +203,17 @@ export default async function PatternDetailPage({ params }: { params: Promise<{ 
                 <Link key={p.id} href={`/gallery/${p.id}`} className="flex flex-col gap-3 group">
                   <div className="aspect-square bg-surface-inset rounded-lg overflow-hidden border border-gold/10">
                     <div
-                      className="w-full h-full group-hover:scale-110 transition-transform duration-500 bg-cover bg-center"
-                      style={{ backgroundColor: '#3d3d30', backgroundImage: p.media?.[0]?.url ? `url("${p.media[0].url}")` : undefined }}
-                    />
+                      className="h-full w-full bg-[#3d3d30] transition-transform duration-500 group-hover:scale-110"
+                    >
+                      {p.media?.[0]?.url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={p.media[0].url}
+                          alt={p.name}
+                          className="h-full w-full object-cover object-center"
+                        />
+                      ) : null}
+                    </div>
                   </div>
                   <div className="flex justify-between items-center">
                     <h5 className="font-bold">{p.name}</h5>

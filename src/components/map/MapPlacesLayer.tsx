@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import type { Map as MaplibreMapInstance, GeoJSONSource } from 'maplibre-gl'
-import maplibregl from 'maplibre-gl'
+import type { Map as MaplibreMapInstance, GeoJSONSource, MapMouseEvent, MapGeoJSONFeature } from 'maplibre-gl'
 import { buildHubeiPlacesGeoJSON } from '@/lib/map/sources/hubeiPlaces'
 import type { HubeiRegion, HubeiKeyPlace } from '@/types'
 
@@ -13,7 +12,7 @@ interface Props {
   onSelectPlace: (regionId: string, placeId: string) => void
 }
 
-type MapLayerMouseEvent = maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }
+type MapLayerMouseEvent = MapMouseEvent & { features?: MapGeoJSONFeature[] }
 
 /**
  * 关键地点图层：监听 selectedRegion 变化，更新 hubei-places source data

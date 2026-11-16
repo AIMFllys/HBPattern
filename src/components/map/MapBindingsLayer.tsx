@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import type { Map as MaplibreMapInstance, GeoJSONSource } from 'maplibre-gl'
-import maplibregl from 'maplibre-gl'
+import type { Map as MaplibreMapInstance, GeoJSONSource, MapMouseEvent, MapGeoJSONFeature } from 'maplibre-gl'
 import { buildHubeiBindingsGeoJSON } from '@/lib/map/sources/hubeiBindings'
 import type { DisplayBinding } from './mapDemoTypes'
 
@@ -12,7 +11,7 @@ interface Props {
   onSelectPlace: (regionId: string, placeId: string) => void
 }
 
-type MapLayerMouseEvent = maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }
+type MapLayerMouseEvent = MapMouseEvent & { features?: MapGeoJSONFeature[] }
 
 /**
  * 纹样绑定点图层：监听 displayBindings 变化，更新 hubei-bindings source data

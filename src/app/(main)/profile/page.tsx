@@ -89,10 +89,16 @@ export default async function ProfilePage({ searchParams }: { searchParams: Prom
               {uploads.map((p) => (
                 <Link key={p.id} href={`/gallery/${p.id}`} className="group">
                   <div className="aspect-square rounded-lg overflow-hidden bg-surface-elevated relative">
-                    <div
-                      className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform"
-                      style={{ backgroundColor: '#3d3d30', backgroundImage: p.media?.[0]?.url ? `url("${p.media[0].url}")` : undefined }}
-                    />
+                    <div className="h-full w-full bg-[#3d3d30] transition-transform group-hover:scale-105">
+                      {p.media?.[0]?.url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={p.media[0].url}
+                          alt={p.name}
+                          className="h-full w-full object-cover object-center"
+                        />
+                      ) : null}
+                    </div>
                     <span className={`absolute top-2 right-2 px-2 py-0.5 rounded text-[10px] font-bold ${statusBadge(p.status)}`}>
                       {statusLabel(p.status)}
                     </span>
