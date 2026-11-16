@@ -1,4 +1,5 @@
 # HBPattern 深度代码审查与未来架构规划
+> 历史文档。现行工程规范以 [docs/standard/README.md](docs/standard/README.md) 为准。本文不再作为实现依据。
 
 > **项目**: 湖北纹案文化展示平台 (HBPattern)
 > **审查范围**: 全栈代码库（前端 + API + 数据库 + 架构文档）

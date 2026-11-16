@@ -30,5 +30,3 @@ export const Logo = ({ size = 24, className = '' }: LogoProps) => {
     </svg>
   )
 }
-
-export default Logo

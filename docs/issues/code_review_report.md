@@ -1,4 +1,7 @@
 # 深度代码审查报告：跨界工坊 & 3D纹样地图
+> 历史文档。现行工程规范以 [../standard/README.md](../standard/README.md) 为准。本文不再作为实现依据。
+
+文中 `file:///d:/project/HBPattern/HBPattern/...` 是当时本机绝对路径，仓库内请改读对应的相对路径。
 
 > **审查日期**: 2026-05-22
 > **审查范围**: Workshop 模块（9个组件 + Store + Canvas引擎 + 历史系统）、Map 模块（1个核心组件 + 数据层 + 分析工具）

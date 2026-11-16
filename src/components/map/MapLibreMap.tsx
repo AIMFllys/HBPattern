@@ -10,11 +10,6 @@ import { hubeiRiversGeoJSON } from '@/lib/map/sources/hubeiRivers'
 type MapInstance = MaplibreMapInstance
 type MapLayerMouseEvent = maplibregl.MapMouseEvent & { features?: maplibregl.MapGeoJSONFeature[] }
 
-export interface MapLibreMapHandle {
-  map: MapInstance | null
-  ready: boolean
-}
-
 interface Props {
   mapRef: React.MutableRefObject<MapInstance | null>
   selectedRegionId: string

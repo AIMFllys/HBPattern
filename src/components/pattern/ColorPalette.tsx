@@ -33,5 +33,3 @@ export function ColorPalette({ colors }: ColorPaletteProps) {
     </div>
   )
 }
-
-export default ColorPalette

@@ -22,5 +22,3 @@ export const Icon = ({ name, size = 24, className = '', color }: IconProps) => {
     </span>
   )
 }
-
-export default Icon

@@ -92,9 +92,3 @@ export const mockPatterns: MockPattern[] = [
     imagePlaceholderColor: '#1a1a14',
   },
 ]
-
-export const filterOptions = {
-  eras: ['楚式风格', '汉代纹饰', '唐宋韵味', '明清工艺'],
-  regions: ['武汉 (江城)', '荆州 (古城)', '恩施 (土苗)', '襄阳 (汉水)'],
-  techniques: ['传统刺绣', '民间蜡染', '织锦 (西兰卡普)', '漆器纹样'],
-}

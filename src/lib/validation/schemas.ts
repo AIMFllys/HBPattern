@@ -12,7 +12,6 @@ export const ListPatternsQuery = z.object({
   sort: z.enum(['newest', 'oldest', 'popular', 'likes']).default('newest'),
   q: z.string().trim().min(1).max(100).optional(),
 })
-export type ListPatternsQueryInput = z.infer<typeof ListPatternsQuery>
 
 /**
  * POST /api/patterns 的请求体 schema。
@@ -26,7 +25,6 @@ export const CreatePatternBody = z.object({
   techniqueId: z.string().uuid().optional(),
   imageUrl: z.string().url(),
 })
-export type CreatePatternBodyInput = z.infer<typeof CreatePatternBody>
 
 /**
  * /api/patterns/[id] 的路径参数 schema。
@@ -35,7 +33,6 @@ export type CreatePatternBodyInput = z.infer<typeof CreatePatternBody>
 export const PatternIdParam = z.object({
   id: z.string().uuid(),
 })
-export type PatternIdParamInput = z.infer<typeof PatternIdParam>
 
 /**
  * POST /api/upload 的 multipart form schema（校验 file 字段存在）。
@@ -44,7 +41,6 @@ export type PatternIdParamInput = z.infer<typeof PatternIdParam>
 export const UploadFileForm = z.object({
   file: z.instanceof(File, { message: '请选择文件' }),
 })
-export type UploadFileFormInput = z.infer<typeof UploadFileForm>
 
 /**
  * POST /api/patterns/:id/comments 的请求体 schema（Phase 0 预置）。
@@ -54,7 +50,6 @@ export const CreateCommentBody = z.object({
   content: z.string().trim().min(1).max(500),
   parentId: z.string().uuid().optional(),
 })
-export type CreateCommentBodyInput = z.infer<typeof CreateCommentBody>
 
 /**
  * PATCH /api/patterns/:id/moderate 的请求体 schema。
@@ -63,4 +58,3 @@ export type CreateCommentBodyInput = z.infer<typeof CreateCommentBody>
 export const ModeratePatternBody = z.object({
   action: z.enum(['approve', 'reject']),
 })
-export type ModeratePatternBodyInput = z.infer<typeof ModeratePatternBody>

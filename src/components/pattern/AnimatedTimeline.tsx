@@ -64,5 +64,3 @@ export function AnimatedTimeline({ items }: AnimatedTimelineProps) {
     </div>
   )
 }
-
-export default AnimatedTimeline

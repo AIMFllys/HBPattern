@@ -86,7 +86,7 @@ export async function exportWorkshopBlob({
   }
 }
 
-function canvasToBlob(canvas: HTMLCanvasElement, mimeType: string, quality: number) {
+export function canvasToBlob(canvas: HTMLCanvasElement, mimeType: string, quality?: number): Promise<Blob> {
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob(
       blob => {

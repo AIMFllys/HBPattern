@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { findHubeiPlace, findHubeiRegion } from '@/data/map/hubei'
 import type { DemoPatternDraft, MapPatternOption } from '@/types'
-import { DEFAULT_PALETTE, MAX_ZOOM, MIN_ZOOM } from '../mapDemoTypes'
+import { DEFAULT_PALETTE } from '../mapDemoTypes'
 import type { DraftForm, MapDemoState } from '../mapDemoTypes'
 
 const mapBindingSchema = z.object({
@@ -26,10 +26,6 @@ const patternDraftSchema = z.object({
   colorPalette: z.array(z.string()),
   createdAt: z.string(),
 })
-
-export function clampZoom(value: number) {
-  return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, Number(value.toFixed(2))))
-}
 
 export function createId(prefix: string) {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
